@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alimento Diário - Devocional</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            flex: 0 0 250px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            position: sticky;
+            top: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+        
+        .content {
+            flex: 1;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+        
+        .week-nav, .day-nav {
+            margin-bottom: 1.5rem;
+        }
+        
+        .week-nav h3, .day-nav h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        
+        .week-list, .day-list {
+            list-style: none;
+        }
+        
+        .week-item, .day-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .week-link, .day-link {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: background-color 0.2s;
+        }
+        
+        .week-link:hover, .day-link:hover {
+            background-color: var(--light-color);
+        }
+        
+        .week-link.active, .day-link.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .devotional-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .devotional-title {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .devotional-date {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .bible-reading, .prayer-reading {
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .bible-reading h3, .prayer-reading h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .devotional-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .devotional-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: var(--accent-color);
+        }
+        
+        .file-input-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: static;
+                max-height: none;
+            }
+            
+            .devotional-title {
+                font-size: 1.3rem;
+            }
+            
+            .devotional-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Alimento Diário</h1>
+        <p>Devocional - A Criação do Homem</p>
+    </header>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <div class="file-input-container">
+                <input type="file" id="pdfFile" accept=".pdf" style="display: none;">
+                <button onclick="document.getElementById('pdfFile').click()" style="
+                    background: var(--secondary-color);
+                    color: white;
+                    border: none;
+                    padding: 0.5rem 1rem;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    width: 100%;
+                ">Carregar PDF</button>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #666;">Ou use o arquivo ad.pdf na pasta</p>
+            </div>
+            
+            <div class="week-nav">
+                <h3>Semana</h3>
+                <ul class="week-list" id="weekList">
+                    <!-- Será preenchido dinamicamente -->
+                </ul>
+            </div>
+            
+            <div class="day-nav">
+                <h3>Dia</h3>
+                <ul class="day-list" id="dayList">
+                    <!-- Será preenchido dinamicamente -->
+                </ul>
+            </div>
+        </aside>
+        
+        <main class="content" id="content">
+            <div class="loading" id="loadingMessage">
+                Carregando devocional...
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        // Mapeamento de dias da semana
+        const weekDays = {
+            'SEGUNDA-FEIRA': 'Segunda',
+            'TERÇA FEIRA': 'Terça',
+            'QUARTA-FEIRA': 'Quarta',
+            'QUINTA-FEIRA': 'Quinta',
+            'SEXTA-FEIRA': 'Sexta',
+            'SÁBADO': 'Sábado',
+            'DOMINGO': 'Domingo'
+        };
+        
+        // Variáveis globais
+        let currentPdf = null;
+        let devotionalData = {};
+        
+        // Função para carregar o PDF
+        async function loadPdf(pdfUrl = 'ad.pdf') {
+            try {
+                document.getElementById('loadingMessage').style.display = 'block';
+                document.getElementById('loadingMessage').textContent = 'Carregando PDF...';
+                
+                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                currentPdf = await loadingTask.promise;
+                
+                // Extrair conteúdo do PDF
+                await extractContent();
+                
+                // Renderizar a primeira semana e primeiro dia
+                renderWeekNavigation();
+                const firstWeek = Object.keys(devotionalData)[0];
+                if (firstWeek) {
+                    renderDayNavigation(parseInt(firstWeek));
+                    const firstDay = Object.keys(devotionalData[firstWeek])[0];
+                    if (firstDay) {
+                        renderDevotional(parseInt(firstWeek), firstDay);
+                    }
+                }
+                
+                // Esconder mensagem de carregamento
+                document.getElementById('loadingMessage').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Erro ao carregar PDF:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h2>Erro ao carregar o devocional</h2>
+                        <p>Verifique se o arquivo ad.pdf está na mesma pasta ou carregue um PDF manualmente.</p>
+                        <p>Erro: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Função para extrair conteúdo do PDF
+        async function extractContent() {
+            devotionalData = {};
+            let currentWeek = null;
+            let currentDay = null;
+            let currentSection = null;
+            
+            console.log('Iniciando extração do PDF...');
+            
+            for (let pageNum = 1; pageNum <= currentPdf.numPages; pageNum++) {
+                try {
+                    const page = await currentPdf.getPage(pageNum);
+                    const textContent = await page.getTextContent();
+                    
+                    let pageText = '';
+                    for (let item of textContent.items) {
+                        pageText += item.str + ' ';
+                    }
+                    
+                    // Processar o texto da página
+                    processPageText(pageText, pageNum);
+                    
+                } catch (error) {
+                    console.error(`Erro ao processar página ${pageNum}:`, error);
+                }
+            }
+            
+            console.log('Extração concluída:', devotionalData);
+        }
+        
+        // Função para processar o texto de uma página
+        function processPageText(pageText, pageNum) {
+            const lines = pageText.split(/\n/);
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (!line) continue;
+                
+                // Detectar semana (ex: "SEMANA 1 – SEGUNDA-FEIRA")
+                const weekMatch = line.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
+                if (weekMatch) {
+                    currentWeek = parseInt(weekMatch[1]);
+                    currentDay = weekMatch[2].trim();
+                    
+                    if (!devotionalData[currentWeek]) {
+                        devotionalData[currentWeek] = {};
+                    }
+                    
+                    if (!devotionalData[currentWeek][currentDay]) {
+                        devotionalData[currentWeek][currentDay] = {
+                            bibleReading: '',
+                            prayerReading: '',
+                            title: '',
+                            content: ''
+                        };
+                    }
+                    
+                    currentSection = 'header';
+                    continue;
+                }
+                
+                // Detectar leitura bíblica
+                if (line.includes('Leitura bíblica:') && currentWeek && currentDay) {
+                    currentSection = 'bibleReading';
+                    devotionalData[currentWeek][currentDay].bibleReading = line.replace('Leitura bíblica:', '').trim();
+                    continue;
+                }
+                
+                // Detectar ler com oração
+                if (line.includes('Ler com oração:') && currentWeek && currentDay) {
+                    currentSection = 'prayerReading';
+                    // Pegar a próxima linha que geralmente contém o versículo
+                    if (i + 1 < lines.length) {
+                        devotionalData[currentWeek][currentDay].prayerReading = lines[i + 1].trim();
+                        i++; // Pular a próxima linha
+                    }
+                    continue;
+                }
+                
+                // Detectar título (geralmente em letras maiúsculas e negrito)
+                if (currentWeek && currentDay && !devotionalData[currentWeek][currentDay].title && 
+                    line === line.toUpperCase() && line.length > 10 && line.length < 100) {
+                    devotionalData[currentWeek][currentDay].title = line;
+                    currentSection = 'content';
+                    continue;
+                }
+                
+                // Processar conteúdo
+                if (currentWeek && currentDay && currentSection === 'content') {
+                    // Ignorar linhas que são cabeçalhos ou rodapés
+                    if (line.includes('Anote abaixo') || line.includes('Ore e faça') || 
+                        line.includes('Luz na palavra') || line.includes('Direção') || 
+                        line.includes('Admoestação') || line.includes('Leitura de apoio')) {
+                        continue;
+                    }
+                    
+                    // Adicionar ao conteúdo
+                    if (line && !line.match(/^\d+$/) && !line.includes('=====')) {
+                        devotionalData[currentWeek][currentDay].content += line + ' ';
+                    }
+                }
+            }
+        }
+        
+        // Função para renderizar navegação de semanas
+        function renderWeekNavigation() {
+            const weekList = document.getElementById('weekList');
+            weekList.innerHTML = '';
+            
+            const weeks = Object.keys(devotionalData).sort((a, b) => a - b);
+            
+            weeks.forEach(weekNum => {
+                const li = document.createElement('li');
+                li.className = 'week-item';
+                
+                const a = document.createElement('a');
+                a.href = '#';
+                a.className = 'week-link';
+                a.textContent = `Semana ${weekNum}`;
+                a.dataset.week = weekNum;
+                
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    renderDayNavigation(parseInt(weekNum));
+                    
+                    // Ativar link selecionado
+                    document.querySelectorAll('.week-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Renderizar primeiro dia da semana
+                    const firstDay = Object.keys(devotionalData[weekNum])[0];
+                    if (firstDay) {
+                        renderDevotional(parseInt(weekNum), firstDay);
+                        
+                        // Ativar primeiro dia
+                        document.querySelectorAll('.day-link').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        document.querySelector(`.day-link[data-day="${firstDay}"]`).classList.add('active');
+                    }
+                });
+                
+                li.appendChild(a);
+                weekList.appendChild(li);
+            });
+            
+            // Ativar primeira semana
+            if (weeks.length > 0) {
+                document.querySelector('.week-link').classList.add('active');
+            }
+        }
+        
+        // Função para renderizar navegação de dias
+        function renderDayNavigation(weekNum) {
+            const dayList = document.getElementById('dayList');
+            dayList.innerHTML = '';
+            
+            const weekData = devotionalData[weekNum];
+            if (!weekData) return;
+            
+            const days = Object.keys(weekData);
+            
+            days.forEach(day => {
+                const li = document.createElement('li');
+                li.className = 'day-item';
+                
+                const a = document.createElement('a');
+                a.href = '#';
+                a.className = 'day-link';
+                a.textContent = weekDays[day] || day;
+                a.dataset.day = day;
+                
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    renderDevotional(weekNum, day);
+                    
+                    // Ativar link selecionado
+                    document.querySelectorAll('.day-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+                
+                li.appendChild(a);
+                dayList.appendChild(li);
+            });
+            
+            // Ativar primeiro dia
+            if (days.length > 0) {
+                document.querySelector('.day-link').classList.add('active');
+            }
+        }
+        
+        // Função para renderizar o devocional
+        function renderDevotional(weekNum, day) {
+            const content = document.getElementById('content');
+            const devotional = devotionalData[weekNum]?.[day];
+            
+            if (!devotional) {
+                content.innerHTML = `
+                    <div class="error">
+                        <h2>Devocional não encontrado</h2>
+                        <p>Semana ${weekNum}, ${weekDays[day] || day}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            content.innerHTML = `
+                <div class="devotional-header">
+                    <h2 class="devotional-title">${devotional.title || 'Título não disponível'}</h2>
+                    <div class="devotional-date">Semana ${weekNum} - ${weekDays[day] || day}</div>
+                </div>
+                
+                <div class="bible-reading">
+                    <h3>Leitura Bíblica</h3>
+                    <p>${devotional.bibleReading || 'Leitura bíblica não disponível'}</p>
+                </div>
+                
+                <div class="prayer-reading">
+                    <h3>Ler com Oração</h3>
+                    <p>${devotional.prayerReading || 'Versículo não disponível'}</p>
+                </div>
+                
+                <div class="devotional-content">
+                    ${formatContent(devotional.content)}
+                </div>
+            `;
+        }
+        
+        // Função para formatar o conteúdo
+        function formatContent(content) {
+            if (!content) return '<p>Conteúdo não disponível</p>';
+            
+            // Limpar e formatar o conteúdo
+            let cleanContent = content
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Quebrar em parágrafos (pontuação como separadores)
+            const sentences = cleanContent.split(/(?<=[.!?])\s+/);
+            let paragraphs = [];
+            let currentParagraph = '';
+            
+            for (let sentence of sentences) {
+                if ((currentParagraph + sentence).length < 500) {
+                    currentParagraph += sentence + ' ';
+                } else {
+                    if (currentParagraph) paragraphs.push(currentParagraph.trim());
+                    currentParagraph = sentence + ' ';
+                }
+            }
+            
+            if (currentParagraph) paragraphs.push(currentParagraph.trim());
+            
+            return paragraphs.map(p => `<p>${p}</p>`).join('');
+        }
+        
+        // Configurar upload de arquivo
+        document.getElementById('pdfFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const fileUrl = URL.createObjectURL(file);
+                loadPdf(fileUrl);
+            }
+        });
+        
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPdf().catch(error => {
+                console.error('Erro ao carregar PDF inicial:', error);
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <h2>Não foi possível carregar o PDF automaticamente</h2>
+                        <p>Por favor, carregue o arquivo PDF manualmente usando o botão acima.</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

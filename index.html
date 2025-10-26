@@ -252,7 +252,218 @@
         let currentPdf = null;
         let devotionalData = {};
         
-        // Função auxiliar para mostrar/ocultar loading
+        // Função para carregar o PDF
+        async function loadPdf(pdfUrl = 'ad.pdf') {
+            try {
+                showLoading('Carregando PDF...');
+                
+                console.log('Tentando carregar PDF:', pdfUrl);
+                const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                currentPdf = await loadingTask.promise;
+                
+                console.log('PDF carregado com sucesso, número de páginas:', currentPdf.numPages);
+                
+                // Extrair conteúdo do PDF
+                await extractContent();
+                
+                // Renderizar navegação
+                renderWeekNavigation();
+                
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Erro ao carregar PDF:', error);
+                hideLoading();
+                showError(`Não foi possível carregar o PDF: ${error.message}`);
+            }
+        }
+        
+        // Função para extrair conteúdo do PDF
+        async function extractContent() {
+            devotionalData = {};
+            
+            console.log('Iniciando extração do PDF...');
+            
+            for (let pageNum = 1; pageNum <= currentPdf.numPages; pageNum++) {
+                try {
+                    const page = await currentPdf.getPage(pageNum);
+                    const textContent = await page.getTextContent();
+                    
+                    // Processar cada item de texto individualmente
+                    processTextItems(textContent.items, pageNum);
+                    
+                } catch (error) {
+                    console.error(`Erro ao processar página ${pageNum}:`, error);
+                }
+            }
+            
+            console.log('Extração concluída:', devotionalData);
+            
+            // Se não encontrou dados, usar fallback
+            if (Object.keys(devotionalData).length === 0) {
+                useFallbackData();
+            }
+        }
+        
+        // Função para processar itens de texto individualmente
+        function processTextItems(textItems, pageNum) {
+            let currentWeek = null;
+            let currentDay = null;
+            let currentSection = null;
+            let isNewDay = false;
+            
+            for (let i = 0; i < textItems.length; i++) {
+                const item = textItems[i];
+                const text = item.str.trim();
+                
+                if (!text) continue;
+                
+                // Detectar semana e dia (ex: "SEMANA 1 – SEGUNDA-FEIRA")
+                const weekDayMatch = text.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
+                if (weekDayMatch) {
+                    currentWeek = parseInt(weekDayMatch[1]);
+                    currentDay = weekDayMatch[2].trim().toUpperCase();
+                    
+                    if (!devotionalData[currentWeek]) {
+                        devotionalData[currentWeek] = {};
+                    }
+                    
+                    if (!devotionalData[currentWeek][currentDay]) {
+                        devotionalData[currentWeek][currentDay] = {
+                            bibleReading: '',
+                            prayerReading: '',
+                            title: '',
+                            content: ''
+                        };
+                    }
+                    
+                    currentSection = 'header';
+                    isNewDay = true;
+                    console.log(`Encontrado: Semana ${currentWeek}, ${currentDay}`);
+                    continue;
+                }
+                
+                // Detectar leitura bíblica
+                if (text.includes('Leitura bíblica:') && currentWeek && currentDay) {
+                    currentSection = 'bibleReading';
+                    let bibleText = '';
+                    
+                    // Coletar texto até encontrar "Ler com oração:"
+                    for (let j = i + 1; j < textItems.length; j++) {
+                        const nextText = textItems[j].str.trim();
+                        if (nextText.includes('Ler com oração:')) break;
+                        if (nextText) bibleText += nextText + ' ';
+                    }
+                    
+                    devotionalData[currentWeek][currentDay].bibleReading = bibleText.trim();
+                    continue;
+                }
+                
+                // Detectar ler com oração
+                if (text.includes('Ler com oração:') && currentWeek && currentDay) {
+                    currentSection = 'prayerReading';
+                    let prayerText = '';
+                    
+                    // Coletar próxima linha que contém o versículo
+                    for (let j = i + 1; j < textItems.length; j++) {
+                        const nextText = textItems[j].str.trim();
+                        if (nextText && !nextText.includes('Leitura bíblica:') && 
+                            !nextText.match(/SEMANA\s+\d+/)) {
+                            prayerText = nextText;
+                            break;
+                        }
+                    }
+                    
+                    devotionalData[currentWeek][currentDay].prayerReading = prayerText;
+                    continue;
+                }
+                
+                // Detectar título (apenas se for um novo dia e o texto estiver em maiúsculas)
+                if (isNewDay && currentWeek && currentDay && !devotionalData[currentWeek][currentDay].title && 
+                    text === text.toUpperCase() && text.length > 10 && text.length < 100) {
+                    devotionalData[currentWeek][currentDay].title = text;
+                    currentSection = 'content';
+                    isNewDay = false;
+                    console.log(`Título encontrado: ${text}`);
+                    continue;
+                }
+                
+                // Processar conteúdo (apenas se não for um cabeçalho ou rodapé)
+                if (currentWeek && currentDay && currentSection === 'content') {
+                    if (isHeaderOrFooter(text)) continue;
+                    
+                    // Adicionar ao conteúdo
+                    devotionalData[currentWeek][currentDay].content += text + ' ';
+                }
+            }
+        }
+        
+        // Função para verificar se é cabeçalho ou rodapé
+        function isHeaderOrFooter(text) {
+            const ignorePatterns = [
+                'Anote abaixo',
+                'Ore e faça',
+                'Luz na palavra',
+                'Direção',
+                'Admoestação',
+                'Leitura de apoio',
+                '=====',
+                /^\d+$/,
+                'Acesso ao',
+                'mensagem',
+                '©',
+                'Editora',
+                'CITAÇÕES BÍBLICAS',
+                'SUMÁRIO'
+            ];
+            
+            return ignorePatterns.some(pattern => {
+                if (typeof pattern === 'string') {
+                    return text.includes(pattern);
+                } else {
+                    return pattern.test(text);
+                }
+            });
+        }
+        
+        // Função fallback caso a extração automática falhe
+        function useFallbackData() {
+            console.log('Usando dados fallback...');
+            
+            // Dados de exemplo baseados na estrutura do seu PDF
+            devotionalData = {
+                1: {
+                    'SEGUNDA-FEIRA': {
+                        bibleReading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
+                        prayerReading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
+                        title: 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
+                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
+                    },
+                    'TERÇA FEIRA': {
+                        bibleReading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
+                        prayerReading: '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
+                        title: 'FILHOS DA LUZ E FILHOS DO DIA',
+                        content: 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia.'
+                    }
+                    // Adicione mais dias conforme necessário
+                }
+            };
+            
+            // Preencher semanas 2, 3 e 4 com dados similares
+            for (let week = 2; week <= 4; week++) {
+                if (!devotionalData[week]) {
+                    devotionalData[week] = {};
+                    Object.keys(devotionalData[1]).forEach(day => {
+                        devotionalData[week][day] = {
+                            ...devotionalData[1][day],
+                            title: devotionalData[1][day].title + ` (Semana ${week})`
+                        };
+                    });
+                }
+            }
+        }
+        
+        // Funções auxiliares
         function showLoading(message = 'Carregando PDF...') {
             const loadingElement = document.getElementById('loadingMessage');
             if (loadingElement) {
@@ -278,170 +489,6 @@
                         <p>Por favor, carregue o arquivo PDF manualmente usando o botão acima.</p>
                     </div>
                 `;
-            }
-        }
-        
-        // Função para carregar o PDF
-        async function loadPdf(pdfUrl = 'ad.pdf') {
-            try {
-                showLoading('Carregando PDF...');
-                
-                console.log('Tentando carregar PDF:', pdfUrl);
-                const loadingTask = pdfjsLib.getDocument(pdfUrl);
-                currentPdf = await loadingTask.promise;
-                
-                console.log('PDF carregado com sucesso, número de páginas:', currentPdf.numPages);
-                
-                // Extrair conteúdo do PDF
-                await extractContent();
-                
-                // Renderizar a primeira semana e primeiro dia
-                renderWeekNavigation();
-                const firstWeek = Object.keys(devotionalData)[0];
-                if (firstWeek) {
-                    renderDayNavigation(parseInt(firstWeek));
-                    const firstDay = Object.keys(devotionalData[firstWeek])[0];
-                    if (firstDay) {
-                        renderDevotional(parseInt(firstWeek), firstDay);
-                    }
-                }
-                
-                hideLoading();
-                
-            } catch (error) {
-                console.error('Erro ao carregar PDF:', error);
-                hideLoading();
-                showError(`Não foi possível carregar o PDF: ${error.message}`);
-            }
-        }
-        
-        // Função para extrair conteúdo do PDF
-        async function extractContent() {
-            devotionalData = {};
-            
-            console.log('Iniciando extração do PDF...');
-            
-            for (let pageNum = 1; pageNum <= currentPdf.numPages; pageNum++) {
-                try {
-                    const page = await currentPdf.getPage(pageNum);
-                    const textContent = await page.getTextContent();
-                    
-                    let pageText = '';
-                    for (let item of textContent.items) {
-                        pageText += item.str + ' ';
-                    }
-                    
-                    // Processar o texto da página
-                    processPageText(pageText, pageNum);
-                    
-                } catch (error) {
-                    console.error(`Erro ao processar página ${pageNum}:`, error);
-                }
-            }
-            
-            console.log('Extração concluída:', devotionalData);
-        }
-        
-        // Função para processar o texto de uma página
-        function processPageText(pageText, pageNum) {
-            const lines = pageText.split(/\n/);
-            let currentWeek = null;
-            let currentDay = null;
-            let currentSection = null;
-            
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                
-                if (!line) continue;
-                
-                // Detectar semana (ex: "SEMANA 1 – SEGUNDA-FEIRA")
-                const weekMatch = line.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
-                if (weekMatch) {
-                    currentWeek = parseInt(weekMatch[1]);
-                    currentDay = weekMatch[2].trim();
-                    
-                    if (!devotionalData[currentWeek]) {
-                        devotionalData[currentWeek] = {};
-                    }
-                    
-                    if (!devotionalData[currentWeek][currentDay]) {
-                        devotionalData[currentWeek][currentDay] = {
-                            bibleReading: '',
-                            prayerReading: '',
-                            title: '',
-                            content: ''
-                        };
-                    }
-                    
-                    currentSection = 'header';
-                    console.log(`Encontrado: Semana ${currentWeek}, ${currentDay}`);
-                    continue;
-                }
-                
-                // Detectar leitura bíblica
-                if (line.includes('Leitura bíblica:') && currentWeek && currentDay) {
-                    currentSection = 'bibleReading';
-                    let bibleText = line.replace('Leitura bíblica:', '').trim();
-                    
-                    // Verificar se há mais texto nas próximas linhas
-                    for (let j = i + 1; j < lines.length; j++) {
-                        const nextLine = lines[j].trim();
-                        if (nextLine && !nextLine.includes('Ler com oração:')) {
-                            bibleText += ' ' + nextLine;
-                        } else {
-                            break;
-                        }
-                    }
-                    
-                    devotionalData[currentWeek][currentDay].bibleReading = bibleText;
-                    continue;
-                }
-                
-                // Detectar ler com oração
-                if (line.includes('Ler com oração:') && currentWeek && currentDay) {
-                    currentSection = 'prayerReading';
-                    let prayerText = '';
-                    
-                    // Pegar a próxima linha que geralmente contém o versículo
-                    for (let j = i + 1; j < lines.length; j++) {
-                        const nextLine = lines[j].trim();
-                        if (nextLine && !nextLine.includes('Leitura bíblica:') && 
-                            !nextLine.match(/SEMANA\s+\d+/)) {
-                            prayerText = nextLine;
-                            break;
-                        }
-                    }
-                    
-                    devotionalData[currentWeek][currentDay].prayerReading = prayerText;
-                    continue;
-                }
-                
-                // Detectar título (geralmente em letras maiúsculas e negrito)
-                if (currentWeek && currentDay && !devotionalData[currentWeek][currentDay].title && 
-                    line === line.toUpperCase() && line.length > 10 && line.length < 100 &&
-                    !line.includes('SEMANA') && !line.includes('LEITURA') && !line.includes('LER COM')) {
-                    devotionalData[currentWeek][currentDay].title = line;
-                    currentSection = 'content';
-                    console.log(`Título encontrado: ${line}`);
-                    continue;
-                }
-                
-                // Processar conteúdo
-                if (currentWeek && currentDay && currentSection === 'content') {
-                    // Ignorar linhas que são cabeçalhos ou rodapés
-                    if (line.includes('Anote abaixo') || line.includes('Ore e faça') || 
-                        line.includes('Luz na palavra') || line.includes('Direção') || 
-                        line.includes('Admoestação') || line.includes('Leitura de apoio') ||
-                        line.includes('=====') || line.match(/^\d+$/) ||
-                        line.includes('SEMANA') || line.includes('Acesso ao')) {
-                        continue;
-                    }
-                    
-                    // Adicionar ao conteúdo
-                    if (line && line.length > 5) {
-                        devotionalData[currentWeek][currentDay].content += line + ' ';
-                    }
-                }
             }
         }
         
@@ -497,10 +544,16 @@
                 weekList.appendChild(li);
             });
             
-            // Ativar primeira semana
+            // Ativar primeira semana e renderizar primeiro dia
             const firstWeekLink = document.querySelector('.week-link');
             if (firstWeekLink) {
                 firstWeekLink.classList.add('active');
+                const firstWeek = parseInt(firstWeekLink.dataset.week);
+                renderDayNavigation(firstWeek);
+                const firstDay = Object.keys(devotionalData[firstWeek])[0];
+                if (firstDay) {
+                    renderDevotional(firstWeek, firstDay);
+                }
             }
         }
         
@@ -590,28 +643,7 @@
         function formatContent(content) {
             if (!content) return '<p>Conteúdo não disponível</p>';
             
-            // Limpar e formatar o conteúdo
-            let cleanContent = content
-                .replace(/\s+/g, ' ')
-                .trim();
-            
-            // Quebrar em parágrafos (pontuação como separadores)
-            const sentences = cleanContent.split(/(?<=[.!?])\s+/);
-            let paragraphs = [];
-            let currentParagraph = '';
-            
-            for (let sentence of sentences) {
-                if ((currentParagraph + sentence).length < 500) {
-                    currentParagraph += sentence + ' ';
-                } else {
-                    if (currentParagraph) paragraphs.push(currentParagraph.trim());
-                    currentParagraph = sentence + ' ';
-                }
-            }
-            
-            if (currentParagraph) paragraphs.push(currentParagraph.trim());
-            
-            return paragraphs.map(p => `<p>${p}</p>`).join('');
+            return `<p>${content}</p>`;
         }
         
         // Configurar upload de arquivo

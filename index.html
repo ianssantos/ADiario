@@ -336,17 +336,17 @@
                         bibleReading = bibleMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    // Extrair oração - usando a lógica do parêntese de fechamento
+                    // Extrair oração - usando a lógica do parêntese + ponto
                     let prayerReading = '';
-                    const prayerMatch = section.match(/Ler com ora[cç][aã]o\s*:\s*([^)]+\))/i);
+                    const prayerMatch = section.match(/Ler com ora[cç][aã]o\s*:\s*([^)]+\)\.)/i);
                     if (prayerMatch) {
                         prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    // Extrair título - procurar por texto em MAIÚSCULAS após o parêntese
+                    // Extrair título - procurar por texto em MAIÚSCULAS após o ")."
                     let title = '';
                     if (prayerMatch) {
-                        // Encontrar o texto após o parêntese de fechamento da oração
+                        // Encontrar o texto após o ")." da oração
                         const afterPrayer = section.substring(prayerMatch.index + prayerMatch[0].length);
                         const titleMatch = afterPrayer.match(/([A-Z][A-Z\s]{5,}[A-Z])(?=\s*[a-z])/);
                         if (titleMatch) {
@@ -414,7 +414,7 @@
         function getDefaultContent(weekNum, day) {
             const defaultContents = {
                 1: {
-                    'SEGUNDA-FEIRA': 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.',
+                    'SEGUNDA-FEIRA': 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.',
                     'TERÇA-FEIRA': 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.'
                 }
             };
@@ -432,7 +432,7 @@
                         bibleReading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
                         prayerReading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
                         title: 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
-                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
+                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
                     },
                     'TERÇA-FEIRA': {
                         bibleReading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',

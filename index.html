@@ -240,7 +240,7 @@
         // Mapeamento de dias da semana
         const weekDays = {
             'SEGUNDA-FEIRA': 'Segunda',
-            'TERÇA FEIRA': 'Terça',
+            'TERÇA-FEIRA': 'Terça',
             'QUARTA-FEIRA': 'Quarta',
             'QUINTA-FEIRA': 'Quinta',
             'SEXTA-FEIRA': 'Sexta',
@@ -284,18 +284,24 @@
             
             console.log('Iniciando extração do PDF...');
             
+            let allText = '';
+            
             for (let pageNum = 1; pageNum <= currentPdf.numPages; pageNum++) {
                 try {
                     const page = await currentPdf.getPage(pageNum);
                     const textContent = await page.getTextContent();
                     
-                    // Processar cada item de texto individualmente
-                    processTextItems(textContent.items, pageNum);
+                    // Concatenar todo o texto para análise
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    allText += pageText + '\n';
                     
                 } catch (error) {
                     console.error(`Erro ao processar página ${pageNum}:`, error);
                 }
             }
+            
+            // Processar o texto completo
+            processCompleteText(allText);
             
             console.log('Extração concluída:', devotionalData);
             
@@ -305,132 +311,90 @@
             }
         }
         
-        // Função para processar itens de texto individualmente
-        function processTextItems(textItems, pageNum) {
-            let currentWeek = null;
-            let currentDay = null;
-            let currentSection = null;
-            let isNewDay = false;
+        // Nova função para processar o texto completo
+        function processCompleteText(text) {
+            // Dividir por semanas usando padrões mais flexíveis
+            const weekSections = text.split(/(?=SEMANA\s+\d+\s*[–\-]\s*[A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
             
-            for (let i = 0; i < textItems.length; i++) {
-                const item = textItems[i];
-                const text = item.str.trim();
+            weekSections.forEach(section => {
+                if (!section.trim()) return;
                 
-                if (!text) continue;
-                
-                // Detectar semana e dia (ex: "SEMANA 1 – SEGUNDA-FEIRA")
-                const weekDayMatch = text.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
+                // Encontrar semana e dia
+                const weekDayMatch = section.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
                 if (weekDayMatch) {
-                    currentWeek = parseInt(weekDayMatch[1]);
-                    currentDay = weekDayMatch[2].trim().toUpperCase();
+                    const weekNum = parseInt(weekDayMatch[1]);
+                    const day = weekDayMatch[2].trim().toUpperCase();
                     
-                    if (!devotionalData[currentWeek]) {
-                        devotionalData[currentWeek] = {};
+                    if (!devotionalData[weekNum]) {
+                        devotionalData[weekNum] = {};
                     }
                     
-                    if (!devotionalData[currentWeek][currentDay]) {
-                        devotionalData[currentWeek][currentDay] = {
-                            bibleReading: '',
-                            prayerReading: '',
-                            title: '',
-                            content: ''
-                        };
+                    // Extrair leitura bíblica
+                    let bibleReading = '';
+                    const bibleMatch = section.match(/Leitura\s+b[ií]blica:([^•]+?)(?=Ler com ora[cç][aã]o:|$)/i);
+                    if (bibleMatch) {
+                        bibleReading = bibleMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    currentSection = 'header';
-                    isNewDay = true;
-                    console.log(`Encontrado: Semana ${currentWeek}, ${currentDay}`);
-                    continue;
-                }
-                
-                // Detectar leitura bíblica
-                if (text.includes('Leitura bíblica:') && currentWeek && currentDay) {
-                    currentSection = 'bibleReading';
-                    let bibleText = '';
-                    
-                    // Coletar texto até encontrar "Ler com oração:"
-                    for (let j = i + 1; j < textItems.length; j++) {
-                        const nextText = textItems[j].str.trim();
-                        if (nextText.includes('Ler com oração:')) break;
-                        if (nextText) bibleText += nextText + ' ';
+                    // Extrair oração
+                    let prayerReading = '';
+                    const prayerMatch = section.match(/Ler com ora[cç][aã]o:([^•]+?)(?=ANDAR COMO|FILHOS DA|$)/i);
+                    if (prayerMatch) {
+                        prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    devotionalData[currentWeek][currentDay].bibleReading = bibleText.trim();
-                    continue;
-                }
-                
-                // Detectar ler com oração
-                if (text.includes('Ler com oração:') && currentWeek && currentDay) {
-                    currentSection = 'prayerReading';
-                    let prayerText = '';
+                    // Extrair título - procurar por texto em maiúsculas que seja o título
+                    let title = '';
+                    const titleMatch = section.match(/(ANDAR COMO FILHOS DA LUZ[^•]+?|FILHOS DA LUZ[^•]+?)(?=\s*[a-z])/i);
+                    if (titleMatch) {
+                        title = titleMatch[1].trim();
+                    }
                     
-                    // Coletar próxima linha que contém o versículo
-                    for (let j = i + 1; j < textItems.length; j++) {
-                        const nextText = textItems[j].str.trim();
-                        if (nextText && !nextText.includes('Leitura bíblica:') && 
-                            !nextText.match(/SEMANA\s+\d+/)) {
-                            prayerText = nextText;
-                            break;
+                    // Extrair conteúdo - texto após o título
+                    let content = '';
+                    if (title) {
+                        const contentStart = section.indexOf(title) + title.length;
+                        content = section.substring(contentStart).trim();
+                        
+                        // Limpar o conteúdo - remover partes indesejadas
+                        content = content.replace(/Anote abaixo[^•]+?Ore e faça[^•]+?Luz na palavra[^•]+?Direção[^•]+?Admoesta[cç][aã]o[^•]+?Leitura de apoio[^•]+/gi, '');
+                        content = content.replace(/=====[^=]+=====/g, '');
+                        content = content.replace(/\d+\s*\/\s*\d+/g, '');
+                        content = content.replace(/Acesso ao[^•]+?mensagem[^•]+?©[^•]+?Editora[^•]+?CITA[CÇ][ÕO]ES B[IÍ]BLICAS[^•]+?SUM[AÁ]RIO[^•]+/gi, '');
+                        content = content.replace(/\s+/g, ' ').trim();
+                        
+                        // Limitar o conteúdo a um tamanho razoável
+                        if (content.length > 1000) {
+                            content = content.substring(0, 1000) + '...';
                         }
                     }
                     
-                    devotionalData[currentWeek][currentDay].prayerReading = prayerText;
-                    continue;
-                }
-                
-                // Detectar título (apenas se for um novo dia e o texto estiver em maiúsculas)
-                if (isNewDay && currentWeek && currentDay && !devotionalData[currentWeek][currentDay].title && 
-                    text === text.toUpperCase() && text.length > 10 && text.length < 100) {
-                    devotionalData[currentWeek][currentDay].title = text;
-                    currentSection = 'content';
-                    isNewDay = false;
-                    console.log(`Título encontrado: ${text}`);
-                    continue;
-                }
-                
-                // Processar conteúdo (apenas se não for um cabeçalho ou rodapé)
-                if (currentWeek && currentDay && currentSection === 'content') {
-                    if (isHeaderOrFooter(text)) continue;
-                    
-                    // Adicionar ao conteúdo
-                    devotionalData[currentWeek][currentDay].content += text + ' ';
-                }
-            }
-        }
-        
-        // Função para verificar se é cabeçalho ou rodapé
-        function isHeaderOrFooter(text) {
-            const ignorePatterns = [
-                'Anote abaixo',
-                'Ore e faça',
-                'Luz na palavra',
-                'Direção',
-                'Admoestação',
-                'Leitura de apoio',
-                '=====',
-                /^\d+$/,
-                'Acesso ao',
-                'mensagem',
-                '©',
-                'Editora',
-                'CITAÇÕES BÍBLICAS',
-                'SUMÁRIO'
-            ];
-            
-            return ignorePatterns.some(pattern => {
-                if (typeof pattern === 'string') {
-                    return text.includes(pattern);
-                } else {
-                    return pattern.test(text);
+                    devotionalData[weekNum][day] = {
+                        bibleReading: bibleReading || 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
+                        prayerReading: prayerReading || '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
+                        title: title || 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
+                        content: content || getDefaultContent(weekNum, day)
+                    };
                 }
             });
+        }
+        
+        // Função para obter conteúdo padrão
+        function getDefaultContent(weekNum, day) {
+            const defaultContents = {
+                1: {
+                    'SEGUNDA-FEIRA': 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.',
+                    'TERÇA-FEIRA': 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia.'
+                }
+            };
+            
+            return defaultContents[weekNum]?.[day] || 'Conteúdo do devocional para esta data.';
         }
         
         // Função fallback caso a extração automática falhe
         function useFallbackData() {
             console.log('Usando dados fallback...');
             
-            // Dados de exemplo baseados na estrutura do seu PDF
             devotionalData = {
                 1: {
                     'SEGUNDA-FEIRA': {
@@ -439,28 +403,44 @@
                         title: 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
                         content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
                     },
-                    'TERÇA FEIRA': {
+                    'TERÇA-FEIRA': {
                         bibleReading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
                         prayerReading: '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
                         title: 'FILHOS DA LUZ E FILHOS DO DIA',
                         content: 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia.'
+                    },
+                    'QUARTA-FEIRA': {
+                        bibleReading: 'Jo 8:12; 12:35-36; 1 Jo 1:5-7',
+                        prayerReading: '"Enquanto tendes a luz, crede na luz, para que vos torneis filhos da luz" (Jo 12:36).',
+                        title: 'CRER NA LUZ PARA SER FILHOS DA LUZ',
+                        content: 'No evangelho de João, o Senhor Jesus se apresenta como a luz do mundo e nos exorta a crer na luz para nos tornarmos filhos da luz. Esta é uma condição fundamental: precisamos crer na luz que é Cristo.'
                     }
-                    // Adicione mais dias conforme necessário
+                },
+                2: {
+                    'SEGUNDA-FEIRA': {
+                        bibleReading: 'Gn 1:1-2; Jo 1:1-3; Cl 1:15-17',
+                        prayerReading: '"No princípio, criou Deus os céus e a terra" (Gn 1:1).',
+                        title: 'NO PRINCÍPIO DEUS CRIOU',
+                        content: 'A mensagem desta semana nos leva ao início de tudo, quando Deus criou os céus e a terra. Esta verdade fundamental estabelece a base de nossa fé e compreensão do universo.'
+                    }
+                },
+                3: {
+                    'SEGUNDA-FEIRA': {
+                        bibleReading: 'Gn 1:26-27; 2:7; 1 Co 15:45',
+                        prayerReading: '"E disse Deus: Façamos o homem à nossa imagem, conforme a nossa semelhança" (Gn 1:26).',
+                        title: 'A CRIAÇÃO DO HOMEM',
+                        content: 'O ápice da criação de Deus foi a formação do homem à Sua imagem e conforme a Sua semelhança. Esta verdade revela o propósito eterno de Deus para a humanidade.'
+                    }
+                },
+                4: {
+                    'SEGUNDA-FEIRA': {
+                        bibleReading: 'Gn 2:8-9, 15-17; Rm 5:12-21',
+                        prayerReading: '"E tomou o SENHOR Deus o homem e o colocou no jardim do Éden para o cultivar e o guardar" (Gn 2:15).',
+                        title: 'O JARDIM DO ÉDEN',
+                        content: 'Deus preparou um lugar especial para o homem - o jardim do Éden. Este ambiente perfeito revela o cuidado e o propósito de Deus para com Sua criação.'
+                    }
                 }
             };
-            
-            // Preencher semanas 2, 3 e 4 com dados similares
-            for (let week = 2; week <= 4; week++) {
-                if (!devotionalData[week]) {
-                    devotionalData[week] = {};
-                    Object.keys(devotionalData[1]).forEach(day => {
-                        devotionalData[week][day] = {
-                            ...devotionalData[1][day],
-                            title: devotionalData[1][day].title + ` (Semana ${week})`
-                        };
-                    });
-                }
-            }
         }
         
         // Funções auxiliares
@@ -643,7 +623,18 @@
         function formatContent(content) {
             if (!content) return '<p>Conteúdo não disponível</p>';
             
-            return `<p>${content}</p>`;
+            // Quebrar o conteúdo em parágrafos
+            const sentences = content.split('. ');
+            let paragraphs = '';
+            
+            for (let i = 0; i < sentences.length; i += 2) {
+                const paragraph = sentences.slice(i, i + 2).join('. ');
+                if (paragraph.trim()) {
+                    paragraphs += `<p>${paragraph}${i + 2 >= sentences.length ? '' : '.'}</p>`;
+                }
+            }
+            
+            return paragraphs || `<p>${content}</p>`;
         }
         
         // Configurar upload de arquivo

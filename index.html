@@ -336,24 +336,29 @@
                         bibleReading = bibleMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    // Extrair oração - melhorar a detecção do fim da seção
+                    // Extrair oração - usando a lógica do parêntese de fechamento
                     let prayerReading = '';
-                    const prayerMatch = section.match(/Ler com ora[cç][aã]o\s*:\s*([^•]+?)(?=\s*(?:[A-Z]{2,}[^a-z]*$|[A-Z]{2,}[^a-z]*\n))/);
+                    const prayerMatch = section.match(/Ler com ora[cç][aã]o\s*:\s*([^)]+\))/i);
                     if (prayerMatch) {
                         prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    // Extrair título - procurar por texto em maiúsculas que seja o título
+                    // Extrair título - procurar por texto em MAIÚSCULAS após o parêntese
                     let title = '';
-                    // Primeiro tentamos encontrar o padrão específico com "FILHOS DO DIA"
-                    const titleMatch1 = section.match(/(FILHOS DA LUZ E FILHOS DO DIA)/i);
-                    if (titleMatch1) {
-                        title = titleMatch1[1].trim();
-                    } else {
-                        // Se não encontrar, procura por qualquer texto em maiúsculas que pareça um título
-                        const titleMatch2 = section.match(/([A-Z][A-Z\s]{10,}?(?=\s*[a-z]))/);
-                        if (titleMatch2) {
-                            title = titleMatch2[1].trim();
+                    if (prayerMatch) {
+                        // Encontrar o texto após o parêntese de fechamento da oração
+                        const afterPrayer = section.substring(prayerMatch.index + prayerMatch[0].length);
+                        const titleMatch = afterPrayer.match(/([A-Z][A-Z\s]{5,}[A-Z])(?=\s*[a-z])/);
+                        if (titleMatch) {
+                            title = titleMatch[1].trim();
+                        }
+                    }
+                    
+                    // Se não encontrou título com a lógica acima, tenta encontrar de outra forma
+                    if (!title) {
+                        const titleMatch = section.match(/(FILHOS DA LUZ E FILHOS DO DIA|ANDAR COMO FILHOS DA LUZ|CRER NA LUZ PARA SER FILHOS DA LUZ)/i);
+                        if (titleMatch) {
+                            title = titleMatch[1].trim();
                         }
                     }
                     
@@ -365,16 +370,13 @@
                             content = section.substring(titleIndex + title.length).trim();
                             
                             // Limpar o conteúdo - remover partes indesejadas
-                            content = content.replace(/Anote abaixo[^•]+?Ore e faça[^•]+?Luz na palavra[^•]+?Direção[^•]+?Admoesta[cç][aã]o[^•]+?Leitura de apoio[^•]+/gi, '');
-                            content = content.replace(/=====[^=]+=====/g, '');
-                            content = content.replace(/\d+\s*\/\s*\d+/g, '');
-                            content = content.replace(/Acesso ao[^•]+?mensagem[^•]+?©[^•]+?Editora[^•]+?CITA[CÇ][ÕO]ES B[IÍ]BLICAS[^•]+?SUM[AÁ]RIO[^•]+/gi, '');
-                            content = content.replace(/\s+/g, ' ').trim();
-                            
-                            // Limitar o conteúdo a um tamanho razoável
-                            if (content.length > 1000) {
-                                content = content.substring(0, 1000) + '...';
-                            }
+                            content = cleanContent(content);
+                        }
+                    } else {
+                        // Se não encontrou título, tenta extrair conteúdo após a oração
+                        if (prayerMatch) {
+                            const afterPrayer = section.substring(prayerMatch.index + prayerMatch[0].length);
+                            content = cleanContent(afterPrayer);
                         }
                     }
                     
@@ -386,6 +388,26 @@
                     };
                 }
             });
+        }
+        
+        // Função para limpar o conteúdo
+        function cleanContent(content) {
+            if (!content) return '';
+            
+            let cleaned = content
+                .replace(/Anote abaixo[^•]+?Ore e faça[^•]+?Luz na palavra[^•]+?Direção[^•]+?Admoesta[cç][aã]o[^•]+?Leitura de apoio[^•]+/gi, '')
+                .replace(/=====[^=]+=====/g, '')
+                .replace(/\d+\s*\/\s*\d+/g, '')
+                .replace(/Acesso ao[^•]+?mensagem[^•]+?©[^•]+?Editora[^•]+?CITA[CÇ][ÕO]ES B[IÍ]BLICAS[^•]+?SUM[AÁ]RIO[^•]+/gi, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Limitar o conteúdo a um tamanho razoável
+            if (cleaned.length > 1000) {
+                cleaned = cleaned.substring(0, 1000) + '...';
+            }
+            
+            return cleaned;
         }
         
         // Função para obter conteúdo padrão

@@ -267,6 +267,9 @@
                 // Extrair conteúdo do PDF usando método simplificado
                 await extractContentSimple();
                 
+                // Corrigir nomes dos dias
+                fixDayNames();
+                
                 // Renderizar navegação
                 renderWeekNavigation();
                 
@@ -277,6 +280,56 @@
                 hideLoading();
                 showError(`Não foi possível carregar o PDF: ${error.message}`);
             }
+        }
+        
+        // Função para corrigir nomes dos dias
+        function fixDayNames() {
+            const correctedData = {};
+            
+            for (let week in devotionalData) {
+                correctedData[week] = {};
+                
+                for (let dayKey in devotionalData[week]) {
+                    // Corrigir o nome do dia
+                    let correctedDay = cleanDayName(dayKey);
+                    
+                    // Se conseguiu corrigir, usar o nome corrigido
+                    if (correctedDay) {
+                        correctedData[week][correctedDay] = devotionalData[week][dayKey];
+                    } else {
+                        // Se não, manter o original
+                        correctedData[week][dayKey] = devotionalData[week][dayKey];
+                    }
+                }
+            }
+            
+            devotionalData = correctedData;
+            console.log('Dados após correção:', devotionalData);
+        }
+        
+        // Função para limpar nome do dia
+        function cleanDayName(dayName) {
+            // Remover "LEITURA BÍBLICA" e variações
+            let cleanName = dayName
+                .replace(/LEITURA BÍBLICA/gi, '')
+                .replace(/LEITURA/gi, '')
+                .replace(/BÍBLICA/gi, '')
+                .trim();
+            
+            // Verificar se é um nome de dia válido
+            const validDays = Object.keys(weekDays);
+            if (validDays.includes(cleanName)) {
+                return cleanName;
+            }
+            
+            // Se não for válido, tentar encontrar o nome do dia
+            for (let validDay of validDays) {
+                if (dayName.includes(validDay)) {
+                    return validDay;
+                }
+            }
+            
+            return null;
         }
         
         // Método simplificado de extração
@@ -296,7 +349,7 @@
                     for (let item of textContent.items) {
                         pageText += item.str + ' ';
                     }
-                    fullText += 'PAGE_' + pageNum + ': ' + pageText + '\n\n';
+                    fullText += pageText + '\n';
                     
                 } catch (error) {
                     console.error(`Erro ao processar página ${pageNum}:`, error);
@@ -309,135 +362,109 @@
         
         // Processamento simplificado do texto completo
         function processFullTextSimple(fullText) {
-            // Dividir por páginas
-            const pages = fullText.split('PAGE_');
+            const lines = fullText.split('\n');
             
             let currentWeek = null;
             let currentDay = null;
+            let currentSection = null;
             
-            for (let i = 1; i < pages.length; i++) {
-                const pageContent = pages[i].substring(pages[i].indexOf(':') + 1).trim();
-                const lines = pageContent.split('\n');
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
                 
-                for (let line of lines) {
-                    const trimmedLine = line.trim();
-                    if (!trimmedLine) continue;
+                if (!line) continue;
+                
+                // Debug: mostrar linhas que contêm padrões importantes
+                if (line.includes('SEMANA') && line.match(/\d+\s*[–\-]/)) {
+                    console.log('Linha com semana:', line);
+                }
+                
+                // Procurar por padrão: "SEMANA X – DIA-DA-SEMANA"
+                const weekDayMatch = line.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
+                if (weekDayMatch) {
+                    currentWeek = parseInt(weekDayMatch[1]);
+                    currentDay = weekDayMatch[2].trim().toUpperCase();
+                    currentSection = 'header';
                     
-                    // Debug: mostrar linhas que contêm padrões importantes
-                    if (trimmedLine.includes('SEMANA') || trimmedLine.match(/SEGUNDA|TERÇA|QUARTA|QUINTA|SEXTA|SÁBADO|DOMINGO/)) {
-                        console.log('Linha importante:', trimmedLine);
+                    if (!devotionalData[currentWeek]) {
+                        devotionalData[currentWeek] = {};
                     }
                     
-                    // Procurar por padrão: "SEMANA X – DIA-DA-SEMANA"
-                    const weekDayMatch = trimmedLine.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s\-]+)/i);
-                    if (weekDayMatch) {
-                        currentWeek = parseInt(weekDayMatch[1]);
-                        currentDay = weekDayMatch[2].trim().toUpperCase();
+                    if (!devotionalData[currentWeek][currentDay]) {
+                        devotionalData[currentWeek][currentDay] = {
+                            bibleReading: '',
+                            prayerReading: '',
+                            title: '',
+                            content: ''
+                        };
+                    }
+                    
+                    console.log(`Encontrado: Semana ${currentWeek}, ${currentDay}`);
+                    continue;
+                }
+                
+                // Se temos semana e dia ativos, procurar por conteúdo
+                if (currentWeek && currentDay) {
+                    const devotional = devotionalData[currentWeek][currentDay];
+                    
+                    // Leitura bíblica
+                    if ((line.includes('Leitura bíblica:') || line.includes('Leitura bíblica')) && !devotional.bibleReading) {
+                        currentSection = 'bibleReading';
+                        let bibleText = line.replace(/Leitura bíblica:?\s*/i, '').trim();
                         
-                        // Corrigir nome do dia se necessário
-                        if (currentDay.includes('TERÇA') && !currentDay.includes('TERÇA FEIRA')) {
-                            currentDay = 'TERÇA FEIRA';
+                        // Coletar próximas linhas até encontrar "Ler com oração"
+                        for (let j = i + 1; j < lines.length; j++) {
+                            const nextLine = lines[j].trim();
+                            if (nextLine.includes('Ler com oração') || nextLine.match(/SEMANA\s+\d+/)) break;
+                            if (nextLine) bibleText += ' ' + nextLine;
                         }
                         
-                        if (!devotionalData[currentWeek]) {
-                            devotionalData[currentWeek] = {};
-                        }
-                        
-                        if (!devotionalData[currentWeek][currentDay]) {
-                            devotionalData[currentWeek][currentDay] = {
-                                bibleReading: '',
-                                prayerReading: '',
-                                title: '',
-                                content: ''
-                            };
-                        }
-                        
-                        console.log(`Encontrado: Semana ${currentWeek}, ${currentDay}`);
+                        devotional.bibleReading = bibleText.trim();
                         continue;
                     }
                     
-                    // Se temos semana e dia ativos, procurar por conteúdo
-                    if (currentWeek && currentDay) {
-                        const devotional = devotionalData[currentWeek][currentDay];
+                    // Ler com oração
+                    if ((line.includes('Ler com oração:') || line.includes('Ler com oração')) && !devotional.prayerReading) {
+                        currentSection = 'prayerReading';
+                        let prayerText = '';
                         
-                        // Leitura bíblica
-                        if ((trimmedLine.includes('Leitura bíblica:') || trimmedLine.includes('Leitura bíblica')) && !devotional.bibleReading) {
-                            devotional.bibleReading = trimmedLine.replace(/Leitura bíblica:?\s*/i, '').trim();
-                            continue;
-                        }
-                        
-                        // Ler com oração
-                        if ((trimmedLine.includes('Ler com oração:') || trimmedLine.includes('Ler com oração')) && !devotional.prayerReading) {
-                            // A próxima linha geralmente tem o versículo
-                            devotional.prayerReading = 'Versículo será extraído';
-                            continue;
-                        }
-                        
-                        // Título (texto em maiúsculas após "Ler com oração")
-                        if (!devotional.title && trimmedLine === trimmedLine.toUpperCase() && 
-                            trimmedLine.length > 10 && trimmedLine.length < 100 &&
-                            !trimmedLine.includes('SEMANA') && !trimmedLine.includes('LEITURA')) {
-                            devotional.title = trimmedLine;
-                            continue;
-                        }
-                        
-                        // Conteúdo (texto normal após o título)
-                        if (devotional.title && trimmedLine && 
-                            !trimmedLine.includes('Anote abaixo') && 
-                            !trimmedLine.includes('Ore e faça') &&
-                            !trimmedLine.includes('Luz na palavra') &&
-                            !trimmedLine.match(/SEMANA\s+\d+/)) {
-                            
-                            // Adicionar ao conteúdo, limitando para não ficar muito longo
-                            if (devotional.content.length < 2000) {
-                                devotional.content += trimmedLine + ' ';
+                        // Coletar próxima linha (geralmente o versículo)
+                        for (let j = i + 1; j < lines.length; j++) {
+                            const nextLine = lines[j].trim();
+                            if (nextLine && !nextLine.includes('Leitura bíblica') && !nextLine.match(/SEMANA\s+\d+/)) {
+                                prayerText = nextLine;
+                                break;
                             }
                         }
+                        
+                        devotional.prayerReading = prayerText;
+                        continue;
+                    }
+                    
+                    // Título (texto em maiúsculas após "Ler com oração")
+                    if (currentSection === 'prayerReading' && !devotional.title && 
+                        line === line.toUpperCase() && line.length > 10 && line.length < 100 &&
+                        !line.includes('SEMANA') && !line.includes('LEITURA') && !line.includes('LER COM')) {
+                        
+                        devotional.title = line;
+                        currentSection = 'content';
+                        console.log(`Título encontrado: ${line}`);
+                        continue;
+                    }
+                    
+                    // Conteúdo (texto normal após o título)
+                    if (currentSection === 'content' && line && 
+                        !line.includes('Anote abaixo') && 
+                        !line.includes('Ore e faça') &&
+                        !line.includes('Luz na palavra') &&
+                        !line.match(/SEMANA\s+\d+/)) {
+                        
+                        // Adicionar ao conteúdo
+                        devotional.content += line + ' ';
                     }
                 }
             }
             
             console.log('Extração simplificada concluída:', devotionalData);
-            
-            // Se não encontrou dados, usar fallback
-            if (Object.keys(devotionalData).length === 0) {
-                useFallbackData();
-            }
-        }
-        
-        // Fallback com dados de exemplo
-        function useFallbackData() {
-            console.log('Usando dados fallback...');
-            devotionalData = {
-                1: {
-                    'SEGUNDA-FEIRA': {
-                        bibleReading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
-                        prayerReading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
-                        title: 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
-                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
-                    },
-                    'TERÇA FEIRA': {
-                        bibleReading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
-                        prayerReading: '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
-                        title: 'FILHOS DA LUZ E FILHOS DO DIA',
-                        content: 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia.'
-                    },
-                    'QUARTA-FEIRA': {
-                        bibleReading: 'Gn 1:3',
-                        prayerReading: '"Disse também Deus: Ajuntem-se as águas debaixo dos céus num só lugar, e apareça a porção seca. E assim se fez" (Gn 1:9).',
-                        title: 'O TERCEIRO DIA – O SURGIMENTO DA PORÇÃO SECA',
-                        content: 'No primeiro dia da restauração da criação, Deus restaurou a luz. A luz é essencial para gerar, sustentar e manter a vida. Sem luz não há vida. No segundo dia, Deus criou a atmosfera e, com o ar criado, produziu oxigênio para que o homem e os demais seres pudessem respirar e viver na terra.'
-                    }
-                },
-                2: {},
-                3: {},
-                4: {}
-            };
-            
-            // Preencher semanas 2, 3 e 4
-            for (let week = 2; week <= 4; week++) {
-                devotionalData[week] = JSON.parse(JSON.stringify(devotionalData[1]));
-            }
         }
         
         // Funções auxiliares
@@ -478,6 +505,7 @@
             
             if (weeks.length === 0) {
                 weekList.innerHTML = '<li>Nenhuma semana encontrada</li>';
+                showError('Nenhum conteúdo foi extraído do PDF. Tente carregar o arquivo manualmente.');
                 return;
             }
             
@@ -620,7 +648,24 @@
         function formatContent(content) {
             if (!content) return '<p>Conteúdo não disponível</p>';
             
-            return `<p>${content}</p>`;
+            // Limpar e quebrar em parágrafos
+            const cleanContent = content.replace(/\s+/g, ' ').trim();
+            const sentences = cleanContent.split(/(?<=[.!?])\s+/);
+            let paragraphs = [];
+            let currentParagraph = '';
+            
+            for (let sentence of sentences) {
+                if ((currentParagraph + sentence).length < 500) {
+                    currentParagraph += sentence + ' ';
+                } else {
+                    if (currentParagraph) paragraphs.push(currentParagraph.trim());
+                    currentParagraph = sentence + ' ';
+                }
+            }
+            
+            if (currentParagraph) paragraphs.push(currentParagraph.trim());
+            
+            return paragraphs.map(p => `<p>${p}</p>`).join('');
         }
         
         // Configurar upload de arquivo

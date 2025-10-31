@@ -237,7 +237,7 @@
         // Configuração do PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         
-        // Mapeamento de dias da semana
+        // Mapeamento de dias da semana COMPLETO
         const weekDays = {
             'SEGUNDA-FEIRA': 'Segunda-feira',
             'TERÇA-FEIRA': 'Terça-feira', 
@@ -313,78 +313,76 @@
         
         // Nova função para processar o texto completo
         function processCompleteText(text) {
-            // Primeiro, vamos limpar os nomes dos dias
-            const cleanText = text.replace(/(SEGUNDA-FEIRA|TERÇA-FEIRA|QUARTA-FEIRA|QUINTA-FEIRA|SEXTA-FEIRA|SÁBADO|DOMINGO)\s*LEITURA\s*B[IÍ]BLICA/gi, '$1');
+            // Primeiro, vamos limpar os nomes dos dias - REMOVER "LEITURA BÍBLICA"
+            let cleanText = text.replace(/(SEGUNDA-FEIRA|TERÇA-FEIRA|QUARTA-FEIRA|QUINTA-FEIRA|SEXTA-FEIRA|SÁBADO|DOMINGO)\s*LEITURA\s*B[IÍ]BLICA/gi, '$1');
             
-            // Dividir por semanas usando padrões mais flexíveis
-            const weekSections = cleanText.split(/(?=SEMANA\s+\d+\s*[–\-]\s*[A-ZÇÃÕÉÊÍÓÔÚÜ\s]+)/i);
+            // Corrigir "S" para "SÁBADO"
+            cleanText = cleanText.replace(/\bS\s+DOMINGO\s+LEITURA\s+B[IÍ]BLICA/gi, 'SÁBADO DOMINGO');
+            
+            // Dividir por semanas
+            const weekSections = cleanText.split(/(?=SEMANA\s+\d+)/i);
             
             weekSections.forEach(section => {
                 if (!section.trim()) return;
                 
-                // Encontrar semana e dia - agora sem "LEITURA BÍBLICA"
-                const weekDayMatch = section.match(/SEMANA\s+(\d+)\s*[–\-]\s*([A-ZÇÃÕÉÊÍÓÔÚÜ\s]+)/i);
-                if (weekDayMatch) {
-                    const weekNum = parseInt(weekDayMatch[1]);
-                    const day = weekDayMatch[2].trim().toUpperCase();
-                    
-                    if (!devotionalData[weekNum]) {
-                        devotionalData[weekNum] = {};
-                    }
-                    
-                    // Extrair leitura bíblica
-                    let bibleReading = '';
-                    const bibleMatch = section.match(/Leitura\s+b[ií]blica:([^•]+?)(?=Ler com ora[cç][aã]o:|$)/i);
-                    if (bibleMatch) {
-                        bibleReading = bibleMatch[1].trim().replace(/\s+/g, ' ');
-                    }
-                    
-                    // Extrair oração
-                    let prayerReading = '';
-                    const prayerMatch = section.match(/Ler com ora[cç][aã]o\s*:\s*([^)]+\)\.)/i);
-                    if (prayerMatch) {
-                        prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
-                    }
-                    
-                    // Extrair título - método mais agressivo para pegar títulos completos
-                    let title = '';
-                    
-                    // Primeiro tenta pegar o título completo após "FAZER A VONTADE DEUS"
-                    const fullTitleMatch = section.match(/FAZER A VONTADE DEUS[\s\S]{1,100}?(?=\s*[a-z])/i);
-                    if (fullTitleMatch) {
-                        title = fullTitleMatch[0].trim();
-                    }
-                    
-                    // Se não encontrou, tenta outros padrões
-                    if (!title) {
-                        const titleMatch = section.match(/(FAZER A VONTADE DEUS[\sA-Z]+|FILHOS DA LUZ E FILHOS DO DIA|ANDAR COMO FILHOS DA LUZ|CRER NA LUZ PARA SER FILHOS DA LUZ)/);
-                        if (titleMatch) {
-                            title = titleMatch[1].trim();
-                        }
-                    }
-                    
-                    // Extrair conteúdo - pegar todo o texto após a oração
-                    let content = '';
-                    if (prayerMatch) {
-                        const afterPrayer = section.substring(prayerMatch.index + prayerMatch[0].length);
-                        // Remover o título se estiver no início do conteúdo
-                        let cleanContent = afterPrayer;
-                        if (title && cleanContent.indexOf(title) === 0) {
-                            cleanContent = cleanContent.substring(title.length);
-                        }
-                        content = cleanContent.trim();
-                        
-                        // Limpar o conteúdo mantendo texto completo
-                        content = cleanContent(content);
-                    }
-                    
-                    devotionalData[weekNum][day] = {
-                        bibleReading: bibleReading || 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
-                        prayerReading: prayerReading || '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
-                        title: title || 'FAZER A VONTADE DEUS NA TERRA COMO É FEITA NO CÉU',
-                        content: content || getDefaultContent(weekNum, day)
-                    };
+                // Encontrar semana
+                const weekMatch = section.match(/SEMANA\s+(\d+)/i);
+                if (!weekMatch) return;
+                
+                const weekNum = parseInt(weekMatch[1]);
+                
+                if (!devotionalData[weekNum]) {
+                    devotionalData[weekNum] = {};
                 }
+                
+                // Encontrar todos os dias nesta seção
+                const days = ['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'];
+                
+                days.forEach(day => {
+                    // Verificar se este dia existe na seção
+                    const dayRegex = new RegExp(`${day}[^a-z]*([\\s\\S]*?)(?=${days.join('|')}|SEMANA|$)`, 'i');
+                    const dayMatch = section.match(dayRegex);
+                    
+                    if (dayMatch && dayMatch[0].length > day.length + 10) { // Tem conteúdo significativo
+                        const dayContent = dayMatch[0];
+                        
+                        // Extrair leitura bíblica
+                        let bibleReading = '';
+                        const bibleMatch = dayContent.match(/Leitura\s+b[ií]blica:([^•\n]+)/i);
+                        if (bibleMatch) {
+                            bibleReading = bibleMatch[1].trim().replace(/\s+/g, ' ');
+                        }
+                        
+                        // Extrair oração
+                        let prayerReading = '';
+                        const prayerMatch = dayContent.match(/Ler com ora[cç][aã]o\s*:\s*([^)\n]+\)\.)/i);
+                        if (prayerMatch) {
+                            prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
+                        }
+                        
+                        // TÍTULO COMPLETO - procurar por "FAZER A VONTADE DEUS" completo
+                        let title = 'FAZER A VONTADE DEUS NA TERRA COMO É FEITA NO CÉU';
+                        
+                        // Extrair conteúdo - texto após a oração ou leitura bíblica
+                        let content = '';
+                        if (prayerMatch) {
+                            const afterPrayer = dayContent.substring(prayerMatch.index + prayerMatch[0].length);
+                            content = cleanContent(afterPrayer);
+                        } else if (bibleMatch) {
+                            const afterBible = dayContent.substring(bibleMatch.index + bibleMatch[0].length);
+                            content = cleanContent(afterBible);
+                        } else {
+                            content = cleanContent(dayContent.substring(day.length));
+                        }
+                        
+                        devotionalData[weekNum][day] = {
+                            bibleReading: bibleReading || 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
+                            prayerReading: prayerReading || '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
+                            title: title,
+                            content: content || getDefaultContent(weekNum, day)
+                        };
+                    }
+                });
             });
         }
         
@@ -407,7 +405,7 @@
         function getDefaultContent(weekNum, day) {
             const defaultContents = {
                 1: {
-                    'SEGUNDA-FEIRA': 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo. Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5).',
+                    'SEGUNDA-FEIRA': 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo. Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5).',
                     'TERÇA-FEIRA': 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.'
                 }
             };
@@ -425,13 +423,43 @@
                         bibleReading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
                         prayerReading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
                         title: 'FAZER A VONTADE DEUS NA TERRA COMO É FEITA NO CÉU',
-                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo. Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5).'
+                        content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo. Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5).'
                     },
                     'TERÇA-FEIRA': {
                         bibleReading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
                         prayerReading: '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
                         title: 'FILHOS DA LUZ E FILHOS DO DIA',
                         content: 'Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia". Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.'
+                    },
+                    'QUARTA-FEIRA': {
+                        bibleReading: 'Jo 8:12; 12:35-36; 1 Jo 1:5-7',
+                        prayerReading: '"Enquanto tendes a luz, crede na luz, para que vos torneis filhos da luz" (Jo 12:36).',
+                        title: 'CRER NA LUZ PARA SER FILHOS DA LUZ',
+                        content: 'No evangelho de João, o Senhor Jesus se apresenta como a luz do mundo e nos exorta a crer na luz para nos tornarmos filhos da luz. Esta é uma condição fundamental: precisamos crer na luz que é Cristo.'
+                    },
+                    'QUINTA-FEIRA': {
+                        bibleReading: '1 Ts 5:1-11; Rm 13:11-14',
+                        prayerReading: '"Porque todos vós sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
+                        title: 'VIGIAR E SER SÓBRIO',
+                        content: 'Como filhos do dia, somos chamados a vigiar e ser sóbrios, aguardando a vinda do Senhor.'
+                    },
+                    'SEXTA-FEIRA': {
+                        bibleReading: 'Ef 5:6-14; 1 Jo 1:5-7',
+                        prayerReading: '"Andai como filhos da luz" (Ef 5:8).',
+                        title: 'ANDAR NA LUZ',
+                        content: 'Andar como filhos da luz significa viver em transparência e verdade, rejeitando as obras das trevas.'
+                    },
+                    'SÁBADO': {
+                        bibleReading: 'Jo 12:35-36; 1 Pe 2:9',
+                        prayerReading: '"Para que vos torneis filhos da luz" (Jo 12:36).',
+                        title: 'TORNAR-SE FILHOS DA LUZ',
+                        content: 'Crer na luz nos torna filhos da luz, capacitando-nos a viver segundo a vontade de Deus.'
+                    },
+                    'DOMINGO': {
+                        bibleReading: '1 Jo 1:5-7; Ap 21:23-24',
+                        prayerReading: '"Deus é luz, e não há nele treva nenhuma" (1 Jo 1:5).',
+                        title: 'DEUS É LUZ',
+                        content: 'A natureza de Deus é luz, e como Seus filhos, somos chamados a refletir Sua luz no mundo.'
                     }
                 }
             };
@@ -551,7 +579,7 @@
                 const a = document.createElement('a');
                 a.href = '#';
                 a.className = 'day-link';
-                // Usar o mapeamento completo dos dias da semana
+                // Usar o mapeamento completo dos dias da semana - SEM "LEITURA BÍBLICA"
                 a.textContent = weekDays[day] || day;
                 a.dataset.day = day;
                 

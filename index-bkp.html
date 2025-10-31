@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alimento Diário</title>
+    <title>Alimento Diário - Devocional</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
         :root {
@@ -192,7 +192,7 @@
 <body>
     <header>
         <h1>Alimento Diário</h1>
-        <p>A Criação do Homem</p>
+        <p>Devocional - A Criação do Homem</p>
     </header>
     
     <div class="container">
@@ -239,11 +239,11 @@
         
         // Mapeamento de dias da semana
         const weekDays = {
-            'SEGUNDA-FEIRA': 'Segunda-feira',
-            'TERÇA-FEIRA': 'Terça-feira',
-            'QUARTA-FEIRA': 'Quarta-feira',
-            'QUINTA-FEIRA': 'Quinta-feira',
-            'SEXTA-FEIRA': 'Sexta-feira',
+            'SEGUNDA-FEIRA': 'Segunda',
+            'TERÇA-FEIRA': 'Terça',
+            'QUARTA-FEIRA': 'Quarta',
+            'QUINTA-FEIRA': 'Quinta',
+            'SEXTA-FEIRA': 'Sexta',
             'SÁBADO': 'Sábado',
             'DOMINGO': 'Domingo'
         };
@@ -325,9 +325,6 @@
                     const weekNum = parseInt(weekDayMatch[1]);
                     const day = weekDayMatch[2].trim().toUpperCase();
                     
-                    // Corrigir nome do dia - remover "LEITURA BÍBLICA"
-                    const cleanDay = day.replace(/\s*LEITURA\s*B[IÍ]BLICA\s*/gi, '');
-                    
                     if (!devotionalData[weekNum]) {
                         devotionalData[weekNum] = {};
                     }
@@ -346,13 +343,12 @@
                         prayerReading = prayerMatch[1].trim().replace(/\s+/g, ' ');
                     }
                     
-                    // Extrair título - procurar texto completo após a oração
+                    // Extrair título - procurar por texto em MAIÚSCULAS após o ")."
                     let title = '';
                     if (prayerMatch) {
                         // Encontrar o texto após o ")." da oração
                         const afterPrayer = section.substring(prayerMatch.index + prayerMatch[0].length);
-                        // Procurar por texto em maiúsculas que seja o título completo
-                        const titleMatch = afterPrayer.match(/([A-Z][A-Z\s]{10,}[A-Z])(?=\s*[a-z])/);
+                        const titleMatch = afterPrayer.match(/([A-Z][A-Z\s]{5,}[A-Z])(?=\s*[a-z])/);
                         if (titleMatch) {
                             title = titleMatch[1].trim();
                         }
@@ -360,8 +356,7 @@
                     
                     // Se não encontrou título com a lógica acima, tenta encontrar de outra forma
                     if (!title) {
-                        // Procurar por "FAZER A VONTADE DEUS" completo
-                        const titleMatch = section.match(/(FAZER A VONTADE DEUS N[A-Z\s]+|FILHOS DA LUZ E FILHOS DO DIA|ANDAR COMO FILHOS DA LUZ|CRER NA LUZ PARA SER FILHOS DA LUZ)/i);
+                        const titleMatch = section.match(/(FILHOS DA LUZ E FILHOS DO DIA|ANDAR COMO FILHOS DA LUZ|CRER NA LUZ PARA SER FILHOS DA LUZ)/i);
                         if (titleMatch) {
                             title = titleMatch[1].trim();
                         }
@@ -385,11 +380,11 @@
                         }
                     }
                     
-                    devotionalData[weekNum][cleanDay] = {
+                    devotionalData[weekNum][day] = {
                         bibleReading: bibleReading || 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
                         prayerReading: prayerReading || '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
-                        title: title || 'FAZER A VONTADE DEUS NA TERRA COMO É FEITA NO CÉU',
-                        content: content || getDefaultContent(weekNum, cleanDay)
+                        title: title || 'FILHOS DA LUZ E FILHOS DO DIA',
+                        content: content || getDefaultContent(weekNum, day)
                     };
                 }
             });
@@ -407,7 +402,11 @@
                 .replace(/\s+/g, ' ')
                 .trim();
             
-            // Não limitar o conteúdo para mostrar texto completo
+            // Limitar o conteúdo a um tamanho razoável
+            if (cleaned.length > 1000) {
+                cleaned = cleaned.substring(0, 1000) + '...';
+            }
+            
             return cleaned;
         }
         
@@ -432,7 +431,7 @@
                     'SEGUNDA-FEIRA': {
                         bibleReading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
                         prayerReading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
-                        title: 'FAZER A VONTADE DEUS NA TERRA COMO É FEITA NO CÉU',
+                        title: 'ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS',
                         content: 'Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.'
                     },
                     'TERÇA-FEIRA': {

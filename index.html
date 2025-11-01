@@ -75,11 +75,27 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .week-btn:hover {
+            background: #2980b9;
+        }
+        
+        .week-btn.active {
+            background: var(--accent);
         }
         
         .days-list {
             list-style: none;
             background-color: rgba(0,0,0,0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .week-item.active .days-list {
+            max-height: 500px;
         }
         
         .day-item {
@@ -321,8 +337,8 @@
             <h2>Navegação</h2>
         </div>
         <ul class="weeks-list">
-            <li class="week-item">
-                <button class="week-btn">
+            <li class="week-item active">
+                <button class="week-btn" onclick="toggleWeek('week1')">
                     SEMANA 1
                     <span>▼</span>
                 </button>
@@ -350,6 +366,35 @@
                     </li>
                 </ul>
             </li>
+            <li class="week-item">
+                <button class="week-btn" onclick="toggleWeek('week2')">
+                    SEMANA 2
+                    <span>▼</span>
+                </button>
+                <ul class="days-list">
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('segunda2')">SEGUNDA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('terca2')">TERÇA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('quarta2')">QUARTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('quinta2')">QUINTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('sexta2')">SEXTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('sabado2')">SÁBADO</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn" onclick="showDay('domingo2')">DOMINGO</button>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
     
@@ -363,6 +408,8 @@
         </header>
         
         <div class="content-area">
+            <!-- SEMANA 1 -->
+            
             <!-- SEGUNDA-FEIRA -->
             <div id="segunda" class="day-content active">
                 <div class="day-header">
@@ -636,6 +683,272 @@
                     <button class="prayer-btn" onclick="handlePrayer('domingo')">Ore e faça um grito de guerra</button>
                 </div>
             </div>
+
+            <!-- SEMANA 2 -->
+            
+            <!-- SEGUNDA-FEIRA - SEMANA 2 -->
+            <div id="segunda2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SEGUNDA-FEIRA - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:14-19; Is 45:18</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Fez Deus os dois grandes luzeiros: o maior para governar o dia, e o menor para governar a noite" (Gn 1:16).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">O SOL E A LUA: INSTRUMENTOS DO GOVERNO DE DEUS</h3>
+                
+                <div class="content-text">
+                    <p>O título da mensagem desta semana é: "A restauração da terra: o quinto dia e o sexto dia". Retomando o quarto dia da criação, conforme visto na semana passada, compreenderemos que Deus criou todas as coisas visando exercer Seu governo na terra. Criou os dois grandes luzeiros não apenas para separar a luz das trevas, mas também para estabelecer Seu senhorio por meio deles (Gn 1:14-19). No quinto dia, criou os peixes, capazes de sobreviver no mar, nas águas de morte, sem ser contaminados por elas (vs. 20-22a). Assim também, colocou-nos no mundo e deu-nos as condições necessárias para não sermos contaminados por ele. Nesse dia ainda criou as aves, animais alados que vencem a gravidade terrestre. Entre elas destaca-se a águia, que representa a Deus, O qual está acima de todas as coisas. No final do sexto dia, Deus criou o homem, o centro de Sua criação, segundo Sua imagem e semelhança, com a missão de se multiplicar, para que, por meio dele, Deus estabeleça Seu governo em toda a terra (vs. 26-28).</p>
+                    
+                    <p>Na restauração de Sua criação aqui na terra, Deus menciona dois grandes luzeiros, criados para governar. Isso quer dizer que Deus não criou a terra e a deixou entregue à própria sorte. Não! Definitivamente Ele não a criou para ser um caos (Is 45:18). Deus criou tudo para que pudesse exercer Seu governo na terra. Portanto o sol e a lua foram criados não apenas para trazer luz e separar a luz das trevas, mas também para, por meio deles, estabelecer o governo de Deus.</p>
+                    
+                    <p>Isso significa que, independentemente de alguém gostar ou não, concordar ou não, ainda está debaixo desse governo – seja do sol durante o dia, seja da lua durante a noite. Mesmo que não concorde com os horários estabelecidos por Deus para a realização de suas atividades cotidianas, ainda assim você está sujeito ao governo do sol e da lua.</p>
+                    
+                    <p>Na parte mais oriental do Brasil, por exemplo, o sol nasce primeiro. Porém, mesmo alguém cansado e querendo dormir mais um pouco, não consegue esse intento, pois o sol forte indica que é hora de levantar-se. Percebe? Estamos sujeitos ao governo estabelecido por Deus.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-segunda2">Luz na palavra:</label>
+                        <textarea id="light-segunda2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-segunda2">Direção:</label>
+                        <textarea id="direction-segunda2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-segunda2">Admoestação:</label>
+                        <textarea id="admonition-segunda2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('segunda2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- TERÇA-FEIRA - SEMANA 2 -->
+            <div id="terca2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">TERÇA-FEIRA - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Mt 27:1, 20; At 6:3; 7:2-53; Gl 5:13</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Elegeram Estêvão, homem cheio de fé e do Espírito Santo" (At 6:5a).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">A IGREJA PRIMITIVA: UM MODELO PARA SEGUIRMOS</h3>
+                
+                <div class="content-text">
+                    <p>Conforme vimos ontem, todos os habitantes da terra estão sujeitos ao governo estabelecido por Deus mediante a luz do sol e da lua. Na semana passada, vimos que Deus criou esses luzeiros de luz concreta com a finalidade de governar. Na esfera espiritual, Cristo é o Sol nascente das alturas, e Seu desejo é governar sobre toda a terra. Para isso Ele precisa de servos que atendam a Seu chamamento sem interesses próprios, como fez Abraão. Precisa também de servos como Estêvão, cheios do Espírito Santo e dispostos a tudo para servir-Lhe.</p>
+                    
+                    <p>O capítulo sétimo de Atos mostra o perfil de Estêvão, um verdadeiro servo de Jesus Cristo, em contraste com aqueles que se diziam servos de Deus, mas faziam oposição a Sua obra. Estêvão fez um diagnóstico preciso da situação do povo de Israel. Entre eles estavam os líderes religiosos, que se opuseram a Deus quando traíram Jesus e O mataram (Mt 27:1, 20). Na ocasião do discurso de Estêvão, esses mesmos líderes faziam oposição à igreja, tramando matá-lo – o que mais tarde, de fato, aconteceu.</p>
+                    
+                    <p>Apesar de não ter sido preparado em nenhuma faculdade teológica ou seminário religioso, Estêvão foi formado na vida normal da igreja, por isso falou com tanta sabedoria a esses religiosos (At 7:2-53). Percebe-se, em seu discurso e em sua própria defesa, o quanto ele era constituído da palavra de Deus. Cremos que esse é o padrão da igreja – o modelo deixado pela igreja primitiva para seguirmos.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-terca2">Luz na palavra:</label>
+                        <textarea id="light-terca2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-terca2">Direção:</label>
+                        <textarea id="direction-terca2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-terca2">Admoestação:</label>
+                        <textarea id="admonition-terca2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('terca2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- QUARTA-FEIRA - SEMANA 2 -->
+            <div id="quarta2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">QUARTA-FEIRA - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:20-23; Mt 8:23-27</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Eu lhes tenho dado a tua palavra, e o mundo os odiou, porque eles não são do mundo, como também eu não sou" (Jo 17:14).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">A VIDA PREVALECE SOBRE AS ÁGUAS DE MORTE</h3>
+                
+                <div class="content-text">
+                    <p>No quinto dia, Deus criou os seres vivos, como os peixes do mar e as aves dos céus, que são seres de baixo nível de consciência, porém superiores à vida vegetal criada no terceiro dia, quando surgiu a porção seca (Gn 1:20-23). Após o julgamento de Deus sobre as criaturas pré-adâmicas, as águas do mar se tornaram inabitáveis. No entanto Deus criou os animais que povoaram as águas salgadas do mar. Normalmente não haveria como animais sobreviverem em águas salgadas, no entanto Deus criou peixes capazes de viver naquelas águas de morte sem ser salgados ou contaminados por elas. Em outras palavras, a morte não prevaleceu sobre a vida desses seres vivos.</p>
+                    
+                    <p>Possuímos a vida de Deus, que recebemos no day em que cremos em Jesus, e isso nos torna vivos espiritualmente. Estamos no mundo, representado pelo mar. Fazendo uma alusão aos peixes que não se contaminam com a água salgada do mar, Deus nos colocou neste mundo. Isso significa que não estamos em um ambiente saudável para viver, mas em um ambiente desfavorável, e é bom termos consciência disso. Por mais que esse mundo pareça ser colorido, o ambiente em que você vive é contaminado pela morte. Lembre-se, adolescente, você não é do mundo; você não faz parte desse sistema cósmico organizado por Satanás.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-quarta2">Luz na palavra:</label>
+                        <textarea id="light-quarta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-quarta2">Direção:</label>
+                        <textarea id="direction-quarta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-quarta2">Admoestação:</label>
+                        <textarea id="admonition-quarta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('quarta2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- QUINTA-FEIRA - SEMANA 2 -->
+            <div id="quinta2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">QUINTA-FEIRA - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:20; Cl 3:1-2</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Juntamente com ele, nos ressuscitou, e nos fez assentar nos lugares celestiais em Cristo Jesus" (Ef 2:6).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">POSICIONADOS ACIMA DO INIMIGO DE DEUS</h3>
+                
+                <div class="content-text">
+                    <p>Toda criatura da terra possui massa e, por ser feita de matéria, está sujeita à ação da gravidade da terra. Mas Deus, milagrosamente, criou as aves, seres vivos alados que conseguem sair do chão e voar (Gn 1:20), vencendo, assim, a ação da gravidade terrestre. Tudo isso tem sentido espiritual. Conforme visto ontem, assim como um peixe, que vive nas águas salgadas sem ser contaminado por elas, estamos no mundo, mas não somos contaminados por ele nem seguimos seu curso, porque Jesus está conosco no barco (Mt 8:23). Por outro lado, como as aves que têm asas para vencer a gravidade da terra, Deus nos deu "asas" para voar e vencer a ação da gravidade das forças espirituais do mal, que tenta prender-nos às coisas da terra, ao pecado e à morte. Isso significa que Deus nos colocou acima dos dominadores deste mundo tenebroso, em Cristo Jesus.</p>
+                    
+                    <p>De acordo com Efésios, Deus fez isso por meio da "suprema grandeza do seu poder para com os que cremos, segundo a eficácia da força do seu poder" (1:19). Deus, com Seu grande poder, atuou em Jesus e O ressuscitou dentre os mortos "fazendo-o sentar à sua direita nos lugares celestiais" (v. 20). Deus não só ressuscitou Jesus, como também O exaltou e O elevou. Na ressurreição Cristo já não está sujeito às forças aqui da terra. Como as aves, Ele não está sujeito à gravidade terrestre.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-quinta2">Luz na palavra:</label>
+                        <textarea id="light-quinta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-quinta2">Direção:</label>
+                        <textarea id="direction-quinta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-quinta2">Admoestação:</label>
+                        <textarea id="admonition-quinta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('quinta2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- SEXTA-FEIRA - SEMANA 2 -->
+            <div id="sexta2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SEXTA-FEIRA - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:11-12; Êx 19:4; Ez 1:4-5, 10</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Os que esperam no SENHOR renovam as suas forças, sobem com asas como águias, correm e não se cansam, caminham e não se fatigam" (Is 40:31).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">TEMOS OS ASPECTOS DOS QUATRO SERES VIVENTES</h3>
+                
+                <div class="content-text">
+                    <p>Na Bíblia Deus é ilustrado como águia. Como águia, Ele não é influenciado pela ação da gravidade da terra e ainda consegue levar-nos para a região celestial. Em Êxodo 19, Deus afirma que tirou os filhos de Israel do Egito, levou-os sobre asas de águia e os achegou a Si (v. 4). Deus é ilustrado como essa águia, cujo voo vence a ação da gravidade e nos capacita a vencê-la.</p>
+                    
+                    <p>O primeiro capítulo do livro de Ezequiel também apresenta a Deus como águia nos rostos dos quatro seres viventes (vs. 4-5, 10). Esses seres viventes representam os que juntamente com Cristo têm executado na terra o desejo do céu. Isso quer dizer que, quando seguimos o ritmo do céu, somos esses quatro seres viventes executando a vontade de Deus para trazer o Senhor de volta.</p>
+                    
+                    <p>O rosto principal, frontal, era o de homem, porque Deus quer fazer Sua vontade por meio do homem. Jesus Cristo encabeçará todas as coisas, a começar pelo homem. Os quatro seres viventes têm rosto de leão, porque Jesus veio para reinar, para ser rei, e nós seremos correis com Ele. Se somos aqueles que reinarão juntamente com Cristo, temos o rosto de leão.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-sexta2">Luz na palavra:</label>
+                        <textarea id="light-sexta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-sexta2">Direção:</label>
+                        <textarea id="direction-sexta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-sexta2">Admoestação:</label>
+                        <textarea id="admonition-sexta2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('sexta2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- SÁBADO - SEMANA 2 -->
+            <div id="sabado2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SÁBADO - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:3, 6, 9, 26-27; 18:1-3; Jo 1:18; Fp 2:7; Hb 2:8; 9:11-14</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Este [Cristo] é a imagem do Deus invisível, o primogênito de toda a criação" (Cl 1:15).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">O HOMEM, O CENTRO E PROPÓSITO DA CRIAÇÃO DE DEUS</h3>
+                
+                <div class="content-text">
+                    <p>No sexto dia, além dos animais, Deus também criou a mais importante de Suas criaturas: o homem (Gn 1:26-27). Finalmente, no final do sexto dia, Deus criou o homem, o centro de Sua criação. Ainda que os cientistas não concordem com isso, os céus existem para que a terra exista, a terra existe para a criação do homem, e o homem existe para fazer a vontade de Deus.</p>
+                    
+                    <p>Por isso é compreensível a importância do homem para Deus. É por meio do homem que Deus fará com que Cristo seja o Cabeça sobre todas as coisas, tanto as do céu como as da terra. Isto é, o homem cumprirá o propósito de Deus de fazer com que todas as coisas estejam sujeitas a Cristo. Por isso o evangelho do reino precisa ser pregado para que as pessoas se permitam ser encabeçadas por Cristo, pois muitas ainda não têm ciência disso.</p>
+                    
+                    <p>Note que, para criar a luz, Deus disse: "Haja luz", e houve luz (Gn 1:3). Para criar o firmamento, disse: "Haja firmamento", e houve (v. 6). Faltava a terra, e Ele disse: "Apareça a porção seca", e assim se fez (v. 9). Mas, para criar o homem, o assunto é tão sério que houve comunhão entre a Trindade divina, dizendo: "Façamos o homem à nossa imagem e semelhança" (v. 26).</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-sabado2">Luz na palavra:</label>
+                        <textarea id="light-sabado2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-sabado2">Direção:</label>
+                        <textarea id="direction-sabado2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-sabado2">Admoestação:</label>
+                        <textarea id="admonition-sabado2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('sabado2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- DOMINGO - SEMANA 2 -->
+            <div id="domingo2" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">DOMINGO - SEMANA 2</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:26-28; Mt 28:18-20; At 1:8</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Toda a autoridade me foi dada no céu e na terra. Ide, portanto, fazei discípulos de todas as nações" (Mt 28:18b,19a).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">DEUS NOS ABENÇOOU PARA FAZER-NOS FECUNDOS</h3>
+                
+                <div class="content-text">
+                    <p>Deus nos concedeu uma bênção maravilhosa: ser fecundos e multiplicar-nos (Gn 1:28). O tempo em que vivemos corresponde ao sexto dia da criação, o que indica que já se completaram seis mil anos desde que Deus restaurou Sua criação e formou o homem. Desde o dia em que o Senhor nos abençoou até hoje, temos uma missão aqui na terra: ser fecundos. O Senhor nos deu o dom da fertilidade, e fertilidade é vida. Somos férteis! Nossos adolescentes são férteis! Eles saem no "Vem e vê!" e têm a capacidade de trazer cinco, dez, quinze, vinte pessoas para ouvir a palavra. O Senhor os tem usado, e isso é uma bênção de Deus.</p>
+                    
+                    <p>Durante vinte séculos da história da igreja, somente nos primeiros anos os cristãos viveram a normalidade de ser fecundos e multiplicar-se. Depois disso, a igreja entrou em degradação. Mas, hoje, Deus está restaurando a condição de Seu povo. Seu desejo é abençoar Sua igreja e torná-la fecunda outra vez. Por isso a ordem é "multiplicai-vos". Então, querido leitor, geremos filhos para o Senhor. Produzamos os frutos que Ele espera de nós. Multipliquemo-nos! Vocês se comprometem com isso?</p>
+                    
+                    <p>A ordem de Deus é que nos multipliquemos e enchamos a terra de pessoas que carreguem a vida multiplicadora de nosso Senhor. Por essa razão, para cumprir o propósito de Deus em sua cidade, faça parte de um grupo de Tropas (adolescentes), Capitães (jovens acima de 18) e Intendentes (irmãos acima de 50 anos).</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-domingo2">Luz na palavra:</label>
+                        <textarea id="light-domingo2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-domingo2">Direção:</label>
+                        <textarea id="direction-domingo2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-domingo2">Admoestação:</label>
+                        <textarea id="admonition-domingo2" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('domingo2')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
         </div>
         
         <footer>
@@ -665,7 +978,7 @@
             
             // Encontra e ativa o botão correspondente
             const activeButton = Array.from(allButtons).find(button => 
-                button.textContent.includes(day.toUpperCase())
+                button.getAttribute('onclick').includes(day)
             );
             if (activeButton) {
                 activeButton.classList.add('active');
@@ -673,6 +986,21 @@
             
             // Salva o dia atual
             localStorage.setItem('currentDay', day);
+        }
+
+        function toggleWeek(week) {
+            const weekItem = event.target.closest('.week-item');
+            const isActive = weekItem.classList.contains('active');
+            
+            // Fecha todas as semanas
+            document.querySelectorAll('.week-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Abre a semana clicada se não estava ativa
+            if (!isActive) {
+                weekItem.classList.add('active');
+            }
         }
 
         function handlePrayer(day) {
@@ -699,14 +1027,21 @@
             showDay(lastDay);
             
             // Carrega as anotações para todos os dias
-            const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
+            const days = [
+                'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo',
+                'segunda2', 'terca2', 'quarta2', 'quinta2', 'sexta2', 'sabado2', 'domingo2'
+            ];
             days.forEach(day => {
                 const savedNotes = localStorage.getItem(`alimentoDiario-${day}`);
                 if (savedNotes) {
                     const notes = JSON.parse(savedNotes);
-                    document.getElementById(`light-${day}`).value = notes.light || '';
-                    document.getElementById(`direction-${day}`).value = notes.direction || '';
-                    document.getElementById(`admonition-${day}`).value = notes.admonition || '';
+                    const lightElement = document.getElementById(`light-${day}`);
+                    const directionElement = document.getElementById(`direction-${day}`);
+                    const admonitionElement = document.getElementById(`admonition-${day}`);
+                    
+                    if (lightElement) lightElement.value = notes.light || '';
+                    if (directionElement) directionElement.value = notes.direction || '';
+                    if (admonitionElement) admonitionElement.value = notes.admonition || '';
                 }
             });
         });

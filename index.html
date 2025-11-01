@@ -66,34 +66,20 @@
             width: 100%;
             text-align: left;
             padding: 12px 20px;
-            background: none;
+            background: var(--secondary);
             border: none;
             color: white;
             cursor: pointer;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.3s;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .week-btn:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        
-        .week-btn.active {
-            background-color: var(--secondary);
-        }
-        
         .days-list {
             list-style: none;
             background-color: rgba(0,0,0,0.2);
-            display: none;
-        }
-        
-        .week-item.active .days-list {
-            display: block;
         }
         
         .day-item {
@@ -141,7 +127,6 @@
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
-            position: relative;
         }
         
         header h1 {
@@ -153,24 +138,6 @@
         header p {
             font-size: 1.2rem;
             opacity: 0.9;
-        }
-        
-        .reload-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-        
-        .reload-btn:hover {
-            background: #c0392b;
         }
         
         .content-area {
@@ -282,23 +249,6 @@
             border-top: 1px solid var(--light);
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-light);
-        }
-        
-        .empty-state h2 {
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-light);
-        }
-        
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -318,14 +268,6 @@
             .content-area {
                 padding: 20px;
             }
-            
-            .reload-btn {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-top: 10px;
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -334,21 +276,85 @@
         <div class="sidebar-header">
             <h2>Navegação</h2>
         </div>
-        <div id="navigation-content">
-            <div class="loading">Carregando conteúdo...</div>
-        </div>
+        <ul class="weeks-list">
+            <li class="week-item">
+                <button class="week-btn">
+                    SEMANA 1
+                    <span>▼</span>
+                </button>
+                <ul class="days-list">
+                    <li class="day-item">
+                        <button class="day-btn active">SEGUNDA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">TERÇA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">QUARTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">QUINTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">SEXTA-FEIRA</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">SÁBADO</button>
+                    </li>
+                    <li class="day-item">
+                        <button class="day-btn">DOMINGO</button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
     
     <div class="main-content">
         <header>
             <h1>Alimento Diário</h1>
             <p>A criação do homem</p>
-            <button class="reload-btn" onclick="reloadPDFContent()">🔄 Atualizar PDF</button>
         </header>
         
         <div class="content-area">
-            <div id="day-content">
-                <div class="loading">Carregando conteúdo do dia...</div>
+            <div class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SEGUNDA-FEIRA - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).
+                    </div>
+                </div>
+                
+                <div class="content-text">
+                    <p>Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa.</p>
+                    
+                    <p>Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.</p>
+                    
+                    <p>Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus. A vida estava em Cristo, a Palavra, e, quando nós O recebemos pela fé, recebemos a vida de Deus. Essa vida que recebemos ao crer em Jesus tornou-se nossa luz. Quando essa luz brilha em nossa vida, as trevas fogem (v. 5).</p>
+                    
+                    <p>Quando recebemos a luz do Senhor, deixamos as obras das trevas, porque nos tornamos filhos da luz. Passamos a reprovar as coisas vergonhosas que se ocultam, que são feitas nas trevas, porque não somos mais das trevas, mas filhos da luz.</p>
+                    
+                    <p>Essa é a primeira função da luz da vida de Cristo, que entrou em nós. Toda vez que praticamos algo das trevas, sentimo-nos mal, porque a luz não pode conviver com as trevas. Dessa forma, pouco a pouco deixamos a vida pecaminosa que tínhamos antes, abandonamos a vida de trevas, que os homens do mundo vivem, e passamos a viver mais na luz.</p>
+                    
+                    <p>Deus nos fez filhos da luz para deixarmos de praticar as obras das trevas. Como filhos da luz, vivemos para agradar ao Senhor. É isso que lemos em Efésios: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz (porque o fruto da luz consiste em toda bondade, e justiça, e verdade), provando sempre o que é agradável ao Senhor" (Ef 5:8-10). Agradar ao Senhor significa fazer Sua vontade. Se faz o que o Senhor quer, então você Lhe agrada. Como filhos da luz, nosso foco é fazer a vontade de Deus.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-1-1">Luz na palavra:</label>
+                        <textarea id="light-1-1" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-1-1">Direção:</label>
+                        <textarea id="direction-1-1" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-1-1">Admoestação:</label>
+                        <textarea id="admonition-1-1" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer()">Ore e faça um grito de guerra</button>
+                </div>
             </div>
         </div>
         
@@ -358,282 +364,32 @@
     </div>
 
     <script>
-        class PDFLoader {
-            constructor() {
-                this.content = null;
-                this.currentDay = '1-1';
-                this.savedNotes = {};
-                this.init();
-            }
-
-            async init() {
-                await this.loadPDFContent();
-                this.renderNavigation();
-                this.renderDayContent(this.currentDay);
-                this.loadSavedNotes();
-            }
-
-            async loadPDFContent() {
-                try {
-                    // Adiciona timestamp para evitar cache
-                    const timestamp = new Date().getTime();
-                    const response = await fetch(`api/index.php?pdf=ad.pdf&t=${timestamp}`);
-                    
-                    if (!response.ok) throw new Error('PDF não carregado');
-                    this.content = await response.json();
-                    
-                    // Verifica se o conteúdo é válido
-                    if (!this.content.weeks || this.content.weeks.length === 0) {
-                        throw new Error('Conteúdo do PDF vazio ou inválido');
-                    }
-                    
-                } catch (error) {
-                    console.error('Erro ao carregar conteúdo:', error);
-                    // Fallback para conteúdo estático se a API falhar
-                    this.content = this.getFallbackContent();
-                }
-            }
-
-            getFallbackContent() {
-                // Conteúdo mínimo como fallback
-                return {
-                    weeks: [
-                        {
-                            number: 1,
-                            title: 'Conteúdo não carregado - Use "Atualizar PDF"',
-                            days: [
-                                {
-                                    title: 'ERRO',
-                                    bible_reading: 'Não foi possível carregar o PDF',
-                                    prayer_reading: 'Clique em "Atualizar PDF" para recarregar',
-                                    content: 'O conteúdo do PDF não pôde ser carregado. Por favor:\n\n1. Verifique se o arquivo ad.pdf está na pasta pdfs/\n2. Clique no botão "Atualizar PDF" no canto superior direito\n3. Se o problema persistir, verifique o console para detalhes'
-                                }
-                            ]
-                        }
-                    ]
-                };
-            }
-
-            renderNavigation() {
-                const navContainer = document.getElementById('navigation-content');
-                
-                if (!this.content || !this.content.weeks) {
-                    navContainer.innerHTML = '<div class="empty-state">Erro ao carregar conteúdo</div>';
-                    return;
-                }
-
-                let html = '<ul class="weeks-list">';
-
-                this.content.weeks.forEach((week, weekIndex) => {
-                    const weekNumber = week.number || weekIndex + 1;
-                    const isActive = weekIndex === 0;
-                    
-                    html += `
-                        <li class="week-item ${isActive ? 'active' : ''}">
-                            <button class="week-btn" data-week="${weekNumber}">
-                                SEMANA ${weekNumber}
-                                <span>▼</span>
-                            </button>
-                            <ul class="days-list">
-                    `;
-
-                    if (week.days && week.days.length > 0) {
-                        week.days.forEach((day, dayIndex) => {
-                            const dayNumber = dayIndex + 1;
-                            const dayId = `${weekNumber}-${dayNumber}`;
-                            const isDayActive = dayId === this.currentDay;
-                            
-                            html += `
-                                <li class="day-item">
-                                    <button class="day-btn ${isDayActive ? 'active' : ''}" 
-                                            data-day="${dayId}">
-                                        ${day.title || `Dia ${dayNumber}`}
-                                    </button>
-                                </li>
-                            `;
-                        });
-                    } else {
-                        html += `<li class="day-item"><button class="day-btn" disabled>Nenhum dia encontrado</button></li>`;
-                    }
-
-                    html += '</ul></li>';
-                });
-
-                html += '</ul>';
-                navContainer.innerHTML = html;
-
-                // Adicionar event listeners
-                this.attachNavigationEvents();
-            }
-
-            attachNavigationEvents() {
-                // Eventos para semanas
-                document.querySelectorAll('.week-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const weekItem = e.target.closest('.week-item');
-                        
-                        // Fechar outras semanas
-                        document.querySelectorAll('.week-item').forEach(item => {
-                            if (item !== weekItem) {
-                                item.classList.remove('active');
-                            }
-                        });
-                        
-                        // Alternar a semana atual
-                        weekItem.classList.toggle('active');
-                    });
-                });
-
-                // Eventos para dias
-                document.querySelectorAll('.day-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const dayId = e.target.getAttribute('data-day');
-                        this.currentDay = dayId;
-                        this.renderDayContent(dayId);
-                        
-                        // Atualizar estados ativos
-                        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-                        e.target.classList.add('active');
-                    });
-                });
-            }
-
-            renderDayContent(dayId) {
-                const [weekNum, dayNum] = dayId.split('-').map(Number);
-                const week = this.content.weeks[weekNum - 1];
-                
-                if (!week || !week.days || !week.days[dayNum - 1]) {
-                    document.getElementById('day-content').innerHTML = `
-                        <div class="empty-state">
-                            <h2>Conteúdo não encontrado</h2>
-                            <p>O dia selecionado não está disponível.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const day = week.days[dayNum - 1];
-
-                const contentContainer = document.getElementById('day-content');
-                contentContainer.innerHTML = `
-                    <div class="day-content">
-                        <div class="day-header">
-                            <h2 class="day-title">${day.title} - SEMANA ${weekNum}</h2>
-                            <p class="bible-reading">Leitura bíblica: ${day.bible_reading}</p>
-                            <div class="prayer-reading">
-                                Ler com oração: ${day.prayer_reading}
-                            </div>
-                        </div>
-                        
-                        <div class="content-text">
-                            ${day.content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
-                        </div>
-                        
-                        <div class="notes-section">
-                            <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
-                            <div class="note-item">
-                                <label for="light-${dayId}">Luz na palavra:</label>
-                                <textarea id="light-${dayId}" placeholder="Escreva aqui..."></textarea>
-                            </div>
-                            <div class="note-item">
-                                <label for="direction-${dayId}">Direção:</label>
-                                <textarea id="direction-${dayId}" placeholder="Escreva aqui..."></textarea>
-                            </div>
-                            <div class="note-item">
-                                <label for="admonition-${dayId}">Admoestação:</label>
-                                <textarea id="admonition-${dayId}" placeholder="Escreva aqui..."></textarea>
-                            </div>
-                            <button class="prayer-btn">Ore e faça um grito de guerra</button>
-                        </div>
-                    </div>
-                `;
-
-                // Adicionar evento ao botão de oração
-                document.querySelector('.prayer-btn').addEventListener('click', () => this.handlePrayer());
-                
-                // Carregar anotações salvas
-                this.loadSavedNotesForDay(dayId);
-            }
-
-            handlePrayer() {
-                // Salvar anotações primeiro
-                this.saveCurrentNotes();
-                
-                alert('Oração e grito de guerra realizado! Que a palavra profética seja sedimentada em seu coração!');
-            }
-
-            saveCurrentNotes() {
-                const dayId = this.currentDay;
-                const light = document.getElementById(`light-${dayId}`)?.value || '';
-                const direction = document.getElementById(`direction-${dayId}`)?.value || '';
-                const admonition = document.getElementById(`admonition-${dayId}`)?.value || '';
-                
-                // Salvar no localStorage
-                const notes = JSON.parse(localStorage.getItem('alimentoDiarioNotes') || '{}');
-                notes[dayId] = { light, direction, admonition };
-                localStorage.setItem('alimentoDiarioNotes', JSON.stringify(notes));
-            }
-
-            loadSavedNotes() {
-                const notes = JSON.parse(localStorage.getItem('alimentoDiarioNotes') || '{}');
-                this.savedNotes = notes;
-            }
-
-            loadSavedNotesForDay(dayId) {
-                if (!this.savedNotes) return;
-                
-                const dayNotes = this.savedNotes[dayId];
-                if (dayNotes) {
-                    const lightEl = document.getElementById(`light-${dayId}`);
-                    const directionEl = document.getElementById(`direction-${dayId}`);
-                    const admonitionEl = document.getElementById(`admonition-${dayId}`);
-                    
-                    if (lightEl) lightEl.value = dayNotes.light || '';
-                    if (directionEl) directionEl.value = dayNotes.direction || '';
-                    if (admonitionEl) admonitionEl.value = dayNotes.admonition || '';
-                }
-            }
+        function handlePrayer() {
+            // Salvar anotações no localStorage
+            const light = document.getElementById('light-1-1').value;
+            const direction = document.getElementById('direction-1-1').value;
+            const admonition = document.getElementById('admonition-1-1').value;
+            
+            const notes = {
+                light: light,
+                direction: direction,
+                admonition: admonition
+            };
+            
+            localStorage.setItem('alimentoDiario-1-1', JSON.stringify(notes));
+            
+            alert('Oração e grito de guerra realizado! Que a palavra profética seja sedimentada em seu coração!');
         }
 
-        // Função para recarregar o conteúdo forçando o uso do PDF atual
-        function reloadPDFContent() {
-            // Mostra loading
-            document.getElementById('navigation-content').innerHTML = '<div class="loading">Atualizando conteúdo...</div>';
-            document.getElementById('day-content').innerHTML = '<div class="loading">Atualizando conteúdo...</div>';
-            
-            // Adiciona timestamp para evitar cache
-            const timestamp = new Date().getTime();
-            const url = `api/index.php?pdf=ad.pdf&t=${timestamp}`;
-            
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro ao carregar PDF');
-                    return response.json();
-                })
-                .then(content => {
-                    // Verifica se o conteúdo é válido
-                    if (content.weeks && content.weeks.length > 0 && content.weeks[0].days && content.weeks[0].days.length > 0) {
-                        window.pdfLoader.content = content;
-                        window.pdfLoader.renderNavigation();
-                        window.pdfLoader.renderDayContent('1-1');
-                        alert('✅ PDF atualizado com sucesso!');
-                    } else {
-                        alert('❌ Erro: Não foi possível carregar o novo PDF. Verifique se o arquivo ad.pdf está na pasta pdfs/');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('❌ Erro ao carregar o PDF: ' + error.message);
-                    
-                    // Restaura o conteúdo anterior
-                    window.pdfLoader.renderNavigation();
-                    window.pdfLoader.renderDayContent(window.pdfLoader.currentDay);
-                });
-        }
-
-        // Inicializar quando a página carregar
-        document.addEventListener('DOMContentLoaded', () => {
-            window.pdfLoader = new PDFLoader();
+        // Carregar anotações salvas quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedNotes = localStorage.getItem('alimentoDiario-1-1');
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                document.getElementById('light-1-1').value = notes.light || '';
+                document.getElementById('direction-1-1').value = notes.direction || '';
+                document.getElementById('admonition-1-1').value = notes.admonition || '';
+            }
         });
     </script>
 </body>

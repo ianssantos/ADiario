@@ -127,6 +127,13 @@
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-content {
+            flex: 1;
         }
         
         header h1 {
@@ -138,6 +145,14 @@
         header p {
             font-size: 1.2rem;
             opacity: 0.9;
+        }
+        
+        .cover-image {
+            width: 120px;
+            height: 170px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            object-fit: cover;
         }
         
         .content-area {
@@ -174,6 +189,17 @@
             margin-bottom: 20px;
             border-left: 4px solid var(--secondary);
             font-size: 1.1rem;
+        }
+        
+        .day-subtitle {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 25px 0 15px 0;
+            text-align: center;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
         }
         
         .content-text {
@@ -249,6 +275,14 @@
             border-top: 1px solid var(--light);
         }
         
+        .day-content {
+            display: none;
+        }
+        
+        .day-content.active {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -259,6 +293,16 @@
             .main-content {
                 margin-left: 0;
                 padding: 20px;
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cover-image {
+                width: 100px;
+                height: 140px;
             }
             
             header h1 {
@@ -284,25 +328,25 @@
                 </button>
                 <ul class="days-list">
                     <li class="day-item">
-                        <button class="day-btn active">SEGUNDA-FEIRA</button>
+                        <button class="day-btn active" onclick="showDay('segunda')">SEGUNDA-FEIRA</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">TERÇA-FEIRA</button>
+                        <button class="day-btn" onclick="showDay('terca')">TERÇA-FEIRA</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">QUARTA-FEIRA</button>
+                        <button class="day-btn" onclick="showDay('quarta')">QUARTA-FEIRA</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">QUINTA-FEIRA</button>
+                        <button class="day-btn" onclick="showDay('quinta')">QUINTA-FEIRA</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">SEXTA-FEIRA</button>
+                        <button class="day-btn" onclick="showDay('sexta')">SEXTA-FEIRA</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">SÁBADO</button>
+                        <button class="day-btn" onclick="showDay('sabado')">SÁBADO</button>
                     </li>
                     <li class="day-item">
-                        <button class="day-btn">DOMINGO</button>
+                        <button class="day-btn" onclick="showDay('domingo')">DOMINGO</button>
                     </li>
                 </ul>
             </li>
@@ -311,12 +355,16 @@
     
     <div class="main-content">
         <header>
-            <h1>Alimento Diário</h1>
-            <p>A criação do homem</p>
+            <img src="capa.png" alt="Capa do Alimento Diário" class="cover-image">
+            <div class="header-content">
+                <h1>Alimento Diário</h1>
+                <p>A criação do homem</p>
+            </div>
         </header>
         
         <div class="content-area">
-            <div class="day-content">
+            <!-- SEGUNDA-FEIRA -->
+            <div id="segunda" class="day-content active">
                 <div class="day-header">
                     <h2 class="day-title">SEGUNDA-FEIRA - SEMANA 1</h2>
                     <p class="bible-reading">Leitura bíblica: Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19</p>
@@ -325,35 +373,267 @@
                     </div>
                 </div>
                 
+                <h3 class="day-subtitle">ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS</h3>
+                
                 <div class="content-text">
                     <p>Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa.</p>
                     
                     <p>Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.</p>
                     
                     <p>Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus. A vida estava em Cristo, a Palavra, e, quando nós O recebemos pela fé, recebemos a vida de Deus. Essa vida que recebemos ao crer em Jesus tornou-se nossa luz. Quando essa luz brilha em nossa vida, as trevas fogem (v. 5).</p>
-                    
-                    <p>Quando recebemos a luz do Senhor, deixamos as obras das trevas, porque nos tornamos filhos da luz. Passamos a reprovar as coisas vergonhosas que se ocultam, que são feitas nas trevas, porque não somos mais das trevas, mas filhos da luz.</p>
-                    
-                    <p>Essa é a primeira função da luz da vida de Cristo, que entrou em nós. Toda vez que praticamos algo das trevas, sentimo-nos mal, porque a luz não pode conviver com as trevas. Dessa forma, pouco a pouco deixamos a vida pecaminosa que tínhamos antes, abandonamos a vida de trevas, que os homens do mundo vivem, e passamos a viver mais na luz.</p>
-                    
-                    <p>Deus nos fez filhos da luz para deixarmos de praticar as obras das trevas. Como filhos da luz, vivemos para agradar ao Senhor. É isso que lemos em Efésios: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz (porque o fruto da luz consiste em toda bondade, e justiça, e verdade), provando sempre o que é agradável ao Senhor" (Ef 5:8-10). Agradar ao Senhor significa fazer Sua vontade. Se faz o que o Senhor quer, então você Lhe agrada. Como filhos da luz, nosso foco é fazer a vontade de Deus.</p>
                 </div>
                 
                 <div class="notes-section">
                     <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
                     <div class="note-item">
-                        <label for="light-1-1">Luz na palavra:</label>
-                        <textarea id="light-1-1" placeholder="Escreva aqui..."></textarea>
+                        <label for="light-segunda">Luz na palavra:</label>
+                        <textarea id="light-segunda" placeholder="Escreva aqui..."></textarea>
                     </div>
                     <div class="note-item">
-                        <label for="direction-1-1">Direção:</label>
-                        <textarea id="direction-1-1" placeholder="Escreva aqui..."></textarea>
+                        <label for="direction-segunda">Direção:</label>
+                        <textarea id="direction-segunda" placeholder="Escreva aqui..."></textarea>
                     </div>
                     <div class="note-item">
-                        <label for="admonition-1-1">Admoestação:</label>
-                        <textarea id="admonition-1-1" placeholder="Escreva aqui..."></textarea>
+                        <label for="admonition-segunda">Admoestação:</label>
+                        <textarea id="admonition-segunda" placeholder="Escreva aqui..."></textarea>
                     </div>
-                    <button class="prayer-btn" onclick="handlePrayer()">Ore e faça um grito de guerra</button>
+                    <button class="prayer-btn" onclick="handlePrayer('segunda')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- TERÇA-FEIRA -->
+            <div id="terca" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">TERÇA-FEIRA - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">FILHOS DA LUZ E FILHOS DO DIA</h3>
+                
+                <div class="content-text">
+                    <p>Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia": "Vós, irmãos, não estais em trevas, para que esse Dia como ladrão vos apanhe de surpresa; porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas. Assim, pois, não durmamos como os demais; pelo contrário, vigiemos e sejamos sóbrios" (5:4-5).</p>
+                    
+                    <p>Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.</p>
+                    
+                    <p>Para os cristãos, o Senhor virá em oculto, mas, para o mundo inteiro, Ele virá publicamente. Ante de Sua vinda pública, o Senhor virá secretamente para a igreja, por isso Ele virá como ladrão de noite e apanhará muitos cristãos de surpresa. Não sejamos apanhados de surpresa, mas vigiemos e sejamos sóbrios, vivendo como filhos da luz e como filhos do dia.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-terca">Luz na palavra:</label>
+                        <textarea id="light-terca" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-terca">Direção:</label>
+                        <textarea id="direction-terca" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-terca">Admoestação:</label>
+                        <textarea id="admonition-terca" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('terca')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- QUARTA-FEIRA -->
+            <div id="quarta" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">QUARTA-FEIRA - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:3</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Disse também Deus: Ajuntem-se as águas debaixo dos céus num só lugar, e apareça a porção seca. E assim se fez" (Gn 1:9).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">O TERCEIRO DIA – O SURGIMENTO DA PORÇÃO SECA</h3>
+                
+                <div class="content-text">
+                    <p>No primeiro dia da restauração da criação, Deus restaurou a luz (Gn 1:3). A luz é essencial para gerar, sustentar e manter a vida. Sem luz não há vida. No segundo dia, Deus criou a atmosfera e, com o ar criado, produziu oxigênio para que o homem e os demais seres pudessem respirar e viver na terra.</p>
+                    
+                    <p>Além disso, com a criação da atmosfera, foi possível aproveitar as águas da morte que estavam na superfície da terra e transformá-las em águas saudáveis.</p>
+                    
+                    <p>Graças à atmosfera, as águas da morte passam por um fenômeno físico chamado de evaporação, que leva a água ao estado gasoso. Nesse estado a água se torna mais leve que o ar e sobe, acumulando-se nas nuvens, que, dessa forma, podem armazenar toneladas de água potável.</p>
+                    
+                    <p>Ao atingir certa densidade, a água das nuvens se precipita e rega a terra, caindo nas montanhas, nos vales, nos rios, e chegando também aos mananciais. Essa água é potável, ou seja, é saudável para nós e todos os demais seres vivos na terra bebermos e sobrevivermos.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-quarta">Luz na palavra:</label>
+                        <textarea id="light-quarta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-quarta">Direção:</label>
+                        <textarea id="direction-quarta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-quarta">Admoestação:</label>
+                        <textarea id="admonition-quarta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('quarta')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- QUINTA-FEIRA -->
+            <div id="quinta" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">QUINTA-FEIRA - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Jo 3:3, 8; Gl 6:15</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "A terra, pois, produziu relva, ervas que davam semente segundo a sua espécie e árvores que davam fruto, cuja semente estava nele, conforme a sua espécie. E viu Deus que isso era bom" (Gn 1:12).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">A PERPETUAÇÃO DA VIDA</h3>
+                
+                <div class="content-text">
+                    <p>Uma vez que fez surgir a terra seca no terceiro dia, Deus tinha como criar a vida sobre a terra. O primeiro tipo de vida criada por Deus foi a "relva, ervas que deem semente e árvores frutíferas que deem fruto segundo a sua espécie, cuja semente esteja nele, sobre a terra" (Gn 1:11).</p>
+                    
+                    <p>Qual a diferença entre relva e erva aqui na Bíblia? A relva diz respeito às gramíneas. As ervas são plantas rasteiras de pequeno porte e de pouca altura. Ao criá-las, Deus fez questão de que elas dessem semente segundo sua espécie. Isso nos mostra que a relva e as ervas precisavam ter continuidade.</p>
+                    
+                    <p>Deus se preocupa com a perpetuação da vida, por isso Ele criou a relva e as ervas com sementes, para que se perpetuassem. Além disso, Ele cria cada qual segundo sua espécie, não há confusão de espécies, pois, se houver confusão de espécies, tudo é por fim exterminado.</p>
+                    
+                    <p>Toda vida vegetal ainda é uma vida inconsciente. Esse foi o primeiro tipo de vida criada sobre a terra, para servir de alimento para os seres vivos. A relva é principalmente para alimentar os animais, e as ervas e árvores frutíferas, para alimentar o homem.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-quinta">Luz na palavra:</label>
+                        <textarea id="light-quinta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-quinta">Direção:</label>
+                        <textarea id="direction-quinta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-quinta">Admoestação:</label>
+                        <textarea id="admonition-quinta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('quinta')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- SEXTA-FEIRA -->
+            <div id="sexta" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SEXTA-FEIRA - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Dt 8:9, 17; Hb 4:12; Ap 20:6</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Simão Pedro, servo e apóstolo de Jesus Cristo, aos que conosco obtiveram fé igualmente preciosa na justiça do nosso Deus e Salvador Jesus Cristo" (2 Pe 1:1).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">FÉ IGUALMENTE PRECIOSA</h3>
+                
+                <div class="content-text">
+                    <p>Em Deuteronômio lemos sobre a boa terra de Canaã: "O SENHOR, teu Deus, te faz entrar numa boa terra, terra de ribeiros de águas, de fontes, de mananciais profundos, que saem dos vales e das montanhas; terra de trigo e cevada, de vides, figueiras e romeiras; terra de oliveiras, de azeite e mel; terra em que comerás o pão sem escassez, e nada te faltará nela; terra cujas pedras são ferro e de cujos montes cavarás o cobre. Comerás, e te fartarás, e louvarás o SENHOR, teu Deus, pela boa terra que te deu" (8:7-10).</p>
+                    
+                    <p>Ao crermos em Jesus, Deus nos colocou em uma boa terra, que representa o Cristo ressurreto. Deus nos fez entrar em uma boa terra, terra de ribeiros de águas, de fontes, de mananciais profundos, que saem dos vales e das montanhas.</p>
+                    
+                    <p>Essa descrição é uma ilustração em que o manancial profundo representa o Pai, a fonte representa o Filho e os ribeiros de água representam o Espírito. O Pai estava em um lugar inacessível ao homem, mas Cristo O trouxe até nós.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-sexta">Luz na palavra:</label>
+                        <textarea id="light-sexta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-sexta">Direção:</label>
+                        <textarea id="direction-sexta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-sexta">Admoestação:</label>
+                        <textarea id="admonition-sexta" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('sexta')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- SÁBADO -->
+            <div id="sabado" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">SÁBADO - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Gn 1:14-19</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Fez Deus os dois grandes luzeiros: o maior para governar o dia, e o menor para governar a noite; e fez também as estrelas" (Gn 1:16).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">O QUARTO DIA – A CRIAÇÃO DOS LUZEIROS</h3>
+                
+                <div class="content-text">
+                    <p>No quarto dia, Deus criou os luzeiros (Gn 1:14-19). Podemos perguntar-nos: "Deus já não havia criado a luz no primeiro dia?". A luz do primeiro dia é uma luz difusa, cuja fonte luminosa, cuja procedência, não conseguimos distinguir.</p>
+                    
+                    <p>Tudo o que Deus faz precisa estar sob um governo, sob um domínio, o domínio de Deus. Portanto, apesar de já haver a luz difusa do primeiro dia, havia a necessidade de uma luz mais definida e intensa para iluminar e governar a terra. Por isso Deus criou o sol para governar o dia, a lua para governar a noite e as estrelas para iluminar a terra.</p>
+                    
+                    <p>Sem a energia, o calor e a luz fornecidos pelo sol, não poderia existir a vida na terra. Dependemos da energia, do calor e da luz solar. O sol foi colocado por Deus a uma distância exata em que nem somos queimados nem congelados.</p>
+                    
+                    <p>Atualmente o homem tem buscado outros planetas habitáveis, mas isso tem-se mostrado uma tarefa muito difícil, pois Deus criou apenas um mundo habitável, que é este lugar maravilhoso em que vivemos.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-sabado">Luz na palavra:</label>
+                        <textarea id="light-sabado" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-sabado">Direção:</label>
+                        <textarea id="direction-sabado" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-sabado">Admoestação:</label>
+                        <textarea id="admonition-sabado" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('sabado')">Ore e faça um grito de guerra</button>
+                </div>
+            </div>
+
+            <!-- DOMINGO -->
+            <div id="domingo" class="day-content">
+                <div class="day-header">
+                    <h2 class="day-title">DOMINGO - SEMANA 1</h2>
+                    <p class="bible-reading">Leitura bíblica: Sl 110:3; Jo 8:2-12</p>
+                    <div class="prayer-reading">
+                        Ler com oração: "Graças à entranhável misericórdia de nosso Deus, pela qual nos visitará o sol nascente das alturas, para alumiar os que jazem nas trevas e na sombra da morte, e dirigir os nossos pés pelo caminho da paz" (Lc 1:78-79).
+                    </div>
+                </div>
+                
+                <h3 class="day-subtitle">CRISTO, O SOL NASCENTE DAS ALTURAS</h3>
+                
+                <div class="content-text">
+                    <p>Ontem falamos sobre a criação dos luzeiros que governam a terra: o sol, a lua e as estrelas. Na esfera espiritual, Cristo é o sol, que nos ilumina e governa. No capítulo primeiro de Lucas, lemos: "Graças à entranhável misericórdia de nosso Deus, pela qual nos visitará o sol nascente das alturas, para alumiar os que jazem nas trevas e na sombra da morte, e dirigir os nossos pés pelo caminho da paz" (vs. 78-79).</p>
+                    
+                    <p>Esses versículos são uma citação da profecia de Zacarias, pai de João Batista, sobre a vinda de Cristo como o Sol nascente das alturas.</p>
+                    
+                    <p>No capítulo oitavo do Evangelho de João, lemos sobre o episódio em que uma mulher foi pega em flagrante adultério. Os escribas e os fariseus a levaram a Jesus e Lhe perguntaram: "Mestre, esta mulher foi apanhada em flagrante adultério. E na lei nos mandou Moisés que tais mulheres sejam apedrejadas; tu, pois, que dizes?" (vs. 2-5).</p>
+                    
+                    <p>Eles fizeram isso para ter de que O acusar, pois a pergunta feita por eles era muito difícil. Se Jesus dissesse que podiam apedrejar a mulher, eles O interpelariam perguntando como Ele, que pregava o amor, poderia mandar executá-la. E, caso Ele dissesse para deixá-la ir embora, eles O acusariam de transgredir a lei de Moisés.</p>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                    <div class="note-item">
+                        <label for="light-domingo">Luz na palavra:</label>
+                        <textarea id="light-domingo" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="direction-domingo">Direção:</label>
+                        <textarea id="direction-domingo" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <div class="note-item">
+                        <label for="admonition-domingo">Admoestação:</label>
+                        <textarea id="admonition-domingo" placeholder="Escreva aqui..."></textarea>
+                    </div>
+                    <button class="prayer-btn" onclick="handlePrayer('domingo')">Ore e faça um grito de guerra</button>
                 </div>
             </div>
         </div>
@@ -364,11 +644,42 @@
     </div>
 
     <script>
-        function handlePrayer() {
+        function showDay(day) {
+            // Esconde todos os dias
+            const allDays = document.querySelectorAll('.day-content');
+            allDays.forEach(dayElement => {
+                dayElement.classList.remove('active');
+            });
+            
+            // Mostra o dia selecionado
+            const selectedDay = document.getElementById(day);
+            if (selectedDay) {
+                selectedDay.classList.add('active');
+            }
+            
+            // Atualiza o botão ativo
+            const allButtons = document.querySelectorAll('.day-btn');
+            allButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Encontra e ativa o botão correspondente
+            const activeButton = Array.from(allButtons).find(button => 
+                button.textContent.includes(day.toUpperCase())
+            );
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            // Salva o dia atual
+            localStorage.setItem('currentDay', day);
+        }
+
+        function handlePrayer(day) {
             // Salvar anotações no localStorage
-            const light = document.getElementById('light-1-1').value;
-            const direction = document.getElementById('direction-1-1').value;
-            const admonition = document.getElementById('admonition-1-1').value;
+            const light = document.getElementById(`light-${day}`).value;
+            const direction = document.getElementById(`direction-${day}`).value;
+            const admonition = document.getElementById(`admonition-${day}`).value;
             
             const notes = {
                 light: light,
@@ -376,20 +687,28 @@
                 admonition: admonition
             };
             
-            localStorage.setItem('alimentoDiario-1-1', JSON.stringify(notes));
+            localStorage.setItem(`alimentoDiario-${day}`, JSON.stringify(notes));
             
             alert('Oração e grito de guerra realizado! Que a palavra profética seja sedimentada em seu coração!');
         }
 
         // Carregar anotações salvas quando a página carrega
         document.addEventListener('DOMContentLoaded', function() {
-            const savedNotes = localStorage.getItem('alimentoDiario-1-1');
-            if (savedNotes) {
-                const notes = JSON.parse(savedNotes);
-                document.getElementById('light-1-1').value = notes.light || '';
-                document.getElementById('direction-1-1').value = notes.direction || '';
-                document.getElementById('admonition-1-1').value = notes.admonition || '';
-            }
+            // Restaura o último dia visitado
+            const lastDay = localStorage.getItem('currentDay') || 'segunda';
+            showDay(lastDay);
+            
+            // Carrega as anotações para todos os dias
+            const days = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
+            days.forEach(day => {
+                const savedNotes = localStorage.getItem(`alimentoDiario-${day}`);
+                if (savedNotes) {
+                    const notes = JSON.parse(savedNotes);
+                    document.getElementById(`light-${day}`).value = notes.light || '';
+                    document.getElementById(`direction-${day}`).value = notes.direction || '';
+                    document.getElementById(`admonition-${day}`).value = notes.admonition || '';
+                }
+            });
         });
     </script>
 </body>

@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alimento Diário - Devocional</title>
+    <title>Alimento Diário</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --text-color: #333;
-            --border-radius: 8px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --text: #333;
+            --border: #e1e5e9;
+            --shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         * {
@@ -23,512 +24,558 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f9f9f9;
+            color: var(--text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
+        .app-container {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
 
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
         }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav li {
-            margin-left: 1.5rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--secondary-color);
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1rem;
+            font-weight: 400;
         }
 
         .main-content {
-            display: flex;
-            margin: 2rem 0;
-            gap: 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
         }
 
         .sidebar {
-            flex: 0 0 250px;
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
             box-shadow: var(--shadow);
             height: fit-content;
+            position: sticky;
+            top: 20px;
         }
 
-        .sidebar h2 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
         }
 
-        .weeks-list {
+        .week-nav {
             list-style: none;
         }
 
-        .weeks-list li {
-            margin-bottom: 0.5rem;
+        .week-item {
+            margin-bottom: 8px;
         }
 
-        .weeks-list a {
+        .week-link {
             display: block;
-            padding: 0.8rem;
-            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            background: var(--light);
+            border-radius: 8px;
             text-decoration: none;
-            color: var(--text-color);
-            transition: background-color 0.3s;
+            color: var(--text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
 
-        .weeks-list a:hover {
-            background-color: var(--light-color);
+        .week-link:hover {
+            background: #e3f2fd;
+            transform: translateX(3px);
         }
 
-        .weeks-list a.active {
-            background-color: var(--secondary-color);
+        .week-link.active {
+            background: var(--secondary);
             color: white;
+            border-left-color: var(--primary);
         }
 
-        .days-list {
+        .days-nav {
             list-style: none;
-            margin-left: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 10px;
+            margin-left: 15px;
         }
 
-        .days-list li {
-            margin-bottom: 0.3rem;
+        .day-item {
+            margin-bottom: 5px;
         }
 
-        .days-list a {
+        .day-link {
             display: block;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--text);
             font-size: 0.9rem;
-            transition: background-color 0.3s;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
         }
 
-        .days-list a:hover {
-            background-color: var(--light-color);
+        .day-link:hover {
+            background: #f0f7ff;
+            border-color: var(--secondary);
         }
 
-        .days-list a.active {
-            background-color: var(--primary-color);
+        .day-link.active {
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
 
-        .devotional-content {
-            flex: 1;
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
+        .content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
             box-shadow: var(--shadow);
         }
 
         .devotional-header {
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1rem;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .devotional-header h1 {
-            color: var(--primary-color);
+        .week-title {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .day-title {
             font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        .devotional-header .week-title {
-            color: var(--secondary-color);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+        .date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
 
-        .devotional-header .day-title {
-            color: var(--accent-color);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+        .reading-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: "•";
+            color: var(--secondary);
+            font-size: 1.5rem;
         }
 
         .bible-reading {
-            background-color: var(--light-color);
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-        }
-
-        .bible-reading h3 {
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
         }
 
         .prayer-reading {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--secondary-color);
-        }
-
-        .devotional-text {
-            line-height: 1.8;
-        }
-
-        .devotional-text p {
-            margin-bottom: 1rem;
-        }
-
-        .notes-section {
-            background-color: #fff9e6;
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            margin-top: 2rem;
+            background: #fff8e6;
+            padding: 15px;
+            border-radius: 8px;
             border-left: 4px solid #f1c40f;
         }
 
-        .notes-section h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
+        .devotional-text {
+            line-height: 1.7;
+            font-size: 1.05rem;
         }
 
-        .notes-section textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            resize: vertical;
+        .devotional-text p {
+            margin-bottom: 15px;
+            text-align: justify;
         }
 
         .navigation {
             display: flex;
             justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
         }
 
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: var(--secondary-color);
+        .nav-btn {
+            padding: 12px 25px;
+            background: var(--secondary);
             color: white;
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            transition: background-color 0.3s;
             border: none;
-            cursor: pointer;
+            border-radius: 8px;
             font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn:hover {
-            background-color: var(--primary-color);
+        .nav-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
         }
 
-        .btn:disabled {
-            background-color: #bdc3c7;
+        .nav-btn:disabled {
+            background: #bdc3c7;
             cursor: not-allowed;
+            transform: none;
         }
 
-        footer {
-            background-color: var(--primary-color);
-            color: white;
+        .loading {
             text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 2rem;
+            padding: 40px 20px;
+            color: var(--secondary);
+            font-size: 1.1rem;
         }
 
-        /* Responsividade */
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--secondary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .main-content {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
-
+            
             .sidebar {
-                flex: 1;
+                position: static;
             }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
+            
+            .app-container {
+                padding: 15px;
             }
-
-            nav ul {
-                margin-top: 1rem;
-                justify-content: center;
+            
+            .content {
+                padding: 20px;
             }
-
-            nav li {
-                margin: 0 0.5rem;
-            }
-        }
-
-        /* Estilo para o PDF quando implementado */
-        .pdf-container {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Alimento Diário</div>
-                <nav>
-                    <ul>
-                        <li><a href="#" id="home-link">Início</a></li>
-                        <li><a href="#" id="pdf-link">Visualizar PDF</a></li>
-                        <li><a href="#" id="about-link">Sobre</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
+    <div class="app-container">
+        <header>
+            <div class="logo">Alimento Diário</div>
+            <div class="subtitle">Devocional para sua jornada espiritual</div>
+        </header>
 
-    <div class="container">
         <div class="main-content">
             <aside class="sidebar">
-                <h2>Navegação</h2>
-                <ul class="weeks-list">
-                    <li>
-                        <a href="#" class="week-link active" data-week="1">SEMANA 1: A RESTAURAÇÃO DA TERRA</a>
-                        <ul class="days-list">
-                            <li><a href="#" class="day-link active" data-day="1">Segunda-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="2">Terça-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="3">Quarta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="4">Quinta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="5">Sexta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="6">Sábado</a></li>
-                            <li><a href="#" class="day-link" data-day="7">Domingo</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="week-link" data-week="2">SEMANA 2: A RESTAURAÇÃO DA TERRA</a>
-                        <ul class="days-list">
-                            <li><a href="#" class="day-link" data-day="1">Segunda-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="2">Terça-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="3">Quarta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="4">Quinta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="5">Sexta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="6">Sábado</a></li>
-                            <li><a href="#" class="day-link" data-day="7">Domingo</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="week-link" data-week="3">SEMANA 3: NO SÉTIMO DIA DEUS DESCANSOU</a>
-                        <ul class="days-list">
-                            <li><a href="#" class="day-link" data-day="1">Segunda-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="2">Terça-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="3">Quarta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="4">Quinta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="5">Sexta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="6">Sábado</a></li>
-                            <li><a href="#" class="day-link" data-day="7">Domingo</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="week-link" data-week="4">SEMANA 4: A CRIAÇÃO DO HOMEM</a>
-                        <ul class="days-list">
-                            <li><a href="#" class="day-link" data-day="1">Segunda-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="2">Terça-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="3">Quarta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="4">Quinta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="5">Sexta-feira</a></li>
-                            <li><a href="#" class="day-link" data-day="6">Sábado</a></li>
-                            <li><a href="#" class="day-link" data-day="7">Domingo</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class="sidebar-title">Navegação</div>
+                <div class="loading" id="sidebar-loading">
+                    <div class="loading-spinner"></div>
+                    Carregando semanas...
+                </div>
+                <ul class="week-nav" id="weeks-list" style="display: none;"></ul>
             </aside>
 
-            <main class="devotional-content">
-                <div class="devotional-header">
-                    <h1>Alimento Diário</h1>
-                    <div class="week-title">SEMANA 1: A RESTAURAÇÃO DA TERRA: O TERCEIRO DIA E O QUARTO DIA</div>
-                    <div class="day-title">Segunda-feira: ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS</div>
+            <main class="content">
+                <div class="loading" id="content-loading">
+                    <div class="loading-spinner"></div>
+                    Carregando devocional...
                 </div>
+                <div id="devotional-content" style="display: none;">
+                    <div class="devotional-header">
+                        <div class="week-title" id="week-title"></div>
+                        <div class="day-title" id="day-title"></div>
+                        <div class="date" id="current-date"></div>
+                    </div>
 
-                <div class="bible-reading">
-                    <h3>Leitura bíblica:</h3>
-                    <p>Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19</p>
-                </div>
+                    <div class="reading-section">
+                        <div class="section-title">Leitura bíblica</div>
+                        <div class="bible-reading" id="bible-reading"></div>
+                    </div>
 
-                <div class="prayer-reading">
-                    <h3>Ler com oração:</h3>
-                    <p>"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).</p>
-                </div>
+                    <div class="reading-section">
+                        <div class="section-title">Ler com oração</div>
+                        <div class="prayer-reading" id="prayer-reading"></div>
+                    </div>
 
-                <div class="devotional-text">
-                    <p>Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.</p>
-                    
-                    <p>Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus. A vida estava em Cristo, a Palavra, e, quando nós O recebemos pela fé, recebemos a vida de Deus. Essa vida que recebemos ao crer em Jesus tornou-se nossa luz. Quando essa luz brilha em nossa vida, as trevas fogem (v. 5). Quando recebemos a luz do Senhor, deixamos as obras das trevas, porque nos tornamos filhos da luz. Passamos a reprovar as coisas vergonhosas que se ocultam, que são feitas nas trevas, porque não somos mais das trevas, mas filhos da luz.</p>
-                    
-                    <p>Essa é a primeira função da luz da vida de Cristo, que entrou em nós. Toda vez que praticamos algo das trevas, sentimo-nos mal, porque a luz não pode conviver com as trevas. Dessa forma, pouco a pouco deixamos a vida pecaminosa que tínhamos antes, abandonamos a vida de trevas, que os homens do mundo vivem, e passamos a viver mais na luz.</p>
-                    
-                    <p>Deus nos fez filhos da luz para deixarmos de praticar as obras das trevas. Como filhos da luz, vivemos para agradar ao Senhor. É isso que lemos em Efésios: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz (porque o fruto da luz consiste em toda bondade, e justiça, e verdade), provando sempre o que é agradável ao Senhor" (Ef 5:8-10). Agradar ao Senhor significa fazer Sua vontade. Se faz o que o Senhor quer, então você Lhe agrada. Como filhos da luz, nosso foco é fazer a vontade de Deus.</p>
-                    
-                    <p>A vontade de Deus é que Cristo seja o Cabeça sobre todas as coisas (Ef 1:9-10). Se somos filhos da luz e vivemos na luz, contribuímos para que Cristo governe nossa vida, e, por meio de nós, governe todas as coisas. Paulo também escreveu: "Não sejais cúmplices nas obras infrutíferas das trevas; antes, porém, reprovai-as. Porque o que eles fazem em oculto, o só referir é vergonha. Mas todas as coisas, quando reprovadas pela luz, se tornam manifestas; porque tudo que se manifesta é luz. Pelo que diz: Desperta, ó tu que dormes, levanta-te de entre os mortos, e Cristo te iluminará" (5:11-14).</p>
-                    
-                    <p>Reprovamos as obras das trevas, pois é vergonhoso o que os homens que andam nas trevas fazem em oculto. Se realmente queremos ser um filho da luz vivendo na luz, precisamos despertar do sono. Quem dorme, dorme de noite, mas não somos da noite nem das trevas, somos da luz. Vamos remir o tempo para viver a vontade de Deus. Quem é filho da luz deseja que seu viver contribua para que Cristo reine sobre esta terra. Como fazer isso? Enchendo-nos do Espírito por meio da palavra (Ef 5:16-19). Quando fazemos a imersão na palavra, os gritos de guerra, a transcrição, as anotações, dormimos e acordamos com Deus ouvindo mensagens, permitimos que a palavra seja inculcada em nós e nos torne verdadeiros filhos da luz, que fazem a vontade de Deus.</p>
-                </div>
+                    <div class="reading-section">
+                        <div class="section-title">Devocional</div>
+                        <div class="devotional-text" id="devotional-text"></div>
+                    </div>
 
-                <div class="notes-section">
-                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
-                    <p><strong>Luz na palavra:</strong> <textarea id="light-notes"></textarea></p>
-                    <p><strong>Direção:</strong> <textarea id="direction-notes"></textarea></p>
-                    <p><strong>Admoestação:</strong> <textarea id="admonition-notes"></textarea></p>
-                    <p><em>Ore e faça um grito de guerra com base nesses itens para que a palavra profética seja sedimentada em seu coração!</em></p>
-                </div>
-
-                <div class="navigation">
-                    <button class="btn" id="prev-btn" disabled>Anterior</button>
-                    <button class="btn" id="next-btn">Próximo</button>
+                    <div class="navigation">
+                        <button class="nav-btn" id="prev-btn">
+                            <span>←</span> Anterior
+                        </button>
+                        <button class="nav-btn" id="next-btn">
+                            Próximo <span>→</span>
+                        </button>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>Alimento Diário &copy; 2025 - Todos os direitos reservados</p>
-        </div>
-    </footer>
-
     <script>
-        // Dados simulados do devocional baseados no PDF
-        const devotionalData = {
-            weeks: [
-                {
-                    id: 1,
-                    title: "SEMANA 1: A RESTAURAÇÃO DA TERRA: O TERCEIRO DIA E O QUARTO DIA",
-                    days: [
-                        {
-                            id: 1,
-                            title: "ANDAR COMO FILHOS DA LUZ É FAZER A VONTADE DEUS",
-                            bibleReading: "Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19",
-                            prayerReading: "\"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz\" (Ef 5:8).",
-                            content: `
-                                <p>Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa. Tambemos reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.</p>
-                                
-                                <p>Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus. A vida estava em Cristo, a Palavra, e, quando nós O recebemos pela fé, recebemos a vida de Deus. Essa vida que recebemos ao crer em Jesus tornou-se nossa luz. Quando essa luz brilha em nossa vida, as trevas fogem (v. 5). Quando recebemos a luz do Senhor, deixamos as obras das trevas, porque nos tornamos filhos da luz. Passamos a reprovar as coisas vergonhosas que se ocultam, que são feitas nas trevas, porque não somos mais das trevas, mas filhos da luz.</p>
-                                
-                                <p>Essa é a primeira função da luz da vida de Cristo, que entrou em nós. Toda vez que praticamos algo das trevas, sentimo-nos mal, porque a luz não pode conviver com as trevas. Dessa forma, pouco a pouco deixamos a vida pecaminosa que tínhamos antes, abandonamos a vida de trevas, que os homens do mundo vivem, e passamos a viver mais na luz.</p>
-                                
-                                <p>Deus nos fez filhos da luz para deixarmos de praticar as obras das trevas. Como filhos da luz, vivemos para agradar ao Senhor. É isso que lemos em Efésios: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz (porque o fruto da luz consiste em toda bondade, e justiça, e verdade), provando sempre o que é agradável ao Senhor" (Ef 5:8-10). Agradar ao Senhor significa fazer Sua vontade. Se faz o que o Senhor quer, então você Lhe agrada. Como filhos da luz, nosso foco é fazer a vontade de Deus.</p>
-                                
-                                <p>A vontade de Deus é que Cristo seja o Cabeça sobre todas as coisas (Ef 1:9-10). Se somos filhos da luz e vivemos na luz, contribuímos para que Cristo governe nossa vida, e, por meio de nós, governe todas as coisas. Paulo também escreveu: "Não sejais cúmplices nas obras infrutíferas das trevas; antes, porém, reprovai-as. Porque o que eles fazem em oculto, o só referir é vergonha. Mas todas as coisas, quando reprovadas pela luz, se tornam manifestas; porque tudo que se manifesta é luz. Pelo que diz: Desperta, ó tu que dormes, levanta-te de entre os mortos, e Cristo te iluminará" (5:11-14).</p>
-                                
-                                <p>Reprovamos as obras das trevas, pois é vergonhoso o que os homens que andam nas trevas fazem em oculto. Se realmente queremos ser um filho da luz vivendo na luz, precisamos despertar do sono. Quem dorme, dorme de noite, mas não somos da noite nem das trevas, somos da luz. Vamos remir o tempo para viver a vontade de Deus. Quem é filho da luz deseja que seu viver contribua para que Cristo reine sobre esta terra. Como fazer isso? Enchendo-nos do Espírito por meio da palavra (Ef 5:16-19). Quando fazemos a imersão na palavra, os gritos de guerra, a transcrição, as anotações, dormimos e acordamos com Deus ouvindo mensagens, permitimos que a palavra seja inculcada em nós e nos torne verdadeiros filhos da luz, que fazem a vontade de Deus.</p>
-                            `
-                        },
-                        {
-                            id: 2,
-                            title: "FILHOS DA LUZ E FILHOS DO DIA",
-                            bibleReading: "Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8",
-                            prayerReading: "\"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas\" (1 Ts 5:5).",
-                            content: `
-                                <p>Texto do devocional para o segundo dia da primeira semana...</p>
-                            `
-                        }
-                        // Outros dias da semana 1...
-                    ]
-                },
-                {
-                    id: 2,
-                    title: "SEMANA 2: A RESTAURAÇÃO DA TERRA: O QUINTO DIA E O SEXTO DIA",
-                    days: [
-                        {
-                            id: 1,
-                            title: "O SOL E A LUA: INSTRUMENTOS DO GOVERNO DE DEUS",
-                            bibleReading: "Gn 1:14-19; Is 45:18",
-                            prayerReading: "\"Fez Deus os dois grandes luzeiros: o maior para governar o dia, e o menor para governar a noite\" (Gn 1:16).",
-                            content: `
-                                <p>Texto do devocional para o primeiro dia da segunda semana...</p>
-                            `
-                        }
-                        // Outros dias da semana 2...
-                    ]
-                }
-                // Outras semanas...
-            ]
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        // Estado da aplicação
+        let devotionalData = {
+            weeks: []
         };
-
-        // Elementos DOM
-        const weekLinks = document.querySelectorAll('.week-link');
-        const dayLinks = document.querySelectorAll('.day-link');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const weekTitle = document.querySelector('.week-title');
-        const dayTitle = document.querySelector('.day-title');
-        const bibleReading = document.querySelector('.bible-reading p');
-        const prayerReading = document.querySelector('.prayer-reading p');
-        const devotionalText = document.querySelector('.devotional-text');
-        const pdfLink = document.getElementById('pdf-link');
-
-        // Estado atual
         let currentWeek = 1;
         let currentDay = 1;
 
-        // Função para carregar o conteúdo do dia
-        function loadDayContent(week, day) {
-            const weekData = devotionalData.weeks.find(w => w.id === week);
-            if (!weekData) return;
-            
-            const dayData = weekData.days.find(d => d.id === day);
-            if (!dayData) return;
-            
-            weekTitle.textContent = weekData.title;
-            dayTitle.textContent = `${getDayName(day)}: ${dayData.title}`;
-            bibleReading.textContent = dayData.bibleReading;
-            prayerReading.textContent = dayData.prayerReading;
-            devotionalText.innerHTML = dayData.content;
-            
-            // Atualizar navegação
-            updateNavigation(week, day);
-            
-            // Atualizar links ativos
-            updateActiveLinks(week, day);
+        // Elementos DOM
+        const weeksList = document.getElementById('weeks-list');
+        const sidebarLoading = document.getElementById('sidebar-loading');
+        const contentLoading = document.getElementById('content-loading');
+        const devotionalContent = document.getElementById('devotional-content');
+        const weekTitle = document.getElementById('week-title');
+        const dayTitle = document.getElementById('day-title');
+        const currentDate = document.getElementById('current-date');
+        const bibleReading = document.getElementById('bible-reading');
+        const prayerReading = document.getElementById('prayer-reading');
+        const devotionalText = document.getElementById('devotional-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Função para extrair o conteúdo do PDF
+        async function extractPDFContent() {
+            try {
+                const pdf = await pdfjsLib.getDocument('ad.pdf').promise;
+                const numPages = pdf.numPages;
+                let fullText = '';
+
+                for (let i = 1; i <= numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + '\n';
+                }
+
+                processPDFText(fullText);
+            } catch (error) {
+                console.error('Erro ao carregar PDF:', error);
+                contentLoading.innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        <p>Erro ao carregar o devocional.</p>
+                        <p>Verifique se o arquivo "ad.pdf" está na pasta raiz.</p>
+                    </div>
+                `;
+            }
         }
 
-        // Função para obter o nome do dia
+        // Função para processar o texto do PDF
+        function processPDFText(text) {
+            const lines = text.split('\n');
+            let currentWeek = null;
+            let currentDay = null;
+            let weekTitle = '';
+            let dayTitle = '';
+            let bibleReadingText = '';
+            let prayerReadingText = '';
+            let devotionalTextContent = '';
+            
+            const weekPattern = /SEMANA\s+\d+:/;
+            const dayPattern = /SEMANA\s+\d+\s+–\s+([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i;
+            const bibleReadingPattern = /Leitura bíblica:/i;
+            const prayerReadingPattern = /Ler com oração:/i;
+            const notesPattern = /Anote abaixo conforme o que você recebeu na leitura de hoje:/i;
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                if (weekPattern.test(line) && !dayPattern.test(line)) {
+                    if (currentDay && devotionalTextContent) {
+                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
+                                   bibleReadingText, prayerReadingText, devotionalTextContent);
+                    }
+                    
+                    currentWeek = parseInt(line.match(/SEMANA\s+(\d+)/)[1]);
+                    weekTitle = line;
+                    currentDay = null;
+                    
+                    if (!devotionalData.weeks.find(w => w.id === currentWeek)) {
+                        devotionalData.weeks.push({
+                            id: currentWeek,
+                            title: weekTitle,
+                            days: []
+                        });
+                    }
+                    
+                    continue;
+                }
+                
+                if (dayPattern.test(line)) {
+                    if (currentDay && devotionalTextContent) {
+                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
+                                   bibleReadingText, prayerReadingText, devotionalTextContent);
+                    }
+                    
+                    const dayMatch = line.match(/SEMANA\s+\d+\s+–\s+([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i);
+                    if (dayMatch) {
+                        currentDay = getDayNumber(dayMatch[1]);
+                        dayTitle = extractDayTitle(lines, i);
+                        bibleReadingText = '';
+                        prayerReadingText = '';
+                        devotionalTextContent = '';
+                    }
+                    
+                    continue;
+                }
+                
+                if (bibleReadingPattern.test(line)) {
+                    bibleReadingText = extractBibleReading(lines, i);
+                    continue;
+                }
+                
+                if (prayerReadingPattern.test(line)) {
+                    prayerReadingText = extractPrayerReading(lines, i);
+                    continue;
+                }
+                
+                if (notesPattern.test(line)) {
+                    if (currentDay && devotionalTextContent) {
+                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
+                                   bibleReadingText, prayerReadingText, devotionalTextContent);
+                    }
+                    continue;
+                }
+                
+                if (currentDay && !bibleReadingPattern.test(line) && 
+                    !prayerReadingPattern.test(line) && !notesPattern.test(line)) {
+                    
+                    if (/^\d+$/.test(line)) continue;
+                    
+                    devotionalTextContent += line + '\n\n';
+                }
+            }
+            
+            if (currentDay && devotionalTextContent) {
+                saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
+                           bibleReadingText, prayerReadingText, devotionalTextContent);
+            }
+            
+            updateSidebar();
+            loadDayContent(currentWeek, currentDay);
+            
+            sidebarLoading.style.display = 'none';
+            contentLoading.style.display = 'none';
+            weeksList.style.display = 'block';
+            devotionalContent.style.display = 'block';
+        }
+
+        // Funções auxiliares
+        function saveDayData(weekNum, dayNum, weekTitle, dayTitle, bible, prayer, content) {
+            const week = devotionalData.weeks.find(w => w.id === weekNum);
+            if (week) {
+                const existingDay = week.days.find(d => d.id === dayNum);
+                if (existingDay) {
+                    existingDay.title = dayTitle;
+                    existingDay.bibleReading = bible;
+                    existingDay.prayerReading = prayer;
+                    existingDay.content = formatDevotionalContent(content);
+                } else {
+                    week.days.push({
+                        id: dayNum,
+                        title: dayTitle,
+                        bibleReading: bible,
+                        prayerReading: prayer,
+                        content: formatDevotionalContent(content)
+                    });
+                }
+            }
+        }
+
+        function formatDevotionalContent(content) {
+            const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
+            return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+        }
+
+        function extractDayTitle(lines, startIndex) {
+            for (let i = startIndex + 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line && !/SEMANA\s+\d+/.test(line) && 
+                    !/Leitura bíblica:/.test(line) && 
+                    !/Ler com oração:/.test(line)) {
+                    return line;
+                }
+            }
+            return 'Devocional Diário';
+        }
+
+        function extractBibleReading(lines, startIndex) {
+            let reading = '';
+            for (let i = startIndex + 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line || /Ler com oração:/.test(line) || /SEMANA\s+\d+/.test(line)) {
+                    break;
+                }
+                reading += line + ' ';
+            }
+            return reading.trim();
+        }
+
+        function extractPrayerReading(lines, startIndex) {
+            let reading = '';
+            for (let i = startIndex + 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line || /Leitura bíblica:/.test(line) || /SEMANA\s+\d+/.test(line)) {
+                    break;
+                }
+                reading += line + ' ';
+            }
+            return reading.trim();
+        }
+
+        function getDayNumber(dayName) {
+            const days = {
+                'SEGUNDA': 1, 'TERÇA': 2, 'QUARTA': 3, 'QUINTA': 4,
+                'SEXTA': 5, 'SÁBADO': 6, 'DOMINGO': 7
+            };
+            return days[dayName.toUpperCase().split('-')[0]] || 1;
+        }
+
         function getDayName(day) {
             const days = [
                 "Segunda-feira", "Terça-feira", "Quarta-feira", 
@@ -537,97 +584,150 @@
             return days[day - 1];
         }
 
-        // Função para atualizar a navegação
+        // Atualizar interface
+        function updateSidebar() {
+            weeksList.innerHTML = '';
+            
+            devotionalData.weeks.forEach(week => {
+                const weekItem = document.createElement('li');
+                weekItem.className = 'week-item';
+                
+                const weekLink = document.createElement('a');
+                weekLink.href = '#';
+                weekLink.className = 'week-link';
+                weekLink.setAttribute('data-week', week.id);
+                weekLink.textContent = `SEMANA ${week.id}`;
+                
+                weekLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentWeek = week.id;
+                    currentDay = 1;
+                    loadDayContent(currentWeek, currentDay);
+                    updateActiveLinks();
+                });
+                
+                weekItem.appendChild(weekLink);
+                
+                const daysList = document.createElement('ul');
+                daysList.className = 'days-nav';
+                
+                for (let i = 1; i <= 7; i++) {
+                    const dayItem = document.createElement('li');
+                    dayItem.className = 'day-item';
+                    
+                    const dayLink = document.createElement('a');
+                    dayLink.href = '#';
+                    dayLink.className = 'day-link';
+                    dayLink.setAttribute('data-day', i);
+                    dayLink.textContent = getDayName(i);
+                    
+                    dayLink.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        currentDay = i;
+                        loadDayContent(currentWeek, currentDay);
+                        updateActiveLinks();
+                    });
+                    
+                    dayItem.appendChild(dayLink);
+                    daysList.appendChild(dayItem);
+                }
+                
+                weekItem.appendChild(daysList);
+                weeksList.appendChild(weekItem);
+            });
+            
+            updateActiveLinks();
+        }
+
+        function updateActiveLinks() {
+            document.querySelectorAll('.week-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll('.day-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeWeekLink = document.querySelector(`.week-link[data-week="${currentWeek}"]`);
+            if (activeWeekLink) {
+                activeWeekLink.classList.add('active');
+                
+                const activeDayLink = activeWeekLink.parentNode.querySelector(`.day-link[data-day="${currentDay}"]`);
+                if (activeDayLink) {
+                    activeDayLink.classList.add('active');
+                }
+            }
+        }
+
+        function loadDayContent(week, day) {
+            const weekData = devotionalData.weeks.find(w => w.id === week);
+            if (!weekData) {
+                weekTitle.textContent = `SEMANA ${week}`;
+                dayTitle.textContent = `${getDayName(day)}`;
+                bibleReading.textContent = 'Leitura bíblica não disponível';
+                prayerReading.textContent = 'Leitura de oração não disponível';
+                devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível para este dia.</p>';
+            } else {
+                weekTitle.textContent = weekData.title;
+                
+                const dayData = weekData.days.find(d => d.id === day);
+                if (!dayData) {
+                    dayTitle.textContent = `${getDayName(day)}`;
+                    bibleReading.textContent = 'Leitura bíblica não disponível';
+                    prayerReading.textContent = 'Leitura de oração não disponível';
+                    devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível para este dia.</p>';
+                } else {
+                    dayTitle.textContent = `${getDayName(day)}: ${dayData.title}`;
+                    bibleReading.textContent = dayData.bibleReading;
+                    prayerReading.textContent = dayData.prayerReading;
+                    devotionalText.innerHTML = dayData.content;
+                }
+            }
+            
+            updateNavigation(week, day);
+            updateCurrentDate();
+        }
+
         function updateNavigation(week, day) {
-            // Verificar se é o primeiro dia da primeira semana
             prevBtn.disabled = (week === 1 && day === 1);
-            
-            // Verificar se é o último dia da última semana
             const lastWeek = devotionalData.weeks[devotionalData.weeks.length - 1];
-            const lastDay = lastWeek.days[lastWeek.days.length - 1];
-            nextBtn.disabled = (week === lastWeek.id && day === lastDay.id);
+            const lastDay = 7;
+            nextBtn.disabled = (week === (lastWeek?.id || 1) && day === lastDay);
         }
 
-        // Função para atualizar os links ativos
-        function updateActiveLinks(week, day) {
-            // Remover classe active de todos os links
-            weekLinks.forEach(link => link.classList.remove('active'));
-            dayLinks.forEach(link => link.classList.remove('active'));
-            
-            // Adicionar classe active aos links corretos
-            document.querySelector(`.week-link[data-week="${week}"]`).classList.add('active');
-            document.querySelector(`.week-link[data-week="${week}"] + .days-list .day-link[data-day="${day}"]`).classList.add('active');
+        function updateCurrentDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            currentDate.textContent = today.toLocaleDateString('pt-BR', options);
         }
 
-        // Event listeners para navegação por semana
-        weekLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const week = parseInt(this.getAttribute('data-week'));
-                currentWeek = week;
-                currentDay = 1; // Sempre começar no primeiro dia da semana
-                loadDayContent(currentWeek, currentDay);
-            });
-        });
-
-        // Event listeners para navegação por dia
-        dayLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const day = parseInt(this.getAttribute('data-day'));
-                currentDay = day;
-                loadDayContent(currentWeek, currentDay);
-            });
-        });
-
-        // Event listeners para botões de navegação
+        // Event listeners
         prevBtn.addEventListener('click', function() {
             if (currentDay > 1) {
                 currentDay--;
             } else if (currentWeek > 1) {
                 currentWeek--;
-                const prevWeek = devotionalData.weeks.find(w => w.id === currentWeek);
-                currentDay = prevWeek.days.length; // Último dia da semana anterior
+                currentDay = 7;
             }
             loadDayContent(currentWeek, currentDay);
+            updateActiveLinks();
         });
 
         nextBtn.addEventListener('click', function() {
-            const currentWeekData = devotionalData.weeks.find(w => w.id === currentWeek);
-            if (currentDay < currentWeekData.days.length) {
+            if (currentDay < 7) {
                 currentDay++;
             } else if (currentWeek < devotionalData.weeks.length) {
                 currentWeek++;
-                currentDay = 1; // Primeiro dia da próxima semana
+                currentDay = 1;
             }
             loadDayContent(currentWeek, currentDay);
+            updateActiveLinks();
         });
 
-        // Event listener para visualizar PDF
-        pdfLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Carregar o PDF da raiz
-            const pdfContainer = document.createElement('div');
-            pdfContainer.className = 'pdf-container';
-            pdfContainer.innerHTML = '<iframe src="ad.pdf" width="100%" height="100%"></iframe>';
-            
-            // Substituir o conteúdo devocional pelo visualizador de PDF
-            document.querySelector('.devotional-content').innerHTML = '';
-            document.querySelector('.devotional-content').appendChild(pdfContainer);
-            
-            // Atualizar navegação para voltar ao conteúdo
-            const backButton = document.createElement('button');
-            backButton.className = 'btn';
-            backButton.textContent = 'Voltar ao Devocional';
-            backButton.addEventListener('click', function() {
-                location.reload(); // Recarregar a página para voltar ao estado inicial
-            });
-            
-            document.querySelector('.devotional-content').appendChild(backButton);
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            extractPDFContent();
         });
-
-        // Inicializar com o primeiro dia da primeira semana
-        loadDayContent(currentWeek, currentDay);
     </script>
 </body>
 </html>

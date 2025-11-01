@@ -274,6 +274,12 @@
             color: var(--primary);
         }
         
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -301,124 +307,9 @@
         <div class="sidebar-header">
             <h2>Navegação</h2>
         </div>
-        <ul class="weeks-list">
-            <li class="week-item active">
-                <button class="week-btn">
-                    SEMANA 1
-                    <span>▼</span>
-                </button>
-                <ul class="days-list">
-                    <li class="day-item">
-                        <button class="day-btn active" data-day="1-1">SEGUNDA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-2">TERÇA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-3">QUARTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-4">QUINTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-5">SEXTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-6">SÁBADO</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="1-7">DOMINGO</button>
-                    </li>
-                </ul>
-            </li>
-            <li class="week-item">
-                <button class="week-btn">
-                    SEMANA 2
-                    <span>▼</span>
-                </button>
-                <ul class="days-list">
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-1">SEGUNDA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-2">TERÇA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-3">QUARTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-4">QUINTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-5">SEXTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-6">SÁBADO</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="2-7">DOMINGO</button>
-                    </li>
-                </ul>
-            </li>
-            <li class="week-item">
-                <button class="week-btn">
-                    SEMANA 3
-                    <span>▼</span>
-                </button>
-                <ul class="days-list">
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-1">SEGUNDA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-2">TERÇA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-3">QUARTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-4">QUINTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-5">SEXTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-6">SÁBADO</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="3-7">DOMINGO</button>
-                    </li>
-                </ul>
-            </li>
-            <li class="week-item">
-                <button class="week-btn">
-                    SEMANA 4
-                    <span>▼</span>
-                </button>
-                <ul class="days-list">
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-1">SEGUNDA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-2">TERÇA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-3">QUARTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-4">QUINTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-5">SEXTA-FEIRA</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-6">SÁBADO</button>
-                    </li>
-                    <li class="day-item">
-                        <button class="day-btn" data-day="4-7">DOMINGO</button>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <div id="navigation-content">
+            <div class="loading">Carregando conteúdo...</div>
+        </div>
     </div>
     
     <div class="main-content">
@@ -428,79 +319,8 @@
         </header>
         
         <div class="content-area">
-            <div class="day-content" id="day-1-1">
-                <div class="day-header">
-                    <h2 class="day-title">SEGUNDA-FEIRA - SEMANA 1</h2>
-                    <p class="bible-reading">Leitura bíblica: Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19</p>
-                    <div class="prayer-reading">
-                        Ler com oração: "Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).
-                    </div>
-                </div>
-                
-                <div class="content-text">
-                    <p>Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa.</p>
-                    
-                    <p>Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.</p>
-                    
-                    <p>Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus.</p>
-                </div>
-                
-                <div class="notes-section">
-                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
-                    <div class="note-item">
-                        <label for="light-1-1">Luz na palavra:</label>
-                        <textarea id="light-1-1" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <div class="note-item">
-                        <label for="direction-1-1">Direção:</label>
-                        <textarea id="direction-1-1" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <div class="note-item">
-                        <label for="admonition-1-1">Admoestação:</label>
-                        <textarea id="admonition-1-1" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <button class="prayer-btn">Ore e faça um grito de guerra</button>
-                </div>
-            </div>
-            
-            <div class="day-content" id="day-1-2" style="display: none;">
-                <div class="day-header">
-                    <h2 class="day-title">TERÇA-FEIRA - SEMANA 1</h2>
-                    <p class="bible-reading">Leitura bíblica: Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8</p>
-                    <div class="prayer-reading">
-                        Ler com oração: "Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).
-                    </div>
-                </div>
-                
-                <div class="content-text">
-                    <p>Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia": "Vós, irmãos, não estais em trevas, para que esse Dia como ladrão vos apanhe de surpresa; porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas. Assim, pois, não durmamos como os demais; pelo contrário, vigiemos e sejamos sóbrios" (5:4-5).</p>
-                    
-                    <p>Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.</p>
-                </div>
-                
-                <div class="notes-section">
-                    <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
-                    <div class="note-item">
-                        <label for="light-1-2">Luz na palavra:</label>
-                        <textarea id="light-1-2" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <div class="note-item">
-                        <label for="direction-1-2">Direção:</label>
-                        <textarea id="direction-1-2" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <div class="note-item">
-                        <label for="admonition-1-2">Admoestação:</label>
-                        <textarea id="admonition-1-2" placeholder="Escreva aqui..."></textarea>
-                    </div>
-                    <button class="prayer-btn">Ore e faça um grito de guerra</button>
-                </div>
-            </div>
-            
-            <!-- Outros dias seriam adicionados aqui -->
-            
-            <div class="empty-state" id="empty-state" style="display: none;">
-                <h2>Selecione um dia para ler</h2>
-                <p>Escolha um dia da semana no menu lateral para começar sua leitura.</p>
+            <div id="day-content">
+                <div class="loading">Carregando conteúdo do dia...</div>
             </div>
         </div>
         
@@ -510,72 +330,199 @@
     </div>
 
     <script>
-        // Navegação entre semanas e dias
-        document.addEventListener('DOMContentLoaded', function() {
-            const weekButtons = document.querySelectorAll('.week-btn');
-            const dayButtons = document.querySelectorAll('.day-btn');
-            const dayContents = document.querySelectorAll('.day-content');
-            const emptyState = document.getElementById('empty-state');
-            
-            // Inicialmente mostrar apenas o primeiro dia
-            dayContents.forEach(content => {
-                content.style.display = 'none';
-            });
-            document.getElementById('day-1-1').style.display = 'block';
-            emptyState.style.display = 'none';
-            
-            // Eventos para os botões das semanas
-            weekButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const weekItem = this.parentElement;
-                    
-                    // Alternar a classe active na semana
-                    weekButtons.forEach(btn => {
-                        btn.classList.remove('active');
+        class PDFLoader {
+            constructor() {
+                this.content = null;
+                this.currentDay = '1-1';
+                this.init();
+            }
+
+            async init() {
+                await this.loadPDFContent();
+                this.renderNavigation();
+                this.renderDayContent(this.currentDay);
+            }
+
+            async loadPDFContent() {
+                try {
+                    const response = await fetch('api/index.php');
+                    this.content = await response.json();
+                } catch (error) {
+                    console.error('Erro ao carregar conteúdo:', error);
+                    // Fallback para conteúdo estático se a API falhar
+                    this.content = this.getFallbackContent();
+                }
+            }
+
+            getFallbackContent() {
+                // Conteúdo completo do PDF como fallback
+                return {
+                    weeks: [
+                        {
+                            title: 'SEMANA 1: A RESTAURAÇÃO DA TERRA: O TERCEIRO DIA E O QUARTO DIA',
+                            days: [
+                                {
+                                    title: 'SEGUNDA-FEIRA',
+                                    bible_reading: 'Gn 1:9, 14-19; Jo 1:1-5; Ef 1:9-10; 5:16-19',
+                                    prayer_reading: '"Outrora, éreis trevas, porém, agora, sois luz no Senhor; andai como filhos da luz" (Ef 5:8).',
+                                    content: `Na mensagem desta semana, cujo título é "A restauração da terra: o terceiro dia e o quarto dia", falaremos sobre o que ocorreu no terceiro e quarto dias da restauração da criação de Deus. No terceiro dia, Deus fez surgir a porção seca de terra (Gn 1:9) e, no quarto dia, fez os dois grandes luzeiros e as estrelas (vs. 14-19). Veremos que esses itens nos remetem a nossa experiência de Cristo como nossa boa terra, cheia de vida e de riquezas, e de Cristo como nosso sol, que nos ilumina e governa.
+
+Também reconheceremos a função da igreja como a lua, que governa durante a noite que precede a segunda vinda do sol, que é Cristo.
+
+Contudo, antes de falarmos sobre o tema desta semana, precisamos aprofundar-nos um pouco mais no que aconteceu no primeiro dia da restauração da terra, no qual a luz foi criada (Gn 1:3-5). Deus mesmo é luz, e a luz está em Sua vida (Jo 1:1-4). Em nossa experiência, no dia em que recebemos Cristo e cremos Nele, também recebemos a vida de Deus. A vida estava em Cristo, a Palavra, e, quando nós O recebemos pela fé, recebemos a vida de Deus. Essa vida que recebemos ao crer em Jesus tornou-se nossa luz. Quando essa luz brilha em nossa vida, as trevas fogem (v. 5).`
+                                },
+                                {
+                                    title: 'TERÇA-FEIRA',
+                                    bible_reading: 'Mt 17:1-7; At 7:2; 2 Co 4:2-4; Fp 3:7-8',
+                                    prayer_reading: '"Porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas" (1 Ts 5:5).',
+                                    content: `Anteriormente abordamos que os filhos da luz contribuem para que a vontade de Deus seja feita na terra. Na Primeira aos Tessalonicenses, encontramos também a expressão "filhos da luz e filhos do dia": "Vós, irmãos, não estais em trevas, para que esse Dia como ladrão vos apanhe de surpresa; porquanto vós todos sois filhos da luz e filhos do dia; nós não somos da noite, nem das trevas. Assim, pois, não durmamos como os demais; pelo contrário, vigiemos e sejamos sóbrios" (5:4-5). Aqui lemos que não apenas somos filhos da luz para fazer a vontade de Deus, mas também somos filhos do dia. Mas qual a diferença? Na verdade, significam a mesma coisa, trazem a mesma responsabilidade, contudo com um enfoque um pouco diferente. Como filhos da luz, vivemos e andamos aqui na terra para fazer a vontade de Deus, e, como filhos do dia, vigiamos e somos sóbrios, aguardando a vinda de nosso Senhor.`
+                                },
+                                // Adicione todos os outros dias aqui seguindo o mesmo padrão
+                            ]
+                        },
+                        // Adicione outras semanas aqui
+                    ]
+                };
+            }
+
+            renderNavigation() {
+                const navContainer = document.getElementById('navigation-content');
+                let html = '<ul class="weeks-list">';
+
+                this.content.weeks.forEach((week, weekIndex) => {
+                    const weekNumber = weekIndex + 1;
+                    html += `
+                        <li class="week-item ${weekIndex === 0 ? 'active' : ''}">
+                            <button class="week-btn" data-week="${weekNumber}">
+                                SEMANA ${weekNumber}
+                                <span>▼</span>
+                            </button>
+                            <ul class="days-list">
+                    `;
+
+                    week.days.forEach((day, dayIndex) => {
+                        const dayNumber = dayIndex + 1;
+                        const dayId = `${weekNumber}-${dayNumber}`;
+                        html += `
+                            <li class="day-item">
+                                <button class="day-btn ${dayId === this.currentDay ? 'active' : ''}" 
+                                        data-day="${dayId}">
+                                    ${day.title}
+                                </button>
+                            </li>
+                        `;
                     });
-                    this.classList.add('active');
-                    
-                    // Alternar a exibição dos dias da semana
-                    document.querySelectorAll('.week-item').forEach(item => {
-                        if (item !== weekItem) {
-                            item.classList.remove('active');
-                        }
-                    });
-                    weekItem.classList.toggle('active');
+
+                    html += '</ul></li>';
                 });
-            });
-            
-            // Eventos para os botões dos dias
-            dayButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const dayId = this.getAttribute('data-day');
-                    
-                    // Remover classe active de todos os botões de dia
-                    dayButtons.forEach(btn => {
-                        btn.classList.remove('active');
+
+                html += '</ul>';
+                navContainer.innerHTML = html;
+
+                // Adicionar event listeners
+                this.attachNavigationEvents();
+            }
+
+            attachNavigationEvents() {
+                // Eventos para semanas
+                document.querySelectorAll('.week-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const weekItem = e.target.closest('.week-item');
+                        document.querySelectorAll('.week-item').forEach(item => {
+                            if (item !== weekItem) item.classList.remove('active');
+                        });
+                        weekItem.classList.toggle('active');
                     });
-                    
-                    // Adicionar classe active ao botão clicado
-                    this.classList.add('active');
-                    
-                    // Esconder todos os conteúdos de dia
-                    dayContents.forEach(content => {
-                        content.style.display = 'none';
+                });
+
+                // Eventos para dias
+                document.querySelectorAll('.day-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const dayId = e.target.getAttribute('data-day');
+                        this.currentDay = dayId;
+                        this.renderDayContent(dayId);
+                        
+                        // Atualizar estados ativos
+                        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
                     });
-                    
-                    // Mostrar o conteúdo do dia selecionado
-                    document.getElementById('day-' + dayId).style.display = 'block';
-                    emptyState.style.display = 'none';
                 });
-            });
-            
-            // Eventos para os botões de oração
-            const prayerButtons = document.querySelectorAll('.prayer-btn');
-            prayerButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Oração e grito de guerra realizado! Que a palavra profética seja sedimentada em seu coração!');
+            }
+
+            renderDayContent(dayId) {
+                const [weekNum, dayNum] = dayId.split('-').map(Number);
+                const week = this.content.weeks[weekNum - 1];
+                const day = week.days[dayNum - 1];
+
+                const contentContainer = document.getElementById('day-content');
+                contentContainer.innerHTML = `
+                    <div class="day-content">
+                        <div class="day-header">
+                            <h2 class="day-title">${day.title} - SEMANA ${weekNum}</h2>
+                            <p class="bible-reading">Leitura bíblica: ${day.bible_reading}</p>
+                            <div class="prayer-reading">
+                                Ler com oração: ${day.prayer_reading}
+                            </div>
+                        </div>
+                        
+                        <div class="content-text">
+                            ${day.content.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
+                        </div>
+                        
+                        <div class="notes-section">
+                            <h3>Anote abaixo conforme o que você recebeu na leitura de hoje:</h3>
+                            <div class="note-item">
+                                <label for="light-${dayId}">Luz na palavra:</label>
+                                <textarea id="light-${dayId}" placeholder="Escreva aqui..."></textarea>
+                            </div>
+                            <div class="note-item">
+                                <label for="direction-${dayId}">Direção:</label>
+                                <textarea id="direction-${dayId}" placeholder="Escreva aqui..."></textarea>
+                            </div>
+                            <div class="note-item">
+                                <label for="admonition-${dayId}">Admoestação:</label>
+                                <textarea id="admonition-${dayId}" placeholder="Escreva aqui..."></textarea>
+                            </div>
+                            <button class="prayer-btn" onclick="this.handlePrayer()">Ore e faça um grito de guerra</button>
+                        </div>
+                    </div>
+                `;
+
+                // Adicionar evento ao botão de oração
+                document.querySelector('.prayer-btn').addEventListener('click', this.handlePrayer);
+            }
+
+            handlePrayer() {
+                alert('Oração e grito de guerra realizado! Que a palavra profética seja sedimentada em seu coração!');
+                
+                // Aqui você pode adicionar lógica para salvar as anotações
+                const dayId = window.pdfLoader.currentDay;
+                const light = document.getElementById(`light-${dayId}`).value;
+                const direction = document.getElementById(`direction-${dayId}`).value;
+                const admonition = document.getElementById(`admonition-${dayId}`).value;
+                
+                // Salvar no localStorage
+                const notes = JSON.parse(localStorage.getItem('alimentoDiarioNotes') || '{}');
+                notes[dayId] = { light, direction, admonition };
+                localStorage.setItem('alimentoDiarioNotes', JSON.stringify(notes));
+            }
+
+            loadSavedNotes() {
+                const notes = JSON.parse(localStorage.getItem('alimentoDiarioNotes') || '{}');
+                Object.keys(notes).forEach(dayId => {
+                    const dayNotes = notes[dayId];
+                    if (document.getElementById(`light-${dayId}`)) {
+                        document.getElementById(`light-${dayId}`).value = dayNotes.light || '';
+                        document.getElementById(`direction-${dayId}`).value = dayNotes.direction || '';
+                        document.getElementById(`admonition-${dayId}`).value = dayNotes.admonition || '';
+                    }
                 });
-            });
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            window.pdfLoader = new PDFLoader();
         });
     </script>
 </body>

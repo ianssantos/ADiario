@@ -14,7 +14,6 @@
             --dark: #2c3e50;
             --text: #333;
             --border: #e1e5e9;
-            --shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         * {
@@ -24,14 +23,14 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             line-height: 1.6;
             color: var(--text);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
         }
 
-        .app-container {
+        .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
@@ -44,32 +43,24 @@
         }
 
         .logo {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 5px;
         }
 
-        .subtitle {
-            color: var(--secondary);
-            font-size: 1rem;
-            font-weight: 400;
-        }
-
         .main-content {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 25px;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
         }
 
         .sidebar {
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             height: fit-content;
-            position: sticky;
-            top: 20px;
         }
 
         .sidebar-title {
@@ -85,7 +76,7 @@
         }
 
         .week-item {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .week-link {
@@ -97,18 +88,15 @@
             color: var(--text);
             font-weight: 500;
             transition: all 0.3s ease;
-            border-left: 3px solid transparent;
         }
 
         .week-link:hover {
             background: #e3f2fd;
-            transform: translateX(3px);
         }
 
         .week-link.active {
             background: var(--secondary);
             color: white;
-            border-left-color: var(--primary);
         }
 
         .days-nav {
@@ -135,50 +123,40 @@
 
         .day-link:hover {
             background: #f0f7ff;
-            border-color: var(--secondary);
         }
 
         .day-link.active {
             background: var(--primary);
             color: white;
-            border-color: var(--primary);
         }
 
         .content {
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 30px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .devotional-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border);
         }
 
         .week-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--secondary);
             margin-bottom: 5px;
-            font-weight: 600;
         }
 
         .day-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--primary);
             margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .date {
-            color: #7f8c8d;
-            font-size: 0.9rem;
         }
 
         .reading-section {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .section-title {
@@ -186,39 +164,28 @@
             color: var(--primary);
             margin-bottom: 8px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title::before {
-            content: "•";
-            color: var(--secondary);
-            font-size: 1.5rem;
         }
 
         .bible-reading {
             background: #e8f4fc;
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid var(--secondary);
+            margin-bottom: 15px;
         }
 
         .prayer-reading {
             background: #fff8e6;
             padding: 15px;
             border-radius: 8px;
-            border-left: 4px solid #f1c40f;
+            margin-bottom: 20px;
         }
 
         .devotional-text {
             line-height: 1.7;
-            font-size: 1.05rem;
         }
 
         .devotional-text p {
             margin-bottom: 15px;
-            text-align: justify;
         }
 
         .navigation {
@@ -230,99 +197,56 @@
         }
 
         .nav-btn {
-            padding: 12px 25px;
+            padding: 10px 20px;
             background: var(--secondary);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: background 0.3s ease;
         }
 
         .nav-btn:hover {
             background: var(--primary);
-            transform: translateY(-2px);
         }
 
         .nav-btn:disabled {
             background: #bdc3c7;
             cursor: not-allowed;
-            transform: none;
         }
 
         .loading {
             text-align: center;
             padding: 40px 20px;
             color: var(--secondary);
-            font-size: 1.1rem;
-        }
-
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--secondary);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
-            .sidebar {
-                position: static;
-            }
-            
-            .app-container {
-                padding: 15px;
-            }
-            
-            .content {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <header>
             <div class="logo">Alimento Diário</div>
-            <div class="subtitle">Devocional para sua jornada espiritual</div>
         </header>
 
         <div class="main-content">
             <aside class="sidebar">
                 <div class="sidebar-title">Navegação</div>
-                <div class="loading" id="sidebar-loading">
-                    <div class="loading-spinner"></div>
-                    Carregando semanas...
-                </div>
+                <div class="loading" id="sidebar-loading">Carregando...</div>
                 <ul class="week-nav" id="weeks-list" style="display: none;"></ul>
             </aside>
 
             <main class="content">
-                <div class="loading" id="content-loading">
-                    <div class="loading-spinner"></div>
-                    Carregando devocional...
-                </div>
+                <div class="loading" id="content-loading">Carregando devocional...</div>
                 <div id="devotional-content" style="display: none;">
                     <div class="devotional-header">
                         <div class="week-title" id="week-title"></div>
                         <div class="day-title" id="day-title"></div>
-                        <div class="date" id="current-date"></div>
                     </div>
 
                     <div class="reading-section">
@@ -341,12 +265,8 @@
                     </div>
 
                     <div class="navigation">
-                        <button class="nav-btn" id="prev-btn">
-                            <span>←</span> Anterior
-                        </button>
-                        <button class="nav-btn" id="next-btn">
-                            Próximo <span>→</span>
-                        </button>
+                        <button class="nav-btn" id="prev-btn">Anterior</button>
+                        <button class="nav-btn" id="next-btn">Próximo</button>
                     </div>
                 </div>
             </main>
@@ -371,7 +291,6 @@
         const devotionalContent = document.getElementById('devotional-content');
         const weekTitle = document.getElementById('week-title');
         const dayTitle = document.getElementById('day-title');
-        const currentDate = document.getElementById('current-date');
         const bibleReading = document.getElementById('bible-reading');
         const prayerReading = document.getElementById('prayer-reading');
         const devotionalText = document.getElementById('devotional-text');
@@ -381,121 +300,236 @@
         // Função para extrair o conteúdo do PDF
         async function extractPDFContent() {
             try {
+                console.log('Iniciando extração do PDF...');
                 const pdf = await pdfjsLib.getDocument('ad.pdf').promise;
                 const numPages = pdf.numPages;
+                console.log(`PDF carregado com ${numPages} páginas`);
+                
                 let fullText = '';
-
+                
+                // Extrair texto de todas as páginas
                 for (let i = 1; i <= numPages; i++) {
+                    console.log(`Processando página ${i}...`);
                     const page = await pdf.getPage(i);
                     const textContent = await page.getTextContent();
                     const pageText = textContent.items.map(item => item.str).join(' ');
                     fullText += pageText + '\n';
                 }
-
+                
+                console.log('Texto extraído, processando...');
                 processPDFText(fullText);
+                
             } catch (error) {
                 console.error('Erro ao carregar PDF:', error);
-                contentLoading.innerHTML = `
-                    <div style="color: #e74c3c; text-align: center;">
-                        <p>Erro ao carregar o devocional.</p>
-                        <p>Verifique se o arquivo "ad.pdf" está na pasta raiz.</p>
-                    </div>
-                `;
+                contentLoading.textContent = 'Erro ao carregar o devocional. Verifique se o arquivo ad.pdf está na pasta raiz.';
             }
         }
 
         // Função para processar o texto do PDF
         function processPDFText(text) {
-            const lines = text.split('\n');
-            let currentWeek = null;
-            let currentDay = null;
-            let weekTitle = '';
-            let dayTitle = '';
-            let bibleReadingText = '';
-            let prayerReadingText = '';
-            let devotionalTextContent = '';
+            console.log('Processando texto do PDF...');
             
-            const weekPattern = /SEMANA\s+\d+:/;
-            const dayPattern = /SEMANA\s+\d+\s+–\s+([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i;
-            const bibleReadingPattern = /Leitura bíblica:/i;
-            const prayerReadingPattern = /Ler com oração:/i;
-            const notesPattern = /Anote abaixo conforme o que você recebeu na leitura de hoje:/i;
+            // Dividir o texto em linhas
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
             
+            // Encontrar todas as semanas
+            const weekMatches = [];
+            const dayMatches = [];
+            
+            // Procurar por padrões de semanas e dias
             for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
+                const line = lines[i];
                 
-                if (weekPattern.test(line) && !dayPattern.test(line)) {
-                    if (currentDay && devotionalTextContent) {
-                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
-                                   bibleReadingText, prayerReadingText, devotionalTextContent);
-                    }
+                // Padrão para semanas (SEMANA X:)
+                if (line.match(/^SEMANA\s+\d+:/)) {
+                    weekMatches.push({
+                        index: i,
+                        text: line,
+                        weekNumber: parseInt(line.match(/SEMANA\s+(\d+)/)[1])
+                    });
+                }
+                
+                // Padrão para dias (SEMANA X – DIA-DA-SEMANA)
+                if (line.match(/SEMANA\s+\d+\s*–\s*[A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA/i)) {
+                    dayMatches.push({
+                        index: i,
+                        text: line,
+                        weekNumber: parseInt(line.match(/SEMANA\s+(\d+)/)[1]),
+                        dayName: line.match(/–\s*([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i)[1]
+                    });
+                }
+            }
+            
+            console.log(`Encontradas ${weekMatches.length} semanas e ${dayMatches.length} dias`);
+            
+            // Processar cada semana
+            devotionalData.weeks = [];
+            
+            for (const weekMatch of weekMatches) {
+                const weekNumber = weekMatch.weekNumber;
+                const weekTitle = weekMatch.text;
+                
+                console.log(`Processando semana ${weekNumber}: ${weekTitle}`);
+                
+                // Encontrar os dias desta semana
+                const weekDays = dayMatches.filter(day => day.weekNumber === weekNumber);
+                
+                const days = [];
+                
+                // Processar cada dia da semana
+                for (const dayMatch of weekDays) {
+                    const dayNumber = getDayNumber(dayMatch.dayName);
+                    const dayStartIndex = dayMatch.index;
                     
-                    currentWeek = parseInt(line.match(/SEMANA\s+(\d+)/)[1]);
-                    weekTitle = line;
-                    currentDay = null;
+                    console.log(`Processando dia ${dayNumber} da semana ${weekNumber}`);
                     
-                    if (!devotionalData.weeks.find(w => w.id === currentWeek)) {
-                        devotionalData.weeks.push({
-                            id: currentWeek,
-                            title: weekTitle,
-                            days: []
+                    // Encontrar o próximo dia ou semana para delimitar o conteúdo
+                    const nextDayIndex = dayMatches.findIndex(day => 
+                        day.index > dayStartIndex && day.weekNumber === weekNumber
+                    );
+                    
+                    const nextIndex = nextDayIndex !== -1 ? 
+                        dayMatches[nextDayIndex].index : 
+                        lines.findIndex((line, idx) => 
+                            idx > dayStartIndex && line.match(/^SEMANA\s+\d+:/)
+                        );
+                    
+                    const dayEndIndex = nextIndex !== -1 ? nextIndex : lines.length;
+                    
+                    // Extrair conteúdo do dia
+                    const dayContent = extractDayContent(lines, dayStartIndex, dayEndIndex);
+                    
+                    if (dayContent) {
+                        days.push({
+                            id: dayNumber,
+                            title: dayContent.title,
+                            bibleReading: dayContent.bibleReading,
+                            prayerReading: dayContent.prayerReading,
+                            content: dayContent.content
                         });
                     }
-                    
+                }
+                
+                // Ordenar dias por número
+                days.sort((a, b) => a.id - b.id);
+                
+                devotionalData.weeks.push({
+                    id: weekNumber,
+                    title: weekTitle,
+                    days: days
+                });
+            }
+            
+            // Ordenar semanas por número
+            devotionalData.weeks.sort((a, b) => a.id - b.id);
+            
+            console.log('Dados processados:', devotionalData);
+            updateInterface();
+        }
+
+        // Função para extrair conteúdo de um dia específico
+        function extractDayContent(lines, startIndex, endIndex) {
+            let title = '';
+            let bibleReading = '';
+            let prayerReading = '';
+            let content = '';
+            
+            let currentSection = 'title';
+            
+            for (let i = startIndex + 1; i < endIndex && i < lines.length; i++) {
+                const line = lines[i];
+                
+                // Pular linhas vazias ou números de página
+                if (!line || /^\d+$/.test(line)) continue;
+                
+                // Detectar seções
+                if (line.includes('Leitura bíblica:')) {
+                    currentSection = 'bible';
                     continue;
                 }
                 
-                if (dayPattern.test(line)) {
-                    if (currentDay && devotionalTextContent) {
-                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
-                                   bibleReadingText, prayerReadingText, devotionalTextContent);
-                    }
-                    
-                    const dayMatch = line.match(/SEMANA\s+\d+\s+–\s+([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i);
-                    if (dayMatch) {
-                        currentDay = getDayNumber(dayMatch[1]);
-                        dayTitle = extractDayTitle(lines, i);
-                        bibleReadingText = '';
-                        prayerReadingText = '';
-                        devotionalTextContent = '';
-                    }
-                    
+                if (line.includes('Ler com oração:')) {
+                    currentSection = 'prayer';
                     continue;
                 }
                 
-                if (bibleReadingPattern.test(line)) {
-                    bibleReadingText = extractBibleReading(lines, i);
-                    continue;
+                if (line.includes('Anote abaixo')) {
+                    currentSection = 'end';
+                    break;
                 }
                 
-                if (prayerReadingPattern.test(line)) {
-                    prayerReadingText = extractPrayerReading(lines, i);
-                    continue;
-                }
-                
-                if (notesPattern.test(line)) {
-                    if (currentDay && devotionalTextContent) {
-                        saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
-                                   bibleReadingText, prayerReadingText, devotionalTextContent);
-                    }
-                    continue;
-                }
-                
-                if (currentDay && !bibleReadingPattern.test(line) && 
-                    !prayerReadingPattern.test(line) && !notesPattern.test(line)) {
-                    
-                    if (/^\d+$/.test(line)) continue;
-                    
-                    devotionalTextContent += line + '\n\n';
+                // Coletar conteúdo baseado na seção atual
+                switch (currentSection) {
+                    case 'title':
+                        if (!title && line && !line.includes('SEMANA')) {
+                            title = line;
+                        }
+                        break;
+                    case 'bible':
+                        bibleReading += line + ' ';
+                        break;
+                    case 'prayer':
+                        prayerReading += line + ' ';
+                        break;
+                    default:
+                        if (currentSection !== 'end') {
+                            content += line + '\n\n';
+                        }
+                        break;
                 }
             }
             
-            if (currentDay && devotionalTextContent) {
-                saveDayData(currentWeek, currentDay, weekTitle, dayTitle, 
-                           bibleReadingText, prayerReadingText, devotionalTextContent);
+            // Limpar e formatar o conteúdo
+            bibleReading = bibleReading.trim();
+            prayerReading = prayerReading.trim();
+            content = content.trim();
+            
+            // Se não encontrou título, usar um padrão
+            if (!title) {
+                title = 'Devocional Diário';
             }
             
+            return {
+                title: title,
+                bibleReading: bibleReading,
+                prayerReading: prayerReading,
+                content: formatDevotionalContent(content)
+            };
+        }
+
+        // Função para formatar o conteúdo devocional
+        function formatDevotionalContent(content) {
+            if (!content) return '<p>Conteúdo não disponível.</p>';
+            
+            // Dividir em parágrafos
+            const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
+            
+            // Criar HTML com parágrafos
+            return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+        }
+
+        // Função para obter o número do dia
+        function getDayNumber(dayName) {
+            const days = {
+                'SEGUNDA': 1, 'TERÇA': 2, 'QUARTA': 3, 'QUINTA': 4,
+                'SEXTA': 5, 'SÁBADO': 6, 'DOMINGO': 7
+            };
+            
+            const dayKey = dayName.toUpperCase().split('-')[0];
+            return days[dayKey] || 1;
+        }
+
+        // Função para obter o nome do dia
+        function getDayName(day) {
+            const days = [
+                "Segunda-feira", "Terça-feira", "Quarta-feira", 
+                "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"
+            ];
+            return days[day - 1] || "Dia Desconhecido";
+        }
+
+        // Atualizar a interface
+        function updateInterface() {
             updateSidebar();
             loadDayContent(currentWeek, currentDay);
             
@@ -505,86 +539,7 @@
             devotionalContent.style.display = 'block';
         }
 
-        // Funções auxiliares
-        function saveDayData(weekNum, dayNum, weekTitle, dayTitle, bible, prayer, content) {
-            const week = devotionalData.weeks.find(w => w.id === weekNum);
-            if (week) {
-                const existingDay = week.days.find(d => d.id === dayNum);
-                if (existingDay) {
-                    existingDay.title = dayTitle;
-                    existingDay.bibleReading = bible;
-                    existingDay.prayerReading = prayer;
-                    existingDay.content = formatDevotionalContent(content);
-                } else {
-                    week.days.push({
-                        id: dayNum,
-                        title: dayTitle,
-                        bibleReading: bible,
-                        prayerReading: prayer,
-                        content: formatDevotionalContent(content)
-                    });
-                }
-            }
-        }
-
-        function formatDevotionalContent(content) {
-            const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
-            return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
-        }
-
-        function extractDayTitle(lines, startIndex) {
-            for (let i = startIndex + 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line && !/SEMANA\s+\d+/.test(line) && 
-                    !/Leitura bíblica:/.test(line) && 
-                    !/Ler com oração:/.test(line)) {
-                    return line;
-                }
-            }
-            return 'Devocional Diário';
-        }
-
-        function extractBibleReading(lines, startIndex) {
-            let reading = '';
-            for (let i = startIndex + 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line || /Ler com oração:/.test(line) || /SEMANA\s+\d+/.test(line)) {
-                    break;
-                }
-                reading += line + ' ';
-            }
-            return reading.trim();
-        }
-
-        function extractPrayerReading(lines, startIndex) {
-            let reading = '';
-            for (let i = startIndex + 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line || /Leitura bíblica:/.test(line) || /SEMANA\s+\d+/.test(line)) {
-                    break;
-                }
-                reading += line + ' ';
-            }
-            return reading.trim();
-        }
-
-        function getDayNumber(dayName) {
-            const days = {
-                'SEGUNDA': 1, 'TERÇA': 2, 'QUARTA': 3, 'QUINTA': 4,
-                'SEXTA': 5, 'SÁBADO': 6, 'DOMINGO': 7
-            };
-            return days[dayName.toUpperCase().split('-')[0]] || 1;
-        }
-
-        function getDayName(day) {
-            const days = [
-                "Segunda-feira", "Terça-feira", "Quarta-feira", 
-                "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"
-            ];
-            return days[day - 1];
-        }
-
-        // Atualizar interface
+        // Atualizar a barra lateral
         function updateSidebar() {
             weeksList.innerHTML = '';
             
@@ -608,37 +563,42 @@
                 
                 weekItem.appendChild(weekLink);
                 
-                const daysList = document.createElement('ul');
-                daysList.className = 'days-nav';
-                
-                for (let i = 1; i <= 7; i++) {
-                    const dayItem = document.createElement('li');
-                    dayItem.className = 'day-item';
+                // Adicionar dias apenas se existirem
+                if (week.days && week.days.length > 0) {
+                    const daysList = document.createElement('ul');
+                    daysList.className = 'days-nav';
                     
-                    const dayLink = document.createElement('a');
-                    dayLink.href = '#';
-                    dayLink.className = 'day-link';
-                    dayLink.setAttribute('data-day', i);
-                    dayLink.textContent = getDayName(i);
-                    
-                    dayLink.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        currentDay = i;
-                        loadDayContent(currentWeek, currentDay);
-                        updateActiveLinks();
+                    week.days.forEach(day => {
+                        const dayItem = document.createElement('li');
+                        dayItem.className = 'day-item';
+                        
+                        const dayLink = document.createElement('a');
+                        dayLink.href = '#';
+                        dayLink.className = 'day-link';
+                        dayLink.setAttribute('data-day', day.id);
+                        dayLink.textContent = getDayName(day.id);
+                        
+                        dayLink.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            currentDay = day.id;
+                            loadDayContent(currentWeek, currentDay);
+                            updateActiveLinks();
+                        });
+                        
+                        dayItem.appendChild(dayLink);
+                        daysList.appendChild(dayItem);
                     });
                     
-                    dayItem.appendChild(dayLink);
-                    daysList.appendChild(dayItem);
+                    weekItem.appendChild(daysList);
                 }
                 
-                weekItem.appendChild(daysList);
                 weeksList.appendChild(weekItem);
             });
             
             updateActiveLinks();
         }
 
+        // Atualizar links ativos
         function updateActiveLinks() {
             document.querySelectorAll('.week-link').forEach(link => {
                 link.classList.remove('active');
@@ -658,62 +618,66 @@
             }
         }
 
+        // Carregar conteúdo do dia
         function loadDayContent(week, day) {
             const weekData = devotionalData.weeks.find(w => w.id === week);
+            
             if (!weekData) {
                 weekTitle.textContent = `SEMANA ${week}`;
+                dayTitle.textContent = `${getDayName(day)}`;
+                bibleReading.textContent = 'Conteúdo não disponível';
+                prayerReading.textContent = 'Conteúdo não disponível';
+                devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível.</p>';
+                return;
+            }
+            
+            weekTitle.textContent = weekData.title;
+            
+            const dayData = weekData.days.find(d => d.id === day);
+            
+            if (!dayData) {
                 dayTitle.textContent = `${getDayName(day)}`;
                 bibleReading.textContent = 'Leitura bíblica não disponível';
                 prayerReading.textContent = 'Leitura de oração não disponível';
                 devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível para este dia.</p>';
             } else {
-                weekTitle.textContent = weekData.title;
-                
-                const dayData = weekData.days.find(d => d.id === day);
-                if (!dayData) {
-                    dayTitle.textContent = `${getDayName(day)}`;
-                    bibleReading.textContent = 'Leitura bíblica não disponível';
-                    prayerReading.textContent = 'Leitura de oração não disponível';
-                    devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível para este dia.</p>';
-                } else {
-                    dayTitle.textContent = `${getDayName(day)}: ${dayData.title}`;
-                    bibleReading.textContent = dayData.bibleReading;
-                    prayerReading.textContent = dayData.prayerReading;
-                    devotionalText.innerHTML = dayData.content;
-                }
+                dayTitle.textContent = `${getDayName(day)}: ${dayData.title}`;
+                bibleReading.textContent = dayData.bibleReading || 'Leitura bíblica não disponível';
+                prayerReading.textContent = dayData.prayerReading || 'Leitura de oração não disponível';
+                devotionalText.innerHTML = dayData.content || '<p>Conteúdo do devocional não disponível.</p>';
             }
             
             updateNavigation(week, day);
-            updateCurrentDate();
         }
 
+        // Atualizar navegação
         function updateNavigation(week, day) {
             prevBtn.disabled = (week === 1 && day === 1);
+            
             const lastWeek = devotionalData.weeks[devotionalData.weeks.length - 1];
-            const lastDay = 7;
+            const lastDay = lastWeek ? (lastWeek.days[lastWeek.days.length - 1]?.id || 7) : 7;
+            
             nextBtn.disabled = (week === (lastWeek?.id || 1) && day === lastDay);
         }
 
-        function updateCurrentDate() {
-            const today = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            currentDate.textContent = today.toLocaleDateString('pt-BR', options);
-        }
-
-        // Event listeners
+        // Event listeners para navegação
         prevBtn.addEventListener('click', function() {
             if (currentDay > 1) {
                 currentDay--;
             } else if (currentWeek > 1) {
                 currentWeek--;
-                currentDay = 7;
+                const prevWeek = devotionalData.weeks.find(w => w.id === currentWeek);
+                currentDay = prevWeek ? (prevWeek.days[prevWeek.days.length - 1]?.id || 7) : 7;
             }
             loadDayContent(currentWeek, currentDay);
             updateActiveLinks();
         });
 
         nextBtn.addEventListener('click', function() {
-            if (currentDay < 7) {
+            const currentWeekData = devotionalData.weeks.find(w => w.id === currentWeek);
+            const maxDay = currentWeekData ? (currentWeekData.days[currentWeekData.days.length - 1]?.id || 7) : 7;
+            
+            if (currentDay < maxDay) {
                 currentDay++;
             } else if (currentWeek < devotionalData.weeks.length) {
                 currentWeek++;
@@ -725,7 +689,6 @@
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            updateCurrentDate();
             extractPDFContent();
         });
     </script>

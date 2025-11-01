@@ -332,7 +332,7 @@
             // Dividir o texto em linhas
             const lines = text.split('\n').map(line => line.trim()).filter(line => line);
             
-            // Encontrar todas as semanas
+            // Encontrar todas as semanas e dias
             const weekMatches = [];
             const dayMatches = [];
             
@@ -341,21 +341,23 @@
                 const line = lines[i];
                 
                 // Padrão para semanas (SEMANA X:)
-                if (line.match(/^SEMANA\s+\d+:/)) {
+                const weekMatch = line.match(/^SEMANA\s+(\d+)/i);
+                if (weekMatch) {
                     weekMatches.push({
                         index: i,
                         text: line,
-                        weekNumber: parseInt(line.match(/SEMANA\s+(\d+)/)[1])
+                        weekNumber: parseInt(weekMatch[1])
                     });
                 }
                 
                 // Padrão para dias (SEMANA X – DIA-DA-SEMANA)
-                if (line.match(/SEMANA\s+\d+\s*–\s*[A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA/i)) {
+                const dayMatch = line.match(/SEMANA\s+(\d+)\s*[–-]\s*([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i);
+                if (dayMatch) {
                     dayMatches.push({
                         index: i,
                         text: line,
-                        weekNumber: parseInt(line.match(/SEMANA\s+(\d+)/)[1]),
-                        dayName: line.match(/–\s*([A-ZÇÃÕÉÍÓÚÀÊÔ]+-FEIRA)/i)[1]
+                        weekNumber: parseInt(dayMatch[1]),
+                        dayName: dayMatch[2]
                     });
                 }
             }
@@ -377,24 +379,22 @@
                 const days = [];
                 
                 // Processar cada dia da semana
-                for (const dayMatch of weekDays) {
+                for (let d = 0; d < weekDays.length; d++) {
+                    const dayMatch = weekDays[d];
                     const dayNumber = getDayNumber(dayMatch.dayName);
                     const dayStartIndex = dayMatch.index;
                     
                     console.log(`Processando dia ${dayNumber} da semana ${weekNumber}`);
                     
                     // Encontrar o próximo dia ou semana para delimitar o conteúdo
-                    const nextDayIndex = dayMatches.findIndex(day => 
-                        day.index > dayStartIndex && day.weekNumber === weekNumber
-                    );
-                    
-                    const nextIndex = nextDayIndex !== -1 ? 
-                        dayMatches[nextDayIndex].index : 
-                        lines.findIndex((line, idx) => 
-                            idx > dayStartIndex && line.match(/^SEMANA\s+\d+:/)
-                        );
-                    
-                    const dayEndIndex = nextIndex !== -1 ? nextIndex : lines.length;
+                    let dayEndIndex;
+                    if (d < weekDays.length - 1) {
+                        dayEndIndex = weekDays[d + 1].index;
+                    } else {
+                        // Último dia da semana - procurar próxima semana
+                        const nextWeekIndex = weekMatches.findIndex(w => w.weekNumber > weekNumber);
+                        dayEndIndex = nextWeekIndex !== -1 ? weekMatches[nextWeekIndex].index : lines.length;
+                    }
                     
                     // Extrair conteúdo do dia
                     const dayContent = extractDayContent(lines, dayStartIndex, dayEndIndex);
@@ -443,17 +443,25 @@
                 if (!line || /^\d+$/.test(line)) continue;
                 
                 // Detectar seções
-                if (line.includes('Leitura bíblica:')) {
+                if (line.toLowerCase().includes('leitura bíblica')) {
                     currentSection = 'bible';
                     continue;
                 }
                 
-                if (line.includes('Ler com oração:')) {
+                if (line.toLowerCase().includes('ler com oração')) {
                     currentSection = 'prayer';
                     continue;
                 }
                 
-                if (line.includes('Anote abaixo')) {
+                if (line.toLowerCase().includes('anote abaixo') || 
+                    line.toLowerCase().includes('semana') ||
+                    line.toLowerCase().includes('domingo') ||
+                    line.toLowerCase().includes('segunda') ||
+                    line.toLowerCase().includes('terça') ||
+                    line.toLowerCase().includes('quarta') ||
+                    line.toLowerCase().includes('quinta') ||
+                    line.toLowerCase().includes('sexta') ||
+                    line.toLowerCase().includes('sábado')) {
                     currentSection = 'end';
                     break;
                 }
@@ -466,10 +474,18 @@
                         }
                         break;
                     case 'bible':
-                        bibleReading += line + ' ';
+                        if (!bibleReading) {
+                            bibleReading = line.replace(/Leitura bíblica:?\s*/i, '');
+                        } else {
+                            bibleReading += ' ' + line;
+                        }
                         break;
                     case 'prayer':
-                        prayerReading += line + ' ';
+                        if (!prayerReading) {
+                            prayerReading = line.replace(/Ler com oração:?\s*/i, '');
+                        } else {
+                            prayerReading += ' ' + line;
+                        }
                         break;
                     default:
                         if (currentSection !== 'end') {
@@ -491,15 +507,15 @@
             
             return {
                 title: title,
-                bibleReading: bibleReading,
-                prayerReading: prayerReading,
-                content: formatDevotionalContent(content)
+                bibleReading: bibleReading || 'Conteúdo não disponível',
+                prayerReading: prayerReading || 'Conteúdo não disponível',
+                content: formatDevotionalContent(content) || '<p>Conteúdo do devocional não disponível.</p>'
             };
         }
 
         // Função para formatar o conteúdo devocional
         function formatDevotionalContent(content) {
-            if (!content) return '<p>Conteúdo não disponível.</p>';
+            if (!content) return '';
             
             // Dividir em parágrafos
             const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
@@ -642,9 +658,9 @@
                 devotionalText.innerHTML = '<p>Conteúdo do devocional não disponível para este dia.</p>';
             } else {
                 dayTitle.textContent = `${getDayName(day)}: ${dayData.title}`;
-                bibleReading.textContent = dayData.bibleReading || 'Leitura bíblica não disponível';
-                prayerReading.textContent = dayData.prayerReading || 'Leitura de oração não disponível';
-                devotionalText.innerHTML = dayData.content || '<p>Conteúdo do devocional não disponível.</p>';
+                bibleReading.textContent = dayData.bibleReading;
+                prayerReading.textContent = dayData.prayerReading;
+                devotionalText.innerHTML = dayData.content;
             }
             
             updateNavigation(week, day);

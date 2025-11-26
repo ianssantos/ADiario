@@ -458,58 +458,10 @@
         let currentWeek = 0;
         let currentDay = 0;
 
-        // DATAS DAS SEMANAS (conforme especificado)
-        function getWeekDates() {
-            const currentYear = new Date().getFullYear();
-            return [
-                // Semana 1: 17/11 a 23/11
-                { start: new Date(currentYear, 10, 17), end: new Date(currentYear, 10, 23) },
-                // Semana 2: 24/11 a 30/11
-                { start: new Date(currentYear, 10, 24), end: new Date(currentYear, 10, 30) },
-                // Semana 3: 01/12 a 07/12
-                { start: new Date(currentYear, 11, 1), end: new Date(currentYear, 11, 7) },
-                // Semana 4: 08/12 a 14/12
-                { start: new Date(currentYear, 11, 8), end: new Date(currentYear, 11, 14) }
-            ];
-        }
-
-        // CALCULAR SEMANA E DIA ATUAIS
-        function calculateCurrentWeekAndDay() {
-            const today = new Date();
-            const weekDates = getWeekDates();
-            
-            console.log("Data atual:", today);
-            console.log("Semanas disponíveis:", weekDates);
-            
-            // Encontrar a semana atual
-            for (let i = 0; i < weekDates.length; i++) {
-                console.log(`Semana ${i}: ${weekDates[i].start.toLocaleDateString()} a ${weekDates[i].end.toLocaleDateString()}`);
-                if (today >= weekDates[i].start && today <= weekDates[i].end) {
-                    currentWeek = i;
-                    
-                    // Calcular o dia da semana (0 = segunda, 6 = domingo)
-                    const dayOfWeek = today.getDay();
-                    // Ajustar para segunda-feira = 0
-                    currentDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-                    
-                    console.log(`Encontrado: Semana ${currentWeek + 1}, Dia ${currentDay + 1}`);
-                    return;
-                }
-            }
-            
-            // Se não está em nenhuma semana, usar a primeira semana e primeiro dia
-            currentWeek = 0;
-            currentDay = 0;
-            console.log("Não encontrado em nenhuma semana. Usando padrão: Semana 1, Segunda");
-        }
-
         // CARREGAR CONTEÚDO AUTOMATICAMENTE AO INICIAR
         function initializeApp() {
             showLoading('Carregando Alimento Diário completo...');
             elements.apiStatus.textContent = '🔄 Carregando conteúdo automático...';
-            
-            // Calcular semana e dia atuais
-            calculateCurrentWeekAndDay();
             
             // Simular um pequeno delay para mostrar o loading
             setTimeout(() => {
@@ -687,16 +639,6 @@
                 // Carregar anotações salvas
                 loadSavedNotes();
             }
-            
-            // Atualizar navegação da semana
-            document.querySelectorAll('.week-list a').forEach((a, index) => {
-                a.classList.toggle('active', index === currentWeek);
-            });
-            
-            // Atualizar navegação dos dias
-            document.querySelectorAll('.day-btn').forEach((btn, index) => {
-                btn.classList.toggle('active', index === currentDay);
-            });
         }
 
         // Salvar anotações

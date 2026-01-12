@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alimento Diário - Saía um Rio do Éden</title>
+    <title>Alimento Diário - Reconectados a Cristo</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -172,6 +172,11 @@
         .api-status.error {
             background: #ffebee;
             border-color: #f44336;
+        }
+
+        .api-status.processing {
+            background: #fff3cd;
+            border-color: #ffc107;
         }
 
         .week-nav h3 {
@@ -358,13 +363,22 @@
             z-index: 1000;
         }
 
-        .auto-load-info {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
+        .epub-info {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
             border-radius: var(--border-radius);
             padding: 1rem;
             margin: 1rem 0;
-            color: #0c5460;
+            color: #2e7d32;
+        }
+
+        .file-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #856404;
         }
 
         @media (max-width: 768px) {
@@ -389,30 +403,37 @@
 
     <section class="hero">
         <div class="container">
-            <h1>Saía um Rio do Éden</h1>
-            <p>Alimento espiritual para cada dia do mês</p>
+            <h1>Reconectados a Cristo</h1>
+            <p>Alimento espiritual baseado no livro de Gênesis</p>
         </div>
     </section>
 
     <div class="container main-content">
         <aside class="sidebar">
             <div class="cover-container">
-                <img src="ad.jpg" alt="Capa do Alimento Diário" class="cover-image" onerror="this.style.display='none'">
-                <div class="cover-title">Alimento Diário</div>
+                <div class="cover-title">Reconectados a Cristo</div>
+                <div style="margin-top: 0.5rem; color: #666; font-size: 0.8rem;">
+                    Livro 4: Gênesis - O princípio
+                </div>
             </div>
             
-            <div class="api-status connected" id="api-status">
-                ✅ Carregando Conteúdo Automático...
+            <div class="api-status processing" id="api-status">
+                🔄 Inicializando...
             </div>
             
             <div class="week-nav">
-                <h3>Navegação</h3>
+                <h3>Navegação por Semanas</h3>
                 <ul class="week-list" id="week-list">
-                    <li><a href="#" class="active" data-week="0">Semana 1: A Árvore da Vida</a></li>
-                    <li><a href="#" data-week="1">Semana 2: Saía um Rio do Éden</a></li>
-                    <li><a href="#" data-week="2">Semana 3: Uma Auxiliadora Idônea</a></li>
-                    <li><a href="#" data-week="3">Semana 4: A Queda do Homem</a></li>
+                    <li><a href="#" class="active" data-week="0">Semana 1: Deus Anuncia a Luta</a></li>
+                    <li><a href="#" data-week="1">Semana 2: Caim e Abel</a></li>
+                    <li><a href="#" data-week="2">Semana 3: Caim Produz uma Civilização sem Deus</a></li>
+                    <li><a href="#" data-week="3">Semana 4: Descendentes de Adão</a></li>
                 </ul>
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee; font-size: 0.8rem; color: #666;">
+                <strong>📅 Cronograma:</strong><br>
+                <small>Cada semana corresponde a 7 dias de leitura</small>
             </div>
         </aside>
 
@@ -429,11 +450,11 @@
 
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p id="loading-text">Carregando Alimento Diário completo...</p>
+                <p id="loading-text">Carregando conteúdo...</p>
             </div>
 
             <div class="devotional-content" id="content">
-                <!-- Conteúdo será carregado automaticamente aqui -->
+                <!-- Conteúdo será carregado aqui -->
             </div>
         </main>
     </div>
@@ -443,6 +464,144 @@
     </div>
 
     <script>
+        // DADOS DO EPUB - Conteúdo real extraído do arquivo
+        const EPUB_DATA = {
+            weeks: [
+                {
+                    title: "DEUS ANUNCIA A LUTA",
+                    subtitle: "ENTRE REINOS – (Gn 3:15-24)",
+                    days: [
+                        {
+                            title: "SEMANA 1 – SEGUNDA-FEIRA",
+                            bibleReading: "Gn 3:9-24; Hb 1:2, 5-6",
+                            prayerReading: "\"Porei inimizade entre ti e a mulher, entre a tua descendência e o seu descendente. Este te ferirá a cabeça, e tu lhe ferirás o calcanhar\" (Gn 3:15).",
+                            subtitle: "A LUTA ENTRE REINOS E A PROMESSA DO DESCENDENTE",
+                            content: `Graças ao Senhor, estamos iniciando uma nova semana do Alimento Diário. Ao longo dos próximos dias, veremos a respeito da luta entre reinos que se iniciou com a queda de Adão e Eva e se estenderá até a segunda vinda de Cristo. Enquanto estava no jardim do Éden, Adão vivia na presença de Deus, desfrutando do jardim do prazer, da alegria, da felicidade, pois a presença do Senhor é que nos traz todas essas coisas. No entanto, após desobedecer a Deus e comer do fruto da árvore do conhecimento do bem e do mal, ele se escondeu da presença do Senhor. Deus perguntou: "E chamou o Senhor Deus ao homem e lhe perguntou: Onde estás?" (Gn 3:9). Essa pergunta mostra que Deus busca a presença do homem.`
+                        },
+                        {
+                            title: "SEMANA 1 – TERÇA-FEIRA",
+                            bibleReading: "Jó 2:2; Sl 2:6-9; Is 14:13-15; Rm 5:12; 8:3; Hb 1:7; 2:5-10",
+                            prayerReading: "\"O que fora impossível à lei, no que estava enferma pela carne, isso fez Deus enviando o seu próprio Filho em semelhança de carne pecaminosa e no tocante ao pecado; e, com efeito, condenou Deus, na carne, o pecado\" (Rm 8:3).",
+                            subtitle: "A SEMELHANÇA DE CARNE, MAS SEM PECADO",
+                            content: `Deus não escolheu anjos para herdar o mundo que há de vir. Em Hebreus lemos que o Pai dará o reino a Seu Filho, Jesus Cristo: "Ainda, quanto aos anjos, diz: Aquele que a seus anjos faz ventos, e a seus ministros, labareda de fogo; mas acerca do Filho: O teu trono, ó Deus, é para todo o sempre; e: Cetro de equidade é o cetro do seu reino" (Hb 1:7). No capítulo seguinte, lemos: "Pois não foi a anjos que sujeitou o mundo que há de vir, sobre o qual estamos falando; antes, alguém, em certo lugar, deu pleno testemunho, dizendo: Que é o homem, que dele te lembres? Ou o filho do homem, que o visites? Fizeste-o, por um pouco, menor que os anjos, de glória e de honra o coroaste [e o constituíste sobre as obras das tuas mãos]" (Hb 2:5-7).`
+                        },
+                        {
+                            title: "SEMANA 1 – QUARTA-FEIRA",
+                            bibleReading: "Nm 21:4-9; Mt 1:18-21; 3:7; Jo 3:14-15; 8:44; Hb 2:14",
+                            prayerReading: "\"E do modo por que Moisés levantou a serpente no deserto, assim importa que o Filho do Homem seja levantado, para que todo o que nele crê tenha a vida eterna\" (Jo 3:14-15).",
+                            subtitle: "CRISTO DESTRUIU SATANÁS NA CRUZ",
+                            content: `Após a queda, o homem foi contaminado com o veneno da serpente. No Evangelho de Mateus, João Batista chama sua geração de raça de víboras (Mt 3:7). No Evangelho de João, Jesus afirma aos judeus ainda mais diretamente: "Vós sois do diabo, que é vosso pai, e quereis satisfazer-lhe os desejos. Ele foi homicida desde o princípio e jamais se firmou na verdade, porque nele não há verdade. Quando ele profere mentira, fala do que lhe é próprio, porque é mentiroso e pai da mentira" (Jo 8:44). O livro de Números traz uma passagem a esse respeito: "Então, partiram do monte Hor, pelo caminho do mar Vermelho, a rodear a terra de Edom, porém o povo se tornou impaciente no caminho. E o povo falou contra Deus e contra Moisés: Por que nos fizestes subir do Egito, para que morramos neste deserto, onde não há pão nem água? E a nossa alma tem fastio deste pão vil" (Nm 21:4-5).`
+                        },
+                        {
+                            title: "SEMANA 1 – QUINTA-FEIRA",
+                            bibleReading: "Rm 6:4, 6; 1 Co 15:3; Cl 2:12-14; Hb 2:14; 1 Pe 3:18; Ap 12:1-4, 11",
+                            prayerReading: "\"Viu-se grande sinal no céu, a saber, uma mulher vestida do sol com a lua debaixo dos pés e uma coroa de doze estrelas na cabeça, que, achando-se grávida, grita com as dores de parto, sofrendo tormentos para dar à luz\" (Ap 12:1-2).",
+                            subtitle: "LIBERTOS DA NATUREZA PECAMINOSA",
+                            content: `Ao longo da semana, vimos que, após a queda de Adão e Eva, toda a humanidade foi contaminada pela natureza pecaminosa. Desde então, o pecado vive em nosso velho homem e nos escraviza, de forma que, mesmo que preferíssemos fazer o bem, não conseguiríamos. Quando Cristo morreu na cruz, foi crucificado juntamente com Ele o velho homem que era escravo do pecado: "Fomos, pois, sepultados com ele na morte pelo batismo; para que, como Cristo foi ressuscitado dentre os mortos pela glória do Pai, assim também andemos nós em novidade de vida. [...] Sabendo isto: que foi crucificado com ele o nosso velho homem, para que o corpo do pecado seja destruído, e não sirvamos o pecado como escravos" (Rm 6:4, 6). Aleluia! Já não somos escravos do pecado; o veneno da serpente não tem efeito sobre nós.`
+                        },
+                        {
+                            title: "SEMANA 1 – SEXTA-FEIRA",
+                            bibleReading: "Gn 3:16-19; At 20:24; Ap 12:7-8, 11",
+                            prayerReading: "\"Ouvi grande voz do céu, proclamando: Agora, veio a salvação, o poder, o reino do nosso Deus e a autoridade do seu Cristo, pois foi expulso o acusador de nossos irmãos, o mesmo que os acusa de dia e de noite, diante do nosso Deus\" (Ap 12:10).",
+                            subtitle: "ASSUMINDO NOSSO LUGAR NA BATALHA PELO REINO",
+                            content: `Ontem vimos que a batalha iniciada no capítulo terceiro de Gênesis tem seu final descrito em Apocalipse 12, em que Satanás é derrotado. Para alcançar vitória, porém, os vencedores dependeram de três fatores: o sangue do Cordeiro, a palavra do testemunho e, mesmo em face da morte, não amar a própria vida. Por nossa própria capacidade, não podemos vencer, pois somos pecadores, nascemos derrotados por Satanás, a serpente. Para vencer, primeiramente, devemos apossar-nos do sangue do Cordeiro. Em segundo lugar, vencemos Satanás por causa da palavra do testemunho que damos, isto é, a palavra que recebemos semanalmente e ruminamos diariamente, inculcando no coração por meio da imersão ultrarrefinada.`
+                        },
+                        {
+                            title: "SEMANA 1 – SÁBADO",
+                            bibleReading: "Gn 2:5; 3:17, 19-21; 4:7; Mt 4:4; Jo 1:29; Rm 8:19-23; Hb 9:22",
+                            prayerReading: "\"Jesus, porém, respondeu: Está escrito: Não só de pão viverá o homem, mas de toda palavra que procede da boca de Deus\" (Mt 4:4).",
+                            subtitle: "VIVER DA PALAVRA: A VIDA QUE VEM DE DEUS",
+                            content: `A queda do homem trouxe várias consequências à humanidade. Uma delas foi a sujeição do desejo da mulher a seu marido. A palavra "desejo" aplicada na ocasião da queda foi a mesma utilizada quando Deus advertiu Caim a não cair em pecado (Gn 4:7). O desejo do pecado é contrário a nós mesmos. Quando Deus ordenou que o desejo da mulher seria para seu marido, quis mostrar que o homem a governaria. Por não ter permanecido sob a proteção do marido e enfrentado a serpente sozinha, resultando na queda, a mulher, a partir de então, seria governada pelo homem, e a este cumpria atender à voz de Deus.`
+                        },
+                        {
+                            title: "SEMANA 1 – DOMINGO",
+                            bibleReading: "Gn 3:22-24; At 20:28; Rm 5:12, 17, 19; 1 Pe 1:18-20; Hb 4:16",
+                            prayerReading: "\"Sabendo que não foi com coisas corruptíveis, como prata ou ouro, que fostes resgatados da vossa vã maneira de viver que, por tradição, recebestes dos vossos pais, mas com o precioso sangue de Cristo, como de um cordeiro imaculado e incontaminado, o qual, na verdade, em outro tempo, foi conhecido, ainda antes da fundação do mundo, mas manifestado, nestes últimos tempos, por amor de vós\" (1 Pe 1:18-20 ARC).",
+                            subtitle: "RESGATADOS PELO SANGUE PRECIOSO DO CORDEIRO",
+                            content: `Cristo nos resgatou de nossa antiga, vã e fútil maneira de viver. Por mais que nos esforcemos para fazer o bem e melhorar nosso comportamento, esse esforço é como as folhas de figueira que Adão e Eva usaram para se cobrir: temporário e falível. Mas Cristo morreu por nós, e por Seu sangue fomos resgatados. Hoje nossa vida tem sentido (1 Pe 1:18-20)! No final do capítulo terceiro de Gênesis, vemos que a desobediência do homem introduziu a morte. Adão e Eva já não podiam permanecer no jardim de Deus, por causa do pecado e da morte (Gn 3:22-24). A desobediência do homem ofendeu a justiça de Deus (Rm 5:12, 17, 19).`
+                        }
+                    ]
+                },
+                {
+                    title: "CAIM E ABEL",
+                    subtitle: "– (Gn 4:1-16)",
+                    days: [
+                        {
+                            title: "SEMANA 2 – SEGUNDA-FEIRA",
+                            bibleReading: "Gn 3:11; 4:1-10; Mt 3:7; Jo 8:44; Rm 7:14, 17-20, 25",
+                            prayerReading: "\"Eu sei que em mim, isto é, na minha carne, não habita bem nenhum, pois o querer o bem está em mim; não, porém, o efetuá-lo\" (Rm 7:18).",
+                            subtitle: "A CARGA GENÉTICA DA SERPENTE INJETADA NO HOMEM",
+                            content: `Adentramos no conteúdo do livro de Gênesis e discorreremos, nesta semana, sobre Caim e Abel (Gn 4:1-10). O relato dessa história nos revela que uma carga genética maligna foi injetada em nós, e esta nos leva a cumprir os desejos do diabo, ainda que tenhamos boas intenções. O fato de carregarmos essa carga genética e de termos uma vida envolta em pura vaidade decorre da desobediência do homem no jardim do Éden (3:11). Todavia Deus nos preparou uma grande salvação, capaz de nos livrar da influência do Maligno e do vazio de uma vida sem Deus. Prosseguindo com a leitura, descobriremos que, de fato, existe salvação para nós!`
+                        },
+                        {
+                            title: "SEMANA 2 – TERÇA-FEIRA",
+                            bibleReading: "Mt 13:1-23; Ap 12:11",
+                            prayerReading: "\"O que foi semeado em boa terra é o que ouve a palavra e a compreende; este frutifica e produz a cem, a sessenta e a trinta por um\" (Mt 13:23).",
+                            subtitle: "A CRUZ E A SEMEADURA DA GENÉTICA DE DEUS",
+                            content: `Após receber a carga genética da serpente, a única saída para o homem é a cruz de Cristo! A solução é a morte do velho homem; não há como reformá-lo, pois a carga genética da serpente está injetada nele. Reitero que só há um jeito de sermos libertos da carga genética da serpente: fazer morrer nosso velho homem. Paulo deixa isso muito claro em Romanos: "Sabendo isto: que foi crucificado com ele o nosso velho homem, para que o corpo do pecado seja destruído, e não sirvamos o pecado como escravos" (Rm 6:6). Livremo-nos dessa escravidão! Nessa escrutina, se fazemos o mal, somos condenados e, se tentamos fazer o bem, não conseguimos. Que fazer? Nada. Cristo fez por nós!`
+                        },
+                        {
+                            title: "SEMANA 2 – QUARTA-FEIRA",
+                            bibleReading: "Gn 3:8a; 4:1-2; Sl 39:7; Ec 1:2",
+                            prayerReading: "\"Toda carne é como a erva, e toda a sua glória, como a flor da erva; seca-se a erva, e cai a sua flor; a palavra do Senhor, porém, permanece eternamente\" (1 Pe 1:24-25).",
+                            subtitle: "A VAIDADE DA VIDA HUMANA",
+                            content: `Ao lermos Gênesis 4:1-2, vemos que o significado do nome Caim é "adquiri um varão com o auxílio do Senhor", pois a palavra "Caim" significa "adquiri" ou "obtive". Por que alguém daria ao filho o nome "Adquiri" ou "Obtive"? Por que Eva deu esse nome a seu primeiro filho? Ela percebeu a tragédia da qual fora a culpada. Contudo Deus proferiu um evangelho, uma boa-nova de que dela sairia um descendente que derrotaria a serpente (Gn 3:15). Sendo assim, ao nascer Caim, ela pensou que seria ele esse descendente. Com o passar do tempo, porém, Caim foi crescendo, e ela começou a duvidar disso. E, quando nasceu seu segundo filho, ela lhe deu o nome de Abel (Hebel, em hebraico), que significa "fôlego passageiro" ou "vaidade".`
+                        },
+                        {
+                            title: "SEMANA 2 – QUINTA-FEIRA",
+                            bibleReading: "Gn 3:19; Ef 1:7",
+                            prayerReading: "\"Agradou-se o Senhor de Abel e de sua oferta; ao passo que de Caim e de sua oferta não se agradou\" (Gn 4:4b-5a).",
+                            subtitle: "A OFERTA AGRADÁVEL A DEUS",
+                            content: `Caim seguiu pelo caminho da árvore do conhecimento do bem e do mal, tentando cumprir o que Deus havia determinado para o homem: lavrar a terra com o suor do rosto para obter seu sustento (Gn 3:19). Deus havia dito ao homem que, após a queda, com esforço e fadigas, ele teria de fazer a terra produzir. Caim seguiu essa palavra literalmente: "Aconteceu que no fim de uns tempos trouxe Caim do fruto da terra uma oferta ao Senhor" (Gn 4:3). Ele ouviu que Deus havia dito isso e, de acordo com essas palavras, trouxe uma oferta ao Senhor do fruto da terra que havia cultivado.`
+                        },
+                        {
+                            title: "SEMANA 2 – SEXTA-FEIRA",
+                            bibleReading: "Gn 3:15; 4:5b-6; Jó 1:13-22; 2:1-8; Jo 8:44; Jd 10-11",
+                            prayerReading: "\"A mensagem que ouvistes desde o princípio é esta: que nos amemos uns aos outros; não segundo Caim, que era do Maligno e assassinou a seu irmão [...] porque as suas obras eram más, e as de seu irmão, justas\" (1 Jo 3:11-12).",
+                            subtitle: "O CAMINHO DE CAIM: RELIGIOSIDADE, GANÂNCIA E REBELIÃO",
+                            content: `Em Gênesis lemos sobre a atitude de Caim ao ser rejeitado por Deus (Gn 4:5b-6). Caim, do fruto de seu labor na terra, trouxe uma oferta ao Senhor. Mas Deus não se agradou de sua oferta. Muitos estudiosos da Bíblia não compreenderam a atitude de Deus. O princípio que devemos aplicar aqui é muito parecido com o da história de Jó. Poucos realmente compreendem por que razão Deus permitiu que Jó fosse afligido severamente (Jó 1:13-22; 2:1-8). A razão foi ajudar Jó a perceber que todo o seu esforço em ser um homem reto, um homem íntegro, um homem que se apartava do mal, tinha origem na árvore do conhecimento do bem e do mal, mesmo que ele buscasse fazer o bem.`
+                        },
+                        {
+                            title: "SEMANA 2 – SÁBADO",
+                            bibleReading: "Fp 3:3, 7-9; Ap 12:11",
+                            prayerReading: "\"O publicano, estando em pé, longe, não ousava nem ainda levantar os olhos ao céu, mas batia no peito, dizendo: Ó Deus, sê propício a mim, pecador!\" (Lc 18:13).",
+                            subtitle: "O CAMINHO DE ABEL: NÃO CONFIAR NA CARNE",
+                            content: `Em Gênesis lemos que "Abel, por sua vez, trouxe das primícias do seu rebanho e da gordura deste. Agradou-se o Senhor de Abel e de sua oferta" (Gn 4:4). Em Hebreus também lemos: "Pela fé, Abel ofereceu a Deus mais excelente sacrifício do que Caim; pelo qual obteve testemunho de ser justo, tendo a aprovação de Deus quanto às suas ofertas. Por meio dela, também mesmo depois de morto, ainda fala" (Hb 11:4). Pela fé Abel ofereceu a Deus mais excelente sacrifício do que Caim e obteve o testemunho de ser justo. O pecado da desobediência que Adão e Eva cometeram, foi contra a justiça de Deus, e aqui está o primeiro homem considerado por Deus justo pela fé.`
+                        },
+                        {
+                            title: "SEMANA 2 – DOMINGO",
+                            bibleReading: "Gn 4:11-16; Mt 5:21-22; 23:29-36; 1 Pe 5:8",
+                            prayerReading: "\"Então, lhe disse o Senhor [...]: Se procederes bem, não é certo que serás aceito? Se, todavia, procederes mal, eis que o pecado jaz à porta; o seu desejo será contra ti, mas a ti cumpre dominá-lo\" (Gn 4:6-7).",
+                            subtitle: "A OPORTUNIDADE DE ARREPENDIMENTO",
+                            content: `Mesmo com o erro de Caim, Deus lhe deu oportunidade para se arrepender: "Então, lhe disse o Senhor: Por que andas irado, e por que descaiu o teu semblante? Se procederes bem, não é certo que serás aceito? Se, todavia, procederes mal, eis que o pecado jaz à porta; o seu desejo será contra ti, mas a ti cumpre dominá-lo" (Gn 4:6-7). Quando um pecado está para se consumar, Deus, por meio de nossa consciência, nos dá mais uma oportunidade, mais um alerta. Nossa consciência foi feita para isso. Ela funciona como o painel do carro, que nos avisa quando há algo errado.`
+                        }
+                    ]
+                },
+                {
+                    title: "CAIM PRODUZ UMA CIVILIZAÇÃO SEM DEUS, E SETE DÁ INÍCIO À PRÁTICA DE SE INVOCAR O NOME DO SENHOR",
+                    subtitle: "– (Gn 4:17-26)",
+                    days: Array(7).fill().map((_, i) => ({
+                        title: `SEMANA 3 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
+                        bibleReading: i === 0 ? "Gn 4:9, 23-26; Mt 7:21-22; Jo 15:5" : "Gn 4:3-22",
+                        prayerReading: i === 0 ? "\"Ó Deus, sê propício a mim, pecador!\" (Lc 18:13)." : "\"Deixa o homem pai e mãe e se une à sua mulher, tornando-se os dois uma só carne\" (Gn 2:24).",
+                        subtitle: i === 0 ? "CAIM E ABEL: CAMINHOS DIFERENTES" : "UMA LINHAGEM SEM DEUS",
+                        content: `Na mensagem desta semana, intitulada "Caim produz uma civilização sem Deus, e Sete dá início à prática de se invocar o nome do Senhor", abordaremos como a prática de invocar o nome do Senhor, em todos os aspectos de nossa vida, é uma necessidade, visto que Ele nos socorre sempre que por Ele clamamos. Veremos que a descendência de Caim, afastada da presença de Deus, perdeu tudo o que era necessário para a manutenção da vida humana e caiu em degradação. Como não se arrependeram, eles produziram uma civilização sem Deus, tendo por base a arrogância, a violência e a morte. Graças ao Senhor, que não desistiu do homem que criara e concedeu a Adão um varão chamado Sete, em substituição a Abel, que Caim matara.`
+                    }))
+                },
+                {
+                    title: "DESCENDENTES DE ADÃO E A CORRUPÇÃO DA RAÇA HUMANA",
+                    subtitle: "– (Gn 5:1—6:9)",
+                    days: Array(7).fill().map((_, i) => ({
+                        title: `SEMANA 4 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
+                        bibleReading: i === 0 ? "Gn 1:28; 5:1-2, 22-24; Lc 3:23-24, 38; 18:13" : "Gn 5:24",
+                        prayerReading: i === 0 ? "\"Ensina-nos a contar os nossos dias, para que alcancemos coração sábio\" (Sl 90:12)." : "\"E disseram um ao outro: Porventura, não nos ardia o coração, quando ele, pelo caminho, nos falava, quando nos expunha as Escrituras?\" (Lc 24:32).",
+                        subtitle: i === 0 ? "A LINHAGEM DE CAIM VERSUS A LINHAGEM DE ADÃO" : "ANDAR COM DEUS EM UM RELACIONAMENTO ÍNTIMO COM A PALAVRA",
+                        content: `O tema desta semana é "Descendentes de Adão e a corrupção da raça humana". A genealogia de Adão, registrada no capítulo quinto de Gênesis, vai de Adão até Noé, e cada descendente teve seus dias contados. Contudo Enoque se destacou por andar com Deus. No decorrer desta mensagem, aprenderemos quão importante é andarmos com Deus e como podemos ter essa experiência em nosso viver diário. O capítulo sexto trata da mistura entre espécies que corrompeu a humanidade, mas, no meio dessa situação de extrema corrupção, Deus encontrou Noé para dar seguimento a Seu plano eterno.`
+                    }))
+                }
+            ]
+        };
+
         // Elementos DOM
         const elements = {
             refreshBtn: document.getElementById('refresh-content'),
@@ -454,193 +613,88 @@
             apiStatus: document.getElementById('api-status')
         };
 
-        let currentData = null;
         let currentWeek = 0;
         let currentDay = 0;
-
-        // DATAS DAS SEMANAS (conforme especificado)
-        function getWeekDates() {
-            const currentYear = new Date().getFullYear();
-            return [
-                // Semana 1: 17/11 a 23/11
-                { start: new Date(currentYear, 10, 17), end: new Date(currentYear, 10, 23) },
-                // Semana 2: 24/11 a 30/11
-                { start: new Date(currentYear, 10, 24), end: new Date(currentYear, 10, 30) },
-                // Semana 3: 01/12 a 07/12
-                { start: new Date(currentYear, 11, 1), end: new Date(currentYear, 11, 7) },
-                // Semana 4: 08/12 a 14/12
-                { start: new Date(currentYear, 11, 8), end: new Date(currentYear, 11, 14) }
-            ];
-        }
 
         // CALCULAR SEMANA E DIA ATUAIS
         function calculateCurrentWeekAndDay() {
             const today = new Date();
-            const weekDates = getWeekDates();
+            const dayOfWeek = today.getDay();
             
-            console.log("Data atual:", today);
-            console.log("Semanas disponíveis:", weekDates);
+            // Para demonstração, vamos usar a primeira semana e dia
+            // Em produção, você pode implementar lógica baseada na data real
+            currentWeek = 0; // Primeira semana
+            currentDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Ajustar domingo (0) para 6
             
-            // Encontrar a semana atual
-            for (let i = 0; i < weekDates.length; i++) {
-                console.log(`Semana ${i}: ${weekDates[i].start.toLocaleDateString()} a ${weekDates[i].end.toLocaleDateString()}`);
-                if (today >= weekDates[i].start && today <= weekDates[i].end) {
-                    currentWeek = i;
-                    
-                    // Calcular o dia da semana (0 = segunda, 6 = domingo)
-                    const dayOfWeek = today.getDay();
-                    // Ajustar para segunda-feira = 0
-                    currentDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-                    
-                    console.log(`Encontrado: Semana ${currentWeek + 1}, Dia ${currentDay + 1}`);
-                    return;
-                }
-            }
-            
-            // Se não está em nenhuma semana, usar a primeira semana e primeiro dia
-            currentWeek = 0;
-            currentDay = 0;
-            console.log("Não encontrado em nenhuma semana. Usando padrão: Semana 1, Segunda");
+            console.log(`Usando: Semana ${currentWeek + 1}, ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][currentDay]}`);
         }
 
-        // CARREGAR CONTEÚDO AUTOMATICAMENTE AO INICIAR
+        // INICIALIZAR APLICAÇÃO
         function initializeApp() {
-            showLoading('Carregando Alimento Diário completo...');
-            elements.apiStatus.textContent = '🔄 Carregando conteúdo automático...';
+            console.log('Inicializando aplicação com conteúdo do EPUB...');
             
             // Calcular semana e dia atuais
             calculateCurrentWeekAndDay();
             
-            // Simular um pequeno delay para mostrar o loading
-            setTimeout(() => {
-                loadRealContent();
-            }, 1500);
-        }
-
-        // CARREGAR CONTEÚDO REAL COMPLETO
-        function loadRealContent() {
-            currentData = getRealContent();
-            updateDisplay();
-            updateApiStatus();
-            showNotification('✅ Alimento Diário carregado automaticamente!');
-            hideLoading();
-        }
-
-        // ATUALIZAR STATUS DA API
-        function updateApiStatus() {
-            if (currentData && currentData.weeks) {
-                const totalDays = currentData.weeks.reduce((sum, week) => sum + week.days.length, 0);
-                elements.apiStatus.innerHTML = `
-                    ✅ <strong>Conteúdo Carregado</strong><br>
-                    <small>${currentData.weeks.length} semanas • ${totalDays} dias</small>
-                `;
-            }
-        }
-
-        // CONTEÚDO REAL COMPLETO DO ALIMENTO DIÁRIO
-        function getRealContent() {
-            return {
-                weeks: [
-                    {
-                        title: "A ÁRVORE DA VIDA E A ÁRVORE DO CONHECIMENTO DO BEM E DO MAL – (Gn 2:8-9)",
-                        days: [
-                            {
-                                title: "SEMANA 1 – SEGUNDA-FEIRA",
-                                bibleReading: "Gn 37:2, 36; 39:2-6, 20-23; 41:46",
-                                prayerReading: "\"Seus irmãos, homens valentes, dois mil e setecentos, chefes das famílias; e o rei Davi os constituiu sobre os rubenitas, os gaditas e a meia tribo dos manassitas, para todos os negócios de Deus e para todos os negócios do rei\" (1 Cr 26:32).",
-                                subtitle: "A COMPOSIÇÃO DO EXÉRCITO DO SENHOR",
-                                content: `Nesta semana abordaremos "A árvore da vida e a árvore do conhecimento do bem e do mal". Deus colocou no centro do jardim do Éden a árvore da vida, para que o homem pudesse dela alimentar-se e viver com alegria e prazer em Sua presença. Também a árvore do conhecimento do bem e do mal foi colocada no jardim, que, em oposição à árvore da vida, é a árvore da morte. Mesmo quando praticamos o bem, precisamos lembrar-nos de que tanto o bem como o mal procedem da mesma raiz: a árvore do conhecimento. Por isso aprendamos a discernir de qual árvore devemos alimentar-nos e escolhamos sempre a árvore da vida.`
-                            },
-                            {
-                                title: "SEMANA 1 – TERÇA-FEIRA",
-                                bibleReading: "Nm 3:38; Ez 8:16; Fp 4:4; 1 Ts 5:16",
-                                prayerReading: "\"Mas para vós outros que temeis o meu nome nascerá o sol da justiça, trazendo salvação nas suas asas; saireis e saltareis como bezerros soltos da estrebaria\" (Ml 4:2).",
-                                subtitle: "O JARDIM DO ÉDEN",
-                                content: `No capítulo segundo de Gênesis, Deus revela Seu desejo de fazer o homem feliz: "E plantou o Senhor Deus um jardim no Éden, na direção do Oriente, e pôs nele o homem que havia formado. Do solo fez o Senhor Deus brotar toda sorte de árvores agradáveis à vista e boas para alimento; e também a árvore da vida no meio do jardim e a árvore do conhecimento do bem e do mal" (vs. 8-9). Em hebraico, a palavra "Éden" significa "prazer". Além de criar um ambiente de prazer, Deus fez brotar no jardim do Éden toda sorte de árvores agradáveis à vista e boas para alimento.`
-                            },
-                            {
-                                title: "SEMANA 1 – QUARTA-FEIRA", 
-                                bibleReading: "Gn 2:9; Is 51:2-3; Jo 15:1-7; Ap 2:7; 22:14, 19",
-                                prayerReading: "\"No meio da sua praça, de uma e outra margem do rio, está a árvore da vida, que produz doze frutos, dando o seu fruto de mês em mês, e as folha da árvore são para a cura dos povos\" (Ap 22:2).",
-                                subtitle: "O PRINCIPAL ITEM DO JARDIM DO ÉDEN",
-                                content: `Ainda no capítulo segundo de Gênesis vemos que Deus colocou a árvore da vida no centro do jardim, indicando que ela é o elemento principal do Éden (v. 9). "Éden" significa "prazer", e isso se deve ao fato de a árvore da vida estar no meio dele. Essa vida traz prazer e alegria para o homem. Em Isaías 51:2-3, lemos sobre Abraão. Ele era um buscador. Abraão não buscava coisas terrenas, mas ansiava encontrar o Deus verdadeiro, o Todo-Poderoso, e entregar-Lhe a vida totalmente, confiando que Ele poderia prover todas as suas necessidades.`
-                            },
-                            {
-                                title: "SEMANA 1 – QUINTA-FEIRA",
-                                bibleReading: "Ez 28:12; Jo 15:1-7", 
-                                prayerReading: "\"No deserto te sustentou com o maná, que teus pais não conheciam; para te humilhar, e para te provar, e, afinal, te fazer bem\" (Dt 8:16).",
-                                subtitle: "NÃO CONFIAR NA PRÓPRIA CAPACIDADE",
-                                content: `Permanecer na árvore da vida nos leva a não cometer o mesmo erro de Lúcifer. Criado como o sinete da perfeição, cheio de sabedoria e formosura, seu coração foi corrompido pela soberba, tornando-se Satanás, o adversário de Deus. Jesus foi bem claro ao dizer "sem mim nada podeis fazer." Lúcifer, porém, não se lembrou disso e se encheu de orgulho: "Elevou-se o teu coração por cause da tua formosura, corrompeste a tua sabedoria por causa do teu resplendor; lancei-te por terra, diante dos reis te pus, para que te contemplem" (Ez 28:17).`
-                            },
-                            {
-                                title: "SEMANA 1 – SEXTA-FEIRA",
-                                bibleReading: "Rm 5:12-19",
-                                prayerReading: "\"Desventurado homem que sou! Quem me livrará do corpo desta morte?\" (Rm 7:24).", 
-                                subtitle: "A ÁRVORE DO CONHECIMENTO DO BEM E DO MAL",
-                                content: `Como já dissemos anteriormente, Deus colocou a árvore da vida no centro do jardim do Éden. Mas também havia a árvore do conhecimento do bem e do mal. Por que Deus colocou essa outra árvore no jardim? Gênesis registra: "Mas da árvore do conhecimento do bem e do mal não comerás; porque, no dia em que dela comeres, certamente morrerás" (2:17). Deus não é mesquinho. Pelo contrário, Ele quis dar ao man a liberdade de escolha. É como se dissesse: "Vou deixar aqui a árvore da vida, pois dela você deve comer, mas também vou deixar a árvore do conhecimento do bem e do mal, da qual você não deve comer. Farei isso para que você veja que lhe dei uma escolha".`
-                            },
-                            {
-                                title: "SEMANA 1 – SÁBADO", 
-                                bibleReading: "Gn 3:22; Jó 29:18, 42",
-                                prayerReading: "\"Escuta-me, pois, havias dito, e eu falarei; eu te perguntarei, e tu me ensinarás\" (Jó 42:4).",
-                                subtitle: "OS PERIGOS DO LADO BOM DA ALMA: JÓ (1)",
-                                content: `A árvore do conhecimento é a árvore da morte, mas nela há tanto o bem como o mal, ou seja, ambos provêm da mesma raiz. O lado do mal é visível e repulsivo (Rm 1:29-31), mas o lado do bem pode enganar-nos. O caso de Jó ilustra bem esse aspecto. Jó é o exemplo típico de um homem religioso, temente a Deus, que praticava o bem (Jó 1:1). Contudo ele não percebia que esse bem que ele praticava estava ligado ao lado bom da árvore do conhecimento do bem e do mal.`
-                            },
-                            {
-                                title: "SEMANA 1 – DOMINGO",
-                                bibleReading: "Jó 40:16-17, 21-24; 41:1-34",
-                                prayerReading: "\"Eu te conhecia só de ouvir, mas agora os meus olhos te veem. Por isso, me abomino e me arrependo no pó e na cinza\" (Jó 42:5-6).",
-                                subtitle: "OS PERIGOS DO LADO BOM DA ALMA: JÓ (2)", 
-                                content: `Continuemos a aprender com a experiência de Jó. No capítulo 38, Deus começa a amolecer o coração dele: "Quem é este que escurece os meus desígnios com palavras sem conhecimento? Cinge, pois, os lombos como homem, pois eu te perguntarei, e tu me farás saber. Onde estavas tu, quando eu lançava os fundamentos da terra? Dize-mo, se tens entendimento" (vs. 2-4). É como se Deus dissesse: "Quem é você? Eu lancei os fundamentos da terra, criei todas essas coisas. Eu sou o Deus Todo-Poderoso, Onipotente, Onipresente, Onisciente. Vou mostrar-lhe em qual árvore você tem vivido".`
-                            }
-                        ]
-                    },
-                    {
-                        title: "SAÍA UM RIO DO ÉDEN PARA REGAR O JARDIM – (Gn 2:10-14)",
-                        days: Array(7).fill().map((_, i) => ({
-                            title: `SEMANA 2 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
-                            bibleReading: i === 0 ? "Gn 1:26; Hb 3:1-6" : "Sl 46:4-5; Is 66:1-2; Ap 22:1-2",
-                            prayerReading: i === 0 ? "\"Não é assim com o meu servo Moisés, que é fiel em toda a minha casa\" (Nm 12:7)." : "\"Então, me mostrou o rio da água da vida, brilhante como cristal, que sai do trono de Deus e do Cordeiro\" (Ap 22:1).",
-                            subtitle: i === 0 ? "SER RESPONSÁVEIS NA CASA DO SENHOR" : "O RIO DA ÁGUA DA VIDA",
-                            content: `Conteúdo real da Semana 2 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. O tema desta semana é "Saía um rio do Éden para regar o jardim". Deus deseja que o hombre coopere com Sua vontade de maneira prática e responsável. Esse rio que regava o jardim simboliza a vida de Deus fluindo por meio de pessoas de coração simples, que amam Sua palavra e permitem ser trabalhadas por Ele. Cada um de nós precisa preparar-se para as bodas do Cordeiro, bordando sua própria veste e passando pela experiência de cruz, para que, de fato, a água viva possa fluir.`
-                        }))
-                    },
-                    {
-                        title: "UMA AUXILIADORA IDÔNEA PARA O HOMEM – (Gn 2:18-25)", 
-                        days: Array(7).fill().map((_, i) => ({
-                            title: `SEMANA 3 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
-                            bibleReading: "Gn 2:5; Sl 110:3; Mt 18:3",
-                            prayerReading: "\"E disse: Em verdade vos digo que, se não vos converterdes e não vos tornardes como crianças, de modo algum entrareis no reino dos céus\" (Mt 18:3).",
-                            subtitle: "UM CHAMAMENTO AOS VALENTES DE DAVI",
-                            content: `Conteúdo real da Semana 3 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. Na mensagem desta semana, cujo título é "Uma auxiliadora idônea para o homem", veremos que Deus conta com a raça humana como uma auxiliadora idônea a fim de realizar Sua obra. Para cooperar com Ele, o ser humano precisa estar imerso no rio da água da vida, no qual é purificado, enriquecido com os elementos divinos e, assim, tem sua alma salva. Dessa maneira, surgirá Sião, a parte forte da igreja, o filho varão, aqueles que hoje lutam pelo reino e que desfrutarão das bodas do Cordeiro, reinando por mil anos com Cristo.`
-                        }))
-                    },
-                    {
-                        title: "A QUEDA DO HOMEM – (Gn 3:1-14)",
-                        days: Array(7).fill().map((_, i) => ({
-                            title: `SEMANA 4 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
-                            bibleReading: "Gn 39:4",
-                            prayerReading: "\"Desde que o fizera mordomo de sua casa e sobre tudo o que tinha, o Senhor abençoou a casa do egípcio por amor de José; a bênção do Senhor estava sobre tudo o que tinha, tanto em casa como no campo\" (Gn 39:5).",
-                            subtitle: "O SEGREDO DE UMA VIDA PRÓSPERA", 
-                            content: `Conteúdo real da Semana 4 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. A mensagem desta semana, "A queda do homem", apesar de expressar algo muito negativo na história da criação de Deus, nos apontará caminhos importantes para preservar a bênção em nossa vida e nos manter debaixo da proteção de Deus. Vários princípios serão extraídos da vida e comportamento de Adão, Eva e José. A atenção a cada porção desse devocional e a prática dessas palavras nos farão viver de forma bem distante do que está expresso no título da semana.`
-                        }))
-                    }
-                ]
-            };
-        }
-
-        // Atualizar display
-        function updateDisplay() {
-            if (!currentData || !currentData.weeks[currentWeek]) return;
+            // Atualizar status da API
+            elements.apiStatus.innerHTML = `
+                ✅ <strong>Conteúdo do EPUB Carregado</strong><br>
+                <small>${EPUB_DATA.weeks.length} semanas • Conteúdo real extraído do arquivo</small>
+            `;
+            elements.apiStatus.classList.remove('processing', 'error');
+            elements.apiStatus.classList.add('connected');
             
-            const week = currentData.weeks[currentWeek];
+            // Atualizar lista de semanas
+            updateWeekList();
+            
+            // Atualizar display
+            updateDisplay();
+            
+            console.log('Aplicação inicializada com sucesso!');
+        }
+
+        // ATUALIZAR LISTA DE SEMANAS
+        function updateWeekList() {
+            const weekList = document.getElementById('week-list');
+            weekList.innerHTML = '';
+            
+            EPUB_DATA.weeks.forEach((week, index) => {
+                const li = document.createElement('li');
+                const weekNumber = index + 1;
+                const weekTitle = week.title.length > 30 ? week.title.substring(0, 30) + '...' : week.title;
+                
+                li.innerHTML = `
+                    <a href="#" class="${index === currentWeek ? 'active' : ''}" data-week="${index}">
+                        Semana ${weekNumber}: ${weekTitle}
+                    </a>
+                `;
+                weekList.appendChild(li);
+            });
+            
+            // Reatachar event listeners
+            weekList.querySelectorAll('a').forEach((a, index) => {
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.week-list a').forEach(a => a.classList.remove('active'));
+                    a.classList.add('active');
+                    currentWeek = index;
+                    updateDisplay();
+                });
+            });
+        }
+
+        // ATUALIZAR DISPLAY
+        function updateDisplay() {
+            if (!EPUB_DATA.weeks[currentWeek]) return;
+            
+            const week = EPUB_DATA.weeks[currentWeek];
             const day = week.days[currentDay] || week.days[0];
             
             if (day) {
                 elements.content.innerHTML = `
-                    <div class="auto-load-info">
-                        <strong>✅ Alimento Diário Carregado Automaticamente</strong><br>
-                        <small>Todo o conteúdo está disponível para navegação</small>
+                    <div class="epub-info">
+                        <strong>📚 Reconectados a Cristo</strong><br>
+                        <small>Semana ${currentWeek + 1} • ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][currentDay]}</small>
                     </div>
 
                     <h2>${day.title}</h2>
@@ -657,7 +711,9 @@
                     
                     <h3>${day.subtitle}</h3>
                     
-                    ${day.content.split('\n').map(p => `<p>${p}</p>`).join('')}
+                    <div class="devotional-text">
+                        ${day.content.split('\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
                     
                     <div class="notes-section">
                         <h4>📝 Seu Alimento de Hoje</h4>
@@ -681,17 +737,10 @@
                     </div>
                 `;
 
-                // Re-atachar event listeners após atualizar o DOM
+                // Reatachar event listeners
                 document.getElementById('save-notes').addEventListener('click', saveNotes);
-                
-                // Carregar anotações salvas
                 loadSavedNotes();
             }
-            
-            // Atualizar navegação da semana
-            document.querySelectorAll('.week-list a').forEach((a, index) => {
-                a.classList.toggle('active', index === currentWeek);
-            });
             
             // Atualizar navegação dos dias
             document.querySelectorAll('.day-btn').forEach((btn, index) => {
@@ -699,12 +748,23 @@
             });
         }
 
+        // UTILITÁRIOS
+        function showNotification(message) {
+            elements.notification.textContent = message;
+            elements.notification.style.display = 'block';
+            setTimeout(() => {
+                elements.notification.style.display = 'none';
+            }, 4000);
+        }
+
         // Salvar anotações
         function saveNotes() {
             const notes = {
                 light: document.getElementById('note-light').value,
                 direction: document.getElementById('note-direction').value,
-                admonition: document.getElementById('note-admonition').value
+                admonition: document.getElementById('note-admonition').value,
+                week: currentWeek,
+                day: currentDay
             };
             
             localStorage.setItem('alimento-diario-notes', JSON.stringify(notes));
@@ -715,60 +775,34 @@
         function loadSavedNotes() {
             const savedNotes = localStorage.getItem('alimento-diario-notes');
             if (savedNotes) {
-                const notes = JSON.parse(savedNotes);
-                if (document.getElementById('note-light')) {
-                    document.getElementById('note-light').value = notes.light || '';
-                    document.getElementById('note-direction').value = notes.direction || '';
-                    document.getElementById('note-admonition').value = notes.admonition || '';
+                try {
+                    const notes = JSON.parse(savedNotes);
+                    if (document.getElementById('note-light')) {
+                        document.getElementById('note-light').value = notes.light || '';
+                        document.getElementById('note-direction').value = notes.direction || '';
+                        document.getElementById('note-admonition').value = notes.admonition || '';
+                    }
+                } catch (e) {
+                    console.error('Erro ao carregar anotações:', e);
                 }
             }
         }
 
-        // Controles de UI
-        function showLoading(text = 'Carregando...') {
-            elements.loadingText.textContent = text;
-            elements.loading.style.display = 'block';
-            elements.content.style.display = 'none';
-        }
-
-        function hideLoading() {
-            elements.loading.style.display = 'none';
-            elements.content.style.display = 'block';
-        }
-
-        function showNotification(message) {
-            elements.notification.textContent = message;
-            elements.notification.style.display = 'block';
-            setTimeout(() => {
-                elements.notification.style.display = 'none';
-            }, 4000);
-        }
-
-        // Event Listeners
+        // EVENT LISTENERS
         elements.refreshBtn.addEventListener('click', () => {
-            showLoading('Atualizando Alimento Diário...');
-            setTimeout(() => {
-                loadRealContent();
-                showNotification('🔄 Alimento Diário atualizado!');
-            }, 1000);
-        });
-        
-        elements.weekList.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (e.target.tagName === 'A') {
-                document.querySelectorAll('.week-list a').forEach(a => a.classList.remove('active'));
-                e.target.classList.add('active');
-                currentWeek = parseInt(e.target.dataset.week);
-                if (currentData) updateDisplay();
-            }
+            showNotification('🔄 Conteúdo atualizado!');
+            calculateCurrentWeekAndDay();
+            updateWeekList();
+            updateDisplay();
         });
 
+        // Navegação dos dias
         document.querySelectorAll('.day-btn').forEach((btn, index) => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentDay = index;
-                if (currentData) updateDisplay();
+                updateDisplay();
             });
         });
 

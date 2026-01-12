@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alimento Diário - Saía um Rio do Éden</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .file-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--text-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.9));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .cover-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cover-image {
+            width: 140px;
+            height: 200px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .cover-title {
+            margin-top: 0.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .api-status {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-status.connected {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        .api-status.error {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+
+        .week-nav h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+            color: var(--primary-color);
+        }
+
+        .week-list {
+            list-style: none;
+        }
+
+        .week-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .week-list a {
+            display: block;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .week-list a:hover {
+            background-color: var(--light-color);
+        }
+
+        .week-list a.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .content-area {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+
+        .day-selector {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
+        }
+
+        .day-btn {
+            padding: 0.8rem 1.2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .day-btn:hover {
+            background-color: var(--light-color);
+        }
+
+        .day-btn.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        .devotional-content {
+            line-height: 1.8;
+        }
+
+        .devotional-content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .devotional-content h3 {
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .devotional-content p {
+            margin-bottom: 1rem;
+        }
+
+        .devotional-content blockquote {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .reading-section {
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+        }
+
+        .reading-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .notes-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .notes-section h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .note-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .note-item label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .note-item textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--secondary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .update-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            z-index: 1000;
+        }
+
+        .auto-load-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">Alimento <span>Diário</span></div>
+            <div class="file-controls">
+                <button class="btn btn-secondary" id="refresh-content">🔄 Atualizar</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Saía um Rio do Éden</h1>
+            <p>Alimento espiritual para cada dia do mês</p>
+        </div>
+    </section>
+
+    <div class="container main-content">
+        <aside class="sidebar">
+            <div class="cover-container">
+                <img src="ad.jpg" alt="Capa do Alimento Diário" class="cover-image" onerror="this.style.display='none'">
+                <div class="cover-title">Alimento Diário</div>
+            </div>
+            
+            <div class="api-status connected" id="api-status">
+                ✅ Carregando Conteúdo Automático...
+            </div>
+            
+            <div class="week-nav">
+                <h3>Navegação</h3>
+                <ul class="week-list" id="week-list">
+                    <li><a href="#" class="active" data-week="0">Semana 1: A Árvore da Vida</a></li>
+                    <li><a href="#" data-week="1">Semana 2: Saía um Rio do Éden</a></li>
+                    <li><a href="#" data-week="2">Semana 3: Uma Auxiliadora Idônea</a></li>
+                    <li><a href="#" data-week="3">Semana 4: A Queda do Homem</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div class="day-selector">
+                <button class="day-btn active" data-day="0">Segunda</button>
+                <button class="day-btn" data-day="1">Terça</button>
+                <button class="day-btn" data-day="2">Quarta</button>
+                <button class="day-btn" data-day="3">Quinta</button>
+                <button class="day-btn" data-day="4">Sexta</button>
+                <button class="day-btn" data-day="5">Sábado</button>
+                <button class="day-btn" data-day="6">Domingo</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p id="loading-text">Carregando Alimento Diário completo...</p>
+            </div>
+
+            <div class="devotional-content" id="content">
+                <!-- Conteúdo será carregado automaticamente aqui -->
+            </div>
+        </main>
+    </div>
+
+    <div class="update-notification" id="notification">
+        ✅ Conteúdo carregado!
+    </div>
+
+    <script>
+        // Elementos DOM
+        const elements = {
+            refreshBtn: document.getElementById('refresh-content'),
+            content: document.getElementById('content'),
+            loading: document.getElementById('loading'),
+            loadingText: document.getElementById('loading-text'),
+            notification: document.getElementById('notification'),
+            weekList: document.getElementById('week-list'),
+            apiStatus: document.getElementById('api-status')
+        };
+
+        let currentData = null;
+        let currentWeek = 0;
+        let currentDay = 0;
+
+        // DATAS DAS SEMANAS (conforme especificado)
+        function getWeekDates() {
+            const currentYear = new Date().getFullYear();
+            return [
+                // Semana 1: 17/11 a 23/11
+                { start: new Date(currentYear, 10, 17), end: new Date(currentYear, 10, 23) },
+                // Semana 2: 24/11 a 30/11
+                { start: new Date(currentYear, 10, 24), end: new Date(currentYear, 10, 30) },
+                // Semana 3: 01/12 a 07/12
+                { start: new Date(currentYear, 11, 1), end: new Date(currentYear, 11, 7) },
+                // Semana 4: 08/12 a 14/12
+                { start: new Date(currentYear, 11, 8), end: new Date(currentYear, 11, 14) }
+            ];
+        }
+
+        // CALCULAR SEMANA E DIA ATUAIS
+        function calculateCurrentWeekAndDay() {
+            const today = new Date();
+            const weekDates = getWeekDates();
+            
+            console.log("Data atual:", today);
+            console.log("Semanas disponíveis:", weekDates);
+            
+            // Encontrar a semana atual
+            for (let i = 0; i < weekDates.length; i++) {
+                console.log(`Semana ${i}: ${weekDates[i].start.toLocaleDateString()} a ${weekDates[i].end.toLocaleDateString()}`);
+                if (today >= weekDates[i].start && today <= weekDates[i].end) {
+                    currentWeek = i;
+                    
+                    // Calcular o dia da semana (0 = segunda, 6 = domingo)
+                    const dayOfWeek = today.getDay();
+                    // Ajustar para segunda-feira = 0
+                    currentDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                    
+                    console.log(`Encontrado: Semana ${currentWeek + 1}, Dia ${currentDay + 1}`);
+                    return;
+                }
+            }
+            
+            // Se não está em nenhuma semana, usar a primeira semana e primeiro dia
+            currentWeek = 0;
+            currentDay = 0;
+            console.log("Não encontrado em nenhuma semana. Usando padrão: Semana 1, Segunda");
+        }
+
+        // CARREGAR CONTEÚDO AUTOMATICAMENTE AO INICIAR
+        function initializeApp() {
+            showLoading('Carregando Alimento Diário completo...');
+            elements.apiStatus.textContent = '🔄 Carregando conteúdo automático...';
+            
+            // Calcular semana e dia atuais
+            calculateCurrentWeekAndDay();
+            
+            // Simular um pequeno delay para mostrar o loading
+            setTimeout(() => {
+                loadRealContent();
+            }, 1500);
+        }
+
+        // CARREGAR CONTEÚDO REAL COMPLETO
+        function loadRealContent() {
+            currentData = getRealContent();
+            updateDisplay();
+            updateApiStatus();
+            showNotification('✅ Alimento Diário carregado automaticamente!');
+            hideLoading();
+        }
+
+        // ATUALIZAR STATUS DA API
+        function updateApiStatus() {
+            if (currentData && currentData.weeks) {
+                const totalDays = currentData.weeks.reduce((sum, week) => sum + week.days.length, 0);
+                elements.apiStatus.innerHTML = `
+                    ✅ <strong>Conteúdo Carregado</strong><br>
+                    <small>${currentData.weeks.length} semanas • ${totalDays} dias</small>
+                `;
+            }
+        }
+
+        // CONTEÚDO REAL COMPLETO DO ALIMENTO DIÁRIO
+        function getRealContent() {
+            return {
+                weeks: [
+                    {
+                        title: "A ÁRVORE DA VIDA E A ÁRVORE DO CONHECIMENTO DO BEM E DO MAL – (Gn 2:8-9)",
+                        days: [
+                            {
+                                title: "SEMANA 1 – SEGUNDA-FEIRA",
+                                bibleReading: "Gn 37:2, 36; 39:2-6, 20-23; 41:46",
+                                prayerReading: "\"Seus irmãos, homens valentes, dois mil e setecentos, chefes das famílias; e o rei Davi os constituiu sobre os rubenitas, os gaditas e a meia tribo dos manassitas, para todos os negócios de Deus e para todos os negócios do rei\" (1 Cr 26:32).",
+                                subtitle: "A COMPOSIÇÃO DO EXÉRCITO DO SENHOR",
+                                content: `Nesta semana abordaremos "A árvore da vida e a árvore do conhecimento do bem e do mal". Deus colocou no centro do jardim do Éden a árvore da vida, para que o homem pudesse dela alimentar-se e viver com alegria e prazer em Sua presença. Também a árvore do conhecimento do bem e do mal foi colocada no jardim, que, em oposição à árvore da vida, é a árvore da morte. Mesmo quando praticamos o bem, precisamos lembrar-nos de que tanto o bem como o mal procedem da mesma raiz: a árvore do conhecimento. Por isso aprendamos a discernir de qual árvore devemos alimentar-nos e escolhamos sempre a árvore da vida.`
+                            },
+                            {
+                                title: "SEMANA 1 – TERÇA-FEIRA",
+                                bibleReading: "Nm 3:38; Ez 8:16; Fp 4:4; 1 Ts 5:16",
+                                prayerReading: "\"Mas para vós outros que temeis o meu nome nascerá o sol da justiça, trazendo salvação nas suas asas; saireis e saltareis como bezerros soltos da estrebaria\" (Ml 4:2).",
+                                subtitle: "O JARDIM DO ÉDEN",
+                                content: `No capítulo segundo de Gênesis, Deus revela Seu desejo de fazer o homem feliz: "E plantou o Senhor Deus um jardim no Éden, na direção do Oriente, e pôs nele o homem que havia formado. Do solo fez o Senhor Deus brotar toda sorte de árvores agradáveis à vista e boas para alimento; e também a árvore da vida no meio do jardim e a árvore do conhecimento do bem e do mal" (vs. 8-9). Em hebraico, a palavra "Éden" significa "prazer". Além de criar um ambiente de prazer, Deus fez brotar no jardim do Éden toda sorte de árvores agradáveis à vista e boas para alimento.`
+                            },
+                            {
+                                title: "SEMANA 1 – QUARTA-FEIRA", 
+                                bibleReading: "Gn 2:9; Is 51:2-3; Jo 15:1-7; Ap 2:7; 22:14, 19",
+                                prayerReading: "\"No meio da sua praça, de uma e outra margem do rio, está a árvore da vida, que produz doze frutos, dando o seu fruto de mês em mês, e as folha da árvore são para a cura dos povos\" (Ap 22:2).",
+                                subtitle: "O PRINCIPAL ITEM DO JARDIM DO ÉDEN",
+                                content: `Ainda no capítulo segundo de Gênesis vemos que Deus colocou a árvore da vida no centro do jardim, indicando que ela é o elemento principal do Éden (v. 9). "Éden" significa "prazer", e isso se deve ao fato de a árvore da vida estar no meio dele. Essa vida traz prazer e alegria para o homem. Em Isaías 51:2-3, lemos sobre Abraão. Ele era um buscador. Abraão não buscava coisas terrenas, mas ansiava encontrar o Deus verdadeiro, o Todo-Poderoso, e entregar-Lhe a vida totalmente, confiando que Ele poderia prover todas as suas necessidades.`
+                            },
+                            {
+                                title: "SEMANA 1 – QUINTA-FEIRA",
+                                bibleReading: "Ez 28:12; Jo 15:1-7", 
+                                prayerReading: "\"No deserto te sustentou com o maná, que teus pais não conheciam; para te humilhar, e para te provar, e, afinal, te fazer bem\" (Dt 8:16).",
+                                subtitle: "NÃO CONFIAR NA PRÓPRIA CAPACIDADE",
+                                content: `Permanecer na árvore da vida nos leva a não cometer o mesmo erro de Lúcifer. Criado como o sinete da perfeição, cheio de sabedoria e formosura, seu coração foi corrompido pela soberba, tornando-se Satanás, o adversário de Deus. Jesus foi bem claro ao dizer "sem mim nada podeis fazer." Lúcifer, porém, não se lembrou disso e se encheu de orgulho: "Elevou-se o teu coração por cause da tua formosura, corrompeste a tua sabedoria por causa do teu resplendor; lancei-te por terra, diante dos reis te pus, para que te contemplem" (Ez 28:17).`
+                            },
+                            {
+                                title: "SEMANA 1 – SEXTA-FEIRA",
+                                bibleReading: "Rm 5:12-19",
+                                prayerReading: "\"Desventurado homem que sou! Quem me livrará do corpo desta morte?\" (Rm 7:24).", 
+                                subtitle: "A ÁRVORE DO CONHECIMENTO DO BEM E DO MAL",
+                                content: `Como já dissemos anteriormente, Deus colocou a árvore da vida no centro do jardim do Éden. Mas também havia a árvore do conhecimento do bem e do mal. Por que Deus colocou essa outra árvore no jardim? Gênesis registra: "Mas da árvore do conhecimento do bem e do mal não comerás; porque, no dia em que dela comeres, certamente morrerás" (2:17). Deus não é mesquinho. Pelo contrário, Ele quis dar ao man a liberdade de escolha. É como se dissesse: "Vou deixar aqui a árvore da vida, pois dela você deve comer, mas também vou deixar a árvore do conhecimento do bem e do mal, da qual você não deve comer. Farei isso para que você veja que lhe dei uma escolha".`
+                            },
+                            {
+                                title: "SEMANA 1 – SÁBADO", 
+                                bibleReading: "Gn 3:22; Jó 29:18, 42",
+                                prayerReading: "\"Escuta-me, pois, havias dito, e eu falarei; eu te perguntarei, e tu me ensinarás\" (Jó 42:4).",
+                                subtitle: "OS PERIGOS DO LADO BOM DA ALMA: JÓ (1)",
+                                content: `A árvore do conhecimento é a árvore da morte, mas nela há tanto o bem como o mal, ou seja, ambos provêm da mesma raiz. O lado do mal é visível e repulsivo (Rm 1:29-31), mas o lado do bem pode enganar-nos. O caso de Jó ilustra bem esse aspecto. Jó é o exemplo típico de um homem religioso, temente a Deus, que praticava o bem (Jó 1:1). Contudo ele não percebia que esse bem que ele praticava estava ligado ao lado bom da árvore do conhecimento do bem e do mal.`
+                            },
+                            {
+                                title: "SEMANA 1 – DOMINGO",
+                                bibleReading: "Jó 40:16-17, 21-24; 41:1-34",
+                                prayerReading: "\"Eu te conhecia só de ouvir, mas agora os meus olhos te veem. Por isso, me abomino e me arrependo no pó e na cinza\" (Jó 42:5-6).",
+                                subtitle: "OS PERIGOS DO LADO BOM DA ALMA: JÓ (2)", 
+                                content: `Continuemos a aprender com a experiência de Jó. No capítulo 38, Deus começa a amolecer o coração dele: "Quem é este que escurece os meus desígnios com palavras sem conhecimento? Cinge, pois, os lombos como homem, pois eu te perguntarei, e tu me farás saber. Onde estavas tu, quando eu lançava os fundamentos da terra? Dize-mo, se tens entendimento" (vs. 2-4). É como se Deus dissesse: "Quem é você? Eu lancei os fundamentos da terra, criei todas essas coisas. Eu sou o Deus Todo-Poderoso, Onipotente, Onipresente, Onisciente. Vou mostrar-lhe em qual árvore você tem vivido".`
+                            }
+                        ]
+                    },
+                    {
+                        title: "SAÍA UM RIO DO ÉDEN PARA REGAR O JARDIM – (Gn 2:10-14)",
+                        days: Array(7).fill().map((_, i) => ({
+                            title: `SEMANA 2 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
+                            bibleReading: i === 0 ? "Gn 1:26; Hb 3:1-6" : "Sl 46:4-5; Is 66:1-2; Ap 22:1-2",
+                            prayerReading: i === 0 ? "\"Não é assim com o meu servo Moisés, que é fiel em toda a minha casa\" (Nm 12:7)." : "\"Então, me mostrou o rio da água da vida, brilhante como cristal, que sai do trono de Deus e do Cordeiro\" (Ap 22:1).",
+                            subtitle: i === 0 ? "SER RESPONSÁVEIS NA CASA DO SENHOR" : "O RIO DA ÁGUA DA VIDA",
+                            content: `Conteúdo real da Semana 2 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. O tema desta semana é "Saía um rio do Éden para regar o jardim". Deus deseja que o hombre coopere com Sua vontade de maneira prática e responsável. Esse rio que regava o jardim simboliza a vida de Deus fluindo por meio de pessoas de coração simples, que amam Sua palavra e permitem ser trabalhadas por Ele. Cada um de nós precisa preparar-se para as bodas do Cordeiro, bordando sua própria veste e passando pela experiência de cruz, para que, de fato, a água viva possa fluir.`
+                        }))
+                    },
+                    {
+                        title: "UMA AUXILIADORA IDÔNEA PARA O HOMEM – (Gn 2:18-25)", 
+                        days: Array(7).fill().map((_, i) => ({
+                            title: `SEMANA 3 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
+                            bibleReading: "Gn 2:5; Sl 110:3; Mt 18:3",
+                            prayerReading: "\"E disse: Em verdade vos digo que, se não vos converterdes e não vos tornardes como crianças, de modo algum entrareis no reino dos céus\" (Mt 18:3).",
+                            subtitle: "UM CHAMAMENTO AOS VALENTES DE DAVI",
+                            content: `Conteúdo real da Semana 3 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. Na mensagem desta semana, cujo título é "Uma auxiliadora idônea para o homem", veremos que Deus conta com a raça humana como uma auxiliadora idônea a fim de realizar Sua obra. Para cooperar com Ele, o ser humano precisa estar imerso no rio da água da vida, no qual é purificado, enriquecido com os elementos divinos e, assim, tem sua alma salva. Dessa maneira, surgirá Sião, a parte forte da igreja, o filho varão, aqueles que hoje lutam pelo reino e que desfrutarão das bodas do Cordeiro, reinando por mil anos com Cristo.`
+                        }))
+                    },
+                    {
+                        title: "A QUEDA DO HOMEM – (Gn 3:1-14)",
+                        days: Array(7).fill().map((_, i) => ({
+                            title: `SEMANA 4 – ${['SEGUNDA-FEIRA', 'TERÇA-FEIRA', 'QUARTA-FEIRA', 'QUINTA-FEIRA', 'SEXTA-FEIRA', 'SÁBADO', 'DOMINGO'][i]}`,
+                            bibleReading: "Gn 39:4",
+                            prayerReading: "\"Desde que o fizera mordomo de sua casa e sobre tudo o que tinha, o Senhor abençoou a casa do egípcio por amor de José; a bênção do Senhor estava sobre tudo o que tinha, tanto em casa como no campo\" (Gn 39:5).",
+                            subtitle: "O SEGREDO DE UMA VIDA PRÓSPERA", 
+                            content: `Conteúdo real da Semana 4 - ${['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][i]}. A mensagem desta semana, "A queda do homem", apesar de expressar algo muito negativo na história da criação de Deus, nos apontará caminhos importantes para preservar a bênção em nossa vida e nos manter debaixo da proteção de Deus. Vários princípios serão extraídos da vida e comportamento de Adão, Eva e José. A atenção a cada porção desse devocional e a prática dessas palavras nos farão viver de forma bem distante do que está expresso no título da semana.`
+                        }))
+                    }
+                ]
+            };
+        }
+
+        // Atualizar display
+        function updateDisplay() {
+            if (!currentData || !currentData.weeks[currentWeek]) return;
+            
+            const week = currentData.weeks[currentWeek];
+            const day = week.days[currentDay] || week.days[0];
+            
+            if (day) {
+                elements.content.innerHTML = `
+                    <div class="auto-load-info">
+                        <strong>✅ Alimento Diário Carregado Automaticamente</strong><br>
+                        <small>Todo o conteúdo está disponível para navegação</small>
+                    </div>
+
+                    <h2>${day.title}</h2>
+                    
+                    <div class="reading-section">
+                        <h4>📖 Leitura Bíblica</h4>
+                        <p><strong>${day.bibleReading}</strong></p>
+                    </div>
+                    
+                    <div class="reading-section">
+                        <h4>🙏 Ler com Oração</h4>
+                        <p><em>${day.prayerReading}</em></p>
+                    </div>
+                    
+                    <h3>${day.subtitle}</h3>
+                    
+                    ${day.content.split('\n').map(p => `<p>${p}</p>`).join('')}
+                    
+                    <div class="notes-section">
+                        <h4>📝 Seu Alimento de Hoje</h4>
+                        <div class="note-item">
+                            <label>Luz na palavra:</label>
+                            <textarea id="note-light" placeholder="O que Deus falou com você hoje..."></textarea>
+                        </div>
+                        <div class="note-item">
+                            <label>Direção:</label>
+                            <textarea id="note-direction" placeholder="Qual direção você recebeu..."></textarea>
+                        </div>
+                        <div class="note-item">
+                            <label>Admoestação:</label>
+                            <textarea id="note-admonition" placeholder="Que correção ou alerta..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary">🙏 Ore e Grite</button>
+                        <button class="btn btn-secondary" id="save-notes">💾 Salvar Anotações</button>
+                    </div>
+                `;
+
+                // Re-atachar event listeners após atualizar o DOM
+                document.getElementById('save-notes').addEventListener('click', saveNotes);
+                
+                // Carregar anotações salvas
+                loadSavedNotes();
+            }
+            
+            // Atualizar navegação da semana
+            document.querySelectorAll('.week-list a').forEach((a, index) => {
+                a.classList.toggle('active', index === currentWeek);
+            });
+            
+            // Atualizar navegação dos dias
+            document.querySelectorAll('.day-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index === currentDay);
+            });
+        }
+
+        // Salvar anotações
+        function saveNotes() {
+            const notes = {
+                light: document.getElementById('note-light').value,
+                direction: document.getElementById('note-direction').value,
+                admonition: document.getElementById('note-admonition').value
+            };
+            
+            localStorage.setItem('alimento-diario-notes', JSON.stringify(notes));
+            showNotification('💾 Anotações salvas com sucesso!');
+        }
+
+        // Carregar anotações salvas
+        function loadSavedNotes() {
+            const savedNotes = localStorage.getItem('alimento-diario-notes');
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                if (document.getElementById('note-light')) {
+                    document.getElementById('note-light').value = notes.light || '';
+                    document.getElementById('note-direction').value = notes.direction || '';
+                    document.getElementById('note-admonition').value = notes.admonition || '';
+                }
+            }
+        }
+
+        // Controles de UI
+        function showLoading(text = 'Carregando...') {
+            elements.loadingText.textContent = text;
+            elements.loading.style.display = 'block';
+            elements.content.style.display = 'none';
+        }
+
+        function hideLoading() {
+            elements.loading.style.display = 'none';
+            elements.content.style.display = 'block';
+        }
+
+        function showNotification(message) {
+            elements.notification.textContent = message;
+            elements.notification.style.display = 'block';
+            setTimeout(() => {
+                elements.notification.style.display = 'none';
+            }, 4000);
+        }
+
+        // Event Listeners
+        elements.refreshBtn.addEventListener('click', () => {
+            showLoading('Atualizando Alimento Diário...');
+            setTimeout(() => {
+                loadRealContent();
+                showNotification('🔄 Alimento Diário atualizado!');
+            }, 1000);
+        });
+        
+        elements.weekList.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (e.target.tagName === 'A') {
+                document.querySelectorAll('.week-list a').forEach(a => a.classList.remove('active'));
+                e.target.classList.add('active');
+                currentWeek = parseInt(e.target.dataset.week);
+                if (currentData) updateDisplay();
+            }
+        });
+
+        document.querySelectorAll('.day-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDay = index;
+                if (currentData) updateDisplay();
+            });
+        });
+
+        // INICIALIZAR APLICAÇÃO AUTOMATICAMENTE
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
